@@ -1,79 +1,155 @@
 package com.example.a2048game;
-
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.View;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
-import androidx.annotation.Nullable;
-
-public class GameView extends View {
-
-    private final Paint mPaint = new Paint();
-    Bitmap mBackground;
-    private Drawable mBackgroundRectangle;
-    private Drawable[] mCellRectangle = new Drawable[20];
-    GameBoard gameBoard = new GameBoard(4,4);
-    Rect textBounds = new Rect();
+import com.example.a2048game.Tiles.TileDrawable;
 
 
-    public GameView(Context context) {
-        super(context);
-        init();
-    }
+public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
-    public GameView(Context context, @Nullable AttributeSet attrs) {
+    private MainThread thread;
+    GameBoard gameBoard;
+    Drawable backgroundRectangle = getResources().getDrawable(R.drawable.background_rectangle);
+    Drawable cellRectangle = getResources().getDrawable(R.drawable.cell_rectangle);
+    TileDrawable tileDrawable;
+    boolean isInit;
+
+
+
+    public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+
+        getHolder().addCallback(this);
+        setZOrderOnTop(true);    // necessary
+        getHolder().setFormat(PixelFormat.TRANSPARENT);
+
+
+        tileDrawable = new TileDrawable();
+        tileDrawable.setContext(context);
+
+        isInit = false;
+        initSwipeListener();
+        gameBoard = new GameBoard(4, 4);
     }
 
-    public GameView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init();
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        thread = new MainThread(holder, this);
+        thread.setRunning(true);
+        thread.start();
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        drawDrawable(canvas, mBackgroundRectangle, 0, 0, canvas.getWidth(), canvas.getHeight());
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        thread.setSurfaceHolder(holder);
+    }
 
-        int padding = (int)pxFromDp(3);
-        int width=canvas.getWidth()-padding*2;
-        int height=canvas.getHeight()-padding*2;
-        int cellWidth=width / gameBoard.getWidth();
-        int cellHeight=height / gameBoard.getHeight();
-
-
-        // drawDrawable(canvas, mBackgroundRectangle, 0, 0, cellWidth*gameBoard.getWidth(), cellHeight* gameBoard.getHeight());
-        mPaint.setTextSize(50);
-        mPaint.setColor(Color.WHITE);
-        mPaint.setFakeBoldText(true);
-
-
-
-        for (int y=0;y<gameBoard.getHeight();y++){
-            for (int x=0; x<gameBoard.getWidth();x++){
-                int posX = x*cellWidth+padding;
-                int posY = y*cellHeight+padding;
-                Tile tile = gameBoard.getTile(x,y);
-
-                if (tile == null){
-                    drawDrawable(canvas, mCellRectangle[0],posX,posY,posX+cellWidth,posY+cellHeight);
-                } else {
-                    String text= Integer.toString(tile.getValue());
-                    drawDrawable(canvas, mCellRectangle[1], posX, posY, posX + cellWidth, posY + cellHeight);
-                    mPaint.getTextBounds(text, 0, text.length(), textBounds);
-                    canvas.drawText(text, posX + cellWidth / 2 - textBounds.exactCenterX(), posY + cellHeight / 2 - textBounds.exactCenterY(), mPaint);
-                }
-
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        boolean retry = true;
+        while (retry) {
+            try {
+                thread.setRunning(false);
+                thread.join();
+                retry = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
+    }
 
+
+
+    public void update() {
+        if(isInit) {
+            gameBoard.update();
+        }
+    }
+
+
+    @Override
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+
+        drawDrawable(canvas, backgroundRectangle, 0, 0, getWidth(), getHeight());
+        drawEmptyBoard(canvas);
+
+        if (!isInit) {
+            gameBoard.initBoard();
+        } isInit=true;
+
+        gameBoard.draw(canvas);
+    }
+
+    private void initSwipeListener() {
+        setOnTouchListener(new OnSwipeTouchListener(this.getContext()) {
+            public void onSwipeTop() {
+                gameBoard.up();
+            }
+
+            public void onSwipeRight() {
+                gameBoard.right();
+
+            }
+
+            public void onSwipeLeft() {
+                gameBoard.left();
+            }
+
+            public void onSwipeBottom() {
+                gameBoard.down();
+            }
+        });
+    }
+
+    private void drawEmptyBoard (Canvas canvas){
+        drawDrawable(canvas, backgroundRectangle, 0, 0, getWidth(), getHeight());
+
+        //adding padding to frame
+
+        int padding = (int) pxFromDp(3);
+        int width = getWidth() - padding * 2;
+        int height = getHeight() - padding * 2;
+
+        //calculating cell size
+        int cellWidth = width / gameBoard.getWidth();
+        int cellHeight = height / gameBoard.getHeight();
+
+        tileDrawable.setCellDefaultHeight(cellHeight);
+        tileDrawable.setCellDefaultWidth(cellWidth);
+
+        //drawing empty tiles
+        for (int y = 0; y < gameBoard.getHeight(); y++) {
+            for (int x = 0; x < gameBoard.getWidth(); x++) {
+
+                //start cell position
+                int posX = x * cellWidth + padding;
+                int posY = y * cellHeight + padding;
+
+                //end cell position
+                int posXX = posX + cellWidth;
+                int posYY = posY + cellHeight;
+
+
+                cellRectangle.setColorFilter(getResources().getColor(R.color.valueEmpty), PorterDuff.Mode.SRC_OVER);
+                drawDrawable(canvas, cellRectangle, posX, posY, posXX, posYY);
+
+                //filling positions Matrix
+                gameBoard.setPositions(x,y,posX,posY);
+            }
+        }
+    }
+
+    private void drawDrawable(Canvas canvas, Drawable draw, int startingX, int startingY, int endingX, int endingY) {
+        draw.setBounds(startingX, startingY, endingX, endingY);
+        draw.draw(canvas);
     }
 
     @Override
@@ -82,62 +158,22 @@ public class GameView extends View {
     }
 
 
-
-    private void init() {
-        try {
-            gameBoard.addRandom();
-            gameBoard.addRandom();
-
-            this.setOnTouchListener(new OnSwipeTouchListener(this.getContext()) {
-                public void onSwipeTop() {
-                    gameBoard.up();
-                    gameBoard.addRandom();
-                    invalidate();
-                }
-                public void onSwipeRight() {
-                    gameBoard.right();
-                    gameBoard.addRandom();
-                    invalidate();
-
-                }
-                public void onSwipeLeft() {
-                    gameBoard.left();
-                    gameBoard.addRandom();
-                    invalidate();
-
-                }
-                public void onSwipeBottom() {
-                    gameBoard.down();
-                    gameBoard.addRandom();
-                    invalidate();
-                }
-
-
-
-
-            });
-
-
-            mBackgroundRectangle = getResources().getDrawable(R.drawable.background_rectangle);
-            mCellRectangle[0] = getResources().getDrawable(R.drawable.cell_rectangle);
-            mCellRectangle[1] = getResources().getDrawable(R.drawable.cell_rectangle_2);
-
-        } catch (Exception e) {
-
-        }
-    }
-
-
-
-    private void drawDrawable(Canvas canvas, Drawable draw, int startingX, int startingY, int endingX, int endingY) {
-        draw.setBounds(startingX, startingY, endingX, endingY);
-        draw.draw(canvas);
-    }
-
     public float pxFromDp(final float dp) {
         return dp * getContext().getResources().getDisplayMetrics().density;
     }
 
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
