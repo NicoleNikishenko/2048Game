@@ -5,8 +5,8 @@
 
     <com.example.a2048game.GameView
         android:id="@+id/GameView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
         android:layout_centerInParent="true" />
 
 

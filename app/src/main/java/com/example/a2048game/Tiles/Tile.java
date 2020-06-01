@@ -16,24 +16,28 @@ public class Tile {
     private int value;
     private Position currentPosition;
     private Position desPosition;
-    private int movingSpeed = 60;
-    private int sizeSpeed = 20;
+    private int movingSpeed = 80;
+    private int sizeSpeed =10;
+
+    private int currentPositionX;
+    private int currentPositionY;
+    private int desPositionX;
+    private int desPositionY;
 
     private boolean isMoving = false;
-    private boolean dead = false;
+
     private boolean increased = false;
-    private boolean alreadyMerged = false;
+
 
     private final Paint mPaint = new Paint();
     private TileDrawable drawables = new TileDrawable();
     private Rect textBounds = new Rect();
     private HashMap<Integer, Bitmap> tileBitmaps = new HashMap<>();
 
-
-    ///////////////////////////////////////////
     private int currentCellSize;
     private int defaultCellSize;
-    //////////////////////////////////////////
+
+
 
     public Tile(int value, Position position, GameBoard callback) {
         this.value = value;
@@ -42,9 +46,9 @@ public class Tile {
         this.defaultCellSize = drawables.getCellDefaultHeight();
 
         currentPosition = desPosition = position;
-        currentCellSize = defaultCellSize/2;
-
-
+        currentPositionX = desPositionX = currentPosition.getPositionX();
+        currentPositionY = desPositionY = currentPosition.getPositionY();
+        currentCellSize = (int)(defaultCellSize/3);
 
         if (tileBitmaps.isEmpty()){
             initCellBitmaps();
@@ -54,38 +58,45 @@ public class Tile {
 
     public int getValue() { return value; }
     public Position getPosition() { return currentPosition; }
-
-    public boolean isDead(){ return dead; }
     public boolean isIncreased(){ return increased; }
-    public boolean isAlreadyMerged(){ return alreadyMerged;}
 
-    public void setMerged(boolean state) { alreadyMerged = state; }
-    public void setDead(boolean state) { dead = state; }
+
+
     public void setIncreased(boolean state) { increased = state; }
 
     public void move(Position position){
-        this.isMoving = true;
+
         this.desPosition = position;
+        desPositionX = desPosition.getPositionX();
+        desPositionY = desPosition.getPositionY();
+
+        this.isMoving = true;
+
     }
 
-    public void increaseValue(int value) {
-        this.value = value;
-        currentCellSize = (int)(defaultCellSize*1.5);
-    }
 
    public void draw (Canvas canvas){
         Bitmap bitmap = getBitmap(value);
         bitmap = Bitmap.createScaledBitmap(bitmap,currentCellSize,currentCellSize,false);
-        canvas.drawBitmap(bitmap,currentPosition.positionX + (int)(defaultCellSize/2-currentCellSize/2) ,currentPosition.positionY + (int)(defaultCellSize/2-currentCellSize/2),null);
-        if(isMoving && currentPosition.positionX == desPosition.positionX && currentPosition.positionY == desPosition.positionY){
+        canvas.drawBitmap(bitmap,currentPositionX+ (int)(defaultCellSize/2-currentCellSize/2) ,currentPositionY + (int)(defaultCellSize/2-currentCellSize/2),null);
+        if(isMoving && currentPosition == desPosition ){
             isMoving =  false;
+            if(increased){
+                this.value *=2;
+                currentCellSize = (int)(defaultCellSize*1.5);
+                increased = false;
+            }
             callback.finishedMoving(this);
+
         }
    }
 
    public void update() {
-        updateSize();
-        updatePosition();
+        if(isMoving) {
+            updatePosition();
+        }
+       updateSize();
+
    }
 
    public void updateSize(){
@@ -106,30 +117,35 @@ public class Tile {
 
    }
    public void updatePosition(){
-       if (currentPosition.positionX < desPosition.positionX) {
-           if (currentPosition.positionX + movingSpeed > desPosition.positionX) {
-               currentPosition.positionX = desPosition.positionX;
+
+       if (currentPositionX < desPositionX) {
+           if (currentPositionX + movingSpeed > desPositionX) {
+              currentPosition = desPosition;
+              currentPositionX = currentPosition.getPositionX();
            } else {
-               currentPosition.positionX += movingSpeed ;
+               currentPositionX += movingSpeed ;
            }
-       } else if (currentPosition.positionX > desPosition.positionX) {
-           if (currentPosition.positionX - movingSpeed  < desPosition.positionX) {
-               currentPosition.positionX = desPosition.positionX;
+       } else if (currentPositionX > desPositionX) {
+           if (currentPositionX - movingSpeed  < desPositionX) {
+               currentPosition = desPosition;
+               currentPositionX = currentPosition.getPositionX();
            } else {
-               currentPosition.positionX -= movingSpeed ;
+               currentPositionX -= movingSpeed ;
            }
        }
-       if (currentPosition.positionY < desPosition.positionY) {
-           if (currentPosition.positionY + movingSpeed  > desPosition.positionY) {
-               currentPosition.positionY = desPosition.positionY;
+       if (currentPositionY < desPositionY) {
+           if (currentPositionY + movingSpeed  > desPositionY) {
+               currentPosition = desPosition;
+               currentPositionY = currentPosition.getPositionY();
            } else {
-               currentPosition.positionY += movingSpeed ;
+               currentPositionY += movingSpeed ;
            }
-       } else if (currentPosition.positionY > desPosition.positionY) {
-           if (currentPosition.positionY - movingSpeed  < desPosition.positionY) {
-               currentPosition.positionY = desPosition.positionY;
+       } else if (currentPositionY > desPositionY) {
+           if (currentPositionY - movingSpeed  < desPositionY) {
+               currentPosition = desPosition;
+               currentPositionY = currentPosition.getPositionY();
            } else {
-               currentPosition.positionY -= movingSpeed ;
+               currentPositionY -= movingSpeed ;
            }
        }
    }
