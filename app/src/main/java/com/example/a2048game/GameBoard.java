@@ -14,30 +14,27 @@ public class GameBoard {
     private Tile[][] board;
     private Tile[][] newBoard;
     private Position[][] positions;
-    private int boardWidth;
-    private int boardHeight;
+    private int boardRows;
+    private int boardCols;
+
     Random rand = new Random();
 
     private boolean isMoving = false;
+    private boolean spawnNeeded = false;
     private ArrayList<Tile> movingTiles;
 
     //constructor
-    public GameBoard(int x, int y) {
-        boardWidth=x;
-        boardHeight=y;
-        board = new Tile[x][y];
-        positions = new Position[x][y];
+    public GameBoard(int cols, int rows) {
+        boardRows = rows;
+        boardCols = cols;
+        board = new Tile[rows][cols];
+        positions = new Position[rows][cols];
     }
 
     //get and set
-    public int getWidth() { return boardWidth; }
-    public int getHeight() { return boardHeight; }
+    public int getHeight() { return boardRows; }
+    public int getWidth() { return boardCols; }
     public Tile getTile(int x, int y) { return board[x][y]; }
-    public Position getPositions (int matrixX, int matrixY){
-        return positions[matrixX][matrixY];
-    }
-
-
     public void setPositions (int matrixX ,int matrixY ,int positionX,int positionY){
         Position position = new Position(positionX,positionY);
         positions[matrixX][matrixY]= position;
@@ -46,23 +43,27 @@ public class GameBoard {
     public void initBoard(){
         addRandom();
         addRandom();
+        addRandom();
+        addRandom();
         movingTiles = new ArrayList<>();
     }
+
     void addRandom() {
+    // a new tile is spawning in a random empty place on the board
         int count = 0;
-        for (int y = 0; y < boardHeight; y++){
-            for(int x = 0; x < boardWidth; x++){
+        for (int x = 0; x < boardRows; x++){
+            for(int y = 0; y < boardCols; y++){
                 if (getTile(x, y) == null)
                     count++;
             }
         }
         int number = rand.nextInt(count);
         count = 0;
-        for (int y = 0; y < boardHeight; y++){
-            for(int x = 0; x < boardWidth; x++){
+        for (int x = 0; x < boardRows; x++){
+            for(int y = 0; y < boardCols; y++){
                 if (getTile(x, y)==null) {
                     if(count == number){
-                        board[x][y] = new Tile(2,getPositions(x,y),this);
+                        board[x][y] = new Tile(2,positions[x][y],this);
                         return;
                     }
                     count++;
@@ -73,12 +74,9 @@ public class GameBoard {
     }
 
     public void draw(Canvas canvas){
-        for (int x = 0; x < boardWidth; x++) {
-
-            for (int y = 0; y < boardHeight; y++) {
-
+        for (int x = 0; x < boardRows; x++) {
+            for (int y = 0; y < boardCols; y++) {
                 if (board[x][y] != null) {
-
                     board[x][y].draw(canvas);
                 }
             }
@@ -86,8 +84,8 @@ public class GameBoard {
     }
 
     public void update() {
-        for (int x = 0; x < boardWidth; x++) {
-            for (int y = 0; y < boardHeight; y++) {
+        for (int x = 0; x < boardRows; x++) {
+            for (int y = 0; y < boardCols; y++) {
                 if (board[x][y] != null) {
                     board[x][y].update();
                 }
@@ -98,193 +96,173 @@ public class GameBoard {
 
 
     void up(){
-        isMoving = true;
-        for(int x=0;x<boardWidth;x++){
-            for (int y=1;y<boardHeight;y++){
-                mergeTileFirst(x,y,x,y-1);
-            }
-        }
-        for(int x=0;x<boardWidth;x++){
-            for (int y=1;y<boardHeight;y++){
-                boolean moved = moveTile(x,y,x,y-1);
-                if (moved) {
-                    y = 0;
-                }
-            }
-        }
-        for(int x=0;x<boardWidth;x++){
-            for (int y=1;y<boardHeight;y++){
-                mergeTileSecond(x,y,x,y-1);
-            }
-        }
-        checkMatrixChanges();
-    }
-    void down(){
-        isMoving = true;
-        for(int x=0;x<boardWidth;x++){
-            for (int y=boardHeight-1;y>0;y--){
-                mergeTileFirst(x,y-1,x,y);
-            }
-        }
-       for(int x=0;x<boardWidth;x++){
-            for (int y=boardHeight-1;y>0;y--){
-                boolean moved = moveTile(x,y-1,x,y);
-                if (moved) {
-                    y = boardHeight;
-                }
-            }
-        }
-       for(int x=0;x<boardWidth;x++){
-            for (int y=boardHeight-1;y>0;y--){
-                mergeTileSecond(x,y-1,x,y);
-            }
-        }
-        checkMatrixChanges();
+        if (!isMoving) {
+           isMoving = true;
+            newBoard = new Tile[boardRows][boardCols];
 
+            for (int i = 0; i < boardRows; i++) {
+                for (int j = 0; j < boardCols; j++) {
+                    if (board[i][j] != null) {
+                        newBoard[i][j] = board[i][j];
+                        for (int k = i - 1; k >= 0; k--) {
+                            if (newBoard[k][j] == null) {
+                                newBoard[k][j] = board[i][j];
+                                if (newBoard[k + 1][j] == board[i][j]) {
+                                    newBoard[k + 1][j] = null;
+                                }
+                            } else if (newBoard[k][j].getValue() == board[i][j].getValue() && !newBoard[k][j].isIncreased()) {
+                                newBoard[k][j] = board[i][j];
+                                newBoard[k][j].setIncreased(true);
+                                if (newBoard[k + 1][j] == board[i][j]) {
+                                    newBoard[k + 1][j] = null;
+                                }
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            moveTiles();
+            board = newBoard;
+        }
+    }
+
+
+
+    void down(){
+        if (!isMoving) {
+            isMoving = true;
+            newBoard = new Tile[boardRows][boardCols];
+
+            for (int i = 3; i >= 0; i--) {
+                for (int j = 0; j < 4; j++) {
+                    if (board[i][j] != null) {
+                        newBoard[i][j] = board[i][j];
+                        for (int k = i + 1; k < 4; k++) {
+                            if (newBoard[k][j] == null) {
+                                newBoard[k][j] = board[i][j];
+                                if (newBoard[k - 1][j] == board[i][j]) {
+                                    newBoard[k - 1][j] = null;
+                                }
+                            } else if (newBoard[k][j].getValue() == board[i][j].getValue() && !newBoard[k][j].isIncreased()) {
+                                newBoard[k][j] = board[i][j];
+                                newBoard[k][j].setIncreased(true);
+                                if (newBoard[k - 1][j] == board[i][j]) {
+                                    newBoard[k - 1][j] = null;
+                                }
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            moveTiles();
+            board = newBoard;
+        }
     }
     void left() {
+        if (!isMoving) {
+            isMoving = true;
+            newBoard = new Tile[boardRows][boardCols];
 
-        isMoving = true;
-
-        for(int y=0;y<boardHeight;y++){
-            for (int x=1;x<boardWidth;x++){
-                mergeTileFirst(x,y,x-1,y);
-            }
-        }
-        for(int y=0;y<boardHeight;y++){
-            for (int x=1;x<boardWidth;x++){
-                boolean moved = moveTile(x,y,x-1,y);
-                if (moved) {
-                    x = 0;
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if (board[i][j] != null) {
+                        newBoard[i][j] = board[i][j];
+                        for (int k = j - 1; k >= 0; k--) {
+                            if (newBoard[i][k] == null) {
+                                newBoard[i][k] = board[i][j];
+                                if (newBoard[i][k + 1] == board[i][j]) {
+                                    newBoard[i][k + 1] = null;
+                                }
+                            } else if (newBoard[i][k].getValue() == board[i][j].getValue() && !newBoard[i][k].isIncreased()) {
+                                newBoard[i][k] = board[i][j];
+                                newBoard[i][k].setIncreased(true);
+                                if (newBoard[i][k + 1] == board[i][j]) {
+                                    newBoard[i][k + 1] = null;
+                                }
+                            } else {
+                                break;
+                            }
+                        }
+                    }
                 }
             }
+            moveTiles();
+            board = newBoard;
         }
-        for(int y=0;y<boardHeight;y++){
-            for (int x=1;x<boardWidth;x++){
-                mergeTileSecond(x,y,x-1,y);
-            }
-        }
-        checkMatrixChanges();
     }
 
     void right(){
+        if (!isMoving) {
+            isMoving = true;
+            newBoard = new Tile[boardRows][boardCols];
 
-        isMoving = true;
-        for(int y=0;y<boardHeight;y++){
-            for (int x=boardWidth-1;x>0;x--){
-                mergeTileFirst(x-1,y,x,y);
-            }
-        }
-        for(int y=0;y<boardHeight;y++){
-            for (int x=boardWidth-1;x>0;x--){
-                boolean moved = moveTile(x-1,y,x,y);
-                if (moved) {
-                    x = boardWidth;
+            for (int i = 0; i < 4; i++) {
+                for (int j = 3; j >= 0; j--) {
+                    if (board[i][j] != null) {
+                        newBoard[i][j] = board[i][j];
+                        for (int k = j + 1; k < 4; k++) {
+                            if (newBoard[i][k] == null) {
+                                newBoard[i][k] = board[i][j];
+                                if (newBoard[i][k - 1] == board[i][j]) {
+                                    newBoard[i][k - 1] = null;
+                                }
+                            } else if (newBoard[i][k].getValue() == board[i][j].getValue() && !newBoard[i][k].isIncreased()) {
+                                newBoard[i][k] = board[i][j];
+                                newBoard[i][k].setIncreased(true);
+                                if (newBoard[i][k - 1] == board[i][j]) {
+                                    newBoard[i][k - 1] = null;
+                                }
+                            } else {
+                                break;
+                            }
+                        }
+                    }
                 }
             }
-        }
-        for(int y=0;y<boardHeight;y++){
-            for (int x=boardWidth-1;x>0;x--){
-                mergeTileSecond(x-1,y,x,y);
-            }
-        }
-        checkMatrixChanges();
-
-
-    }
-
-    public void mergeTileFirst(int fromX, int fromY, int toX, int toY) {
-        Tile fromTile = getTile(fromX,fromY);
-        Tile toTile = getTile(toX,toY);
-        if (fromTile == null)
-        {
-            return;
-        }
-        if (toTile!=null) {
-            if (toTile.getValue( )==fromTile.getValue())
-            {
-                board[fromX][fromY] = null;
-                int value = toTile.getValue();
-                toTile.increaseValue(value*2);
-                toTile.setMerged(true);
-            }
-        }
-
-    }
-    public void mergeTileSecond(int fromX, int fromY, int toX, int toY) {
-        Tile fromTile = getTile(fromX, fromY);
-        Tile toTile = getTile(toX, toY);
-        if (fromTile == null) {
-            return;
-        }
-        if (toTile != null && !toTile.isAlreadyMerged() && !fromTile.isAlreadyMerged()) {
-            if (toTile.getValue() == fromTile.getValue()) {
-                fromTile.setDead(true);
-                toTile.setIncreased(true);
-
-            }
+            moveTiles();
+            board = newBoard;
         }
     }
 
-    public boolean moveTile(int fromX, int fromY, int toX, int toY) {
-        Tile fromTile = getTile(fromX,fromY);
-        Tile toTile = getTile(toX,toY);
-        if (fromTile == null)
-        {
-            return false;
-        }
-        if (toTile==null) {
-            board[fromX][fromY] = null;
-            board[toX][toY]=fromTile;
-            return true;
-        }
-        return false;
-    }
-
-    public void checkMatrixChanges() {
-        for (int x = 0; x < boardWidth; x++) {
-            for (int y = 0; y < boardHeight; y++) {
-                Tile t = board[x][y];
+    public void moveTiles(){
+        //checking which tiles changed position and moving them accordingly
+        for (int x = 0; x < boardRows; x++) {
+            for (int y = 0; y < boardCols; y++) {
+                Tile t = newBoard[x][y];
                 if(t != null) {
-                    if (t.getPosition() != getPositions(x, y)) {
+                    if (t.getPosition() != positions[x][y]) {
                         movingTiles.add(t);
-                        t.move(getPositions(x, y));
+                        t.move(positions[x][y]);
                     }
                 }
             }
         }
+        if (movingTiles.isEmpty()) {
+            isMoving = false;
+        }
+        else
+            spawnNeeded = true;
     }
 
+
+    public void spawn(){
+        if(spawnNeeded){
+            addRandom();
+            spawnNeeded = false;
+        }
+    }
 
     public void finishedMoving(Tile t) {
+    //finish moving is false only if all tiles are at their place
         movingTiles.remove(t);
         if (movingTiles.isEmpty()) {
-            checkTilesState();
             isMoving = false;
-
+            spawn();
         }
-    }
-
-    public void checkTilesState(){
-        for(int x=0;x<boardWidth;x++){
-            for (int y=0;y<boardHeight;y++){
-                if (board[x][y]!=null){
-                    Tile tile = board[x][y];
-                    if (tile.isDead()){
-                        board[x][y]=null;
-                    }
-                    else if (tile.isIncreased()){
-                        int value = tile.getValue();
-                        tile.increaseValue(value*2);
-                        tile.setIncreased(false);
-                    }
-                    else if(tile.isAlreadyMerged()){
-                        tile.setMerged(false);
-                    }
-                }
-            }
-        }
-        addRandom();
     }
 
 }

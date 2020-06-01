@@ -126,23 +126,25 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         tileDrawable.setCellDefaultWidth(cellWidth);
 
         //drawing empty tiles
-        for (int y = 0; y < gameBoard.getHeight(); y++) {
-            for (int x = 0; x < gameBoard.getWidth(); x++) {
+        for (int x = 0; x < gameBoard.getHeight(); x++) {
+            for (int y = 0; y < gameBoard.getWidth(); y++) {
 
                 //start cell position
-                int posX = x * cellWidth + padding;
-                int posY = y * cellHeight + padding;
+                int posX = x * cellHeight + padding;
+                int posY = y * cellWidth + padding;
 
                 //end cell position
-                int posXX = posX + cellWidth;
-                int posYY = posY + cellHeight;
+                int posXX = posX + cellHeight;
+                int posYY = posY + cellWidth;
 
 
                 cellRectangle.setColorFilter(getResources().getColor(R.color.valueEmpty), PorterDuff.Mode.SRC_OVER);
                 drawDrawable(canvas, cellRectangle, posX, posY, posXX, posYY);
 
-                //filling positions Matrix
-                gameBoard.setPositions(x,y,posX,posY);
+                //filling positions Matrix only on init
+                if (!isInit) {
+                    gameBoard.setPositions(x, y, posY, posX);
+                }
             }
         }
     }
