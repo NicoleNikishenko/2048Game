@@ -7,8 +7,6 @@ public class MainThread extends Thread {
 
     private SurfaceHolder surfaceHolder;
     private GameView gameView;
-    private int targetFPS =60;
-    private Canvas canvas;
     private boolean running;
 
     public MainThread (SurfaceHolder surfaceHolder, GameView gameView) {
@@ -28,11 +26,12 @@ public class MainThread extends Thread {
     @Override
     public void run() {
         long startTime,timeMillis,waitTime;
-        long targetTime = 1000/targetFPS;
+        int targetFPS = 60;
+        long targetTime = 1000/ targetFPS;
 
         while (running){
             startTime = System.nanoTime();
-            canvas = null;
+            Canvas canvas = null;
 
             try {
                 canvas =  surfaceHolder.lockCanvas();

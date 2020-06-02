@@ -16,9 +16,4 @@ public class Position {
         this.positionX = positionX;
         this.positionY = positionY;
     }
-    public void setPositions(int positionsX, int positionY){
-        this.positionX = positionsX;
-        this.positionY = positionY;
-    }
-
 }
