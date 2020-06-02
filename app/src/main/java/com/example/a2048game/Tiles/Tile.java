@@ -2,92 +2,78 @@ package com.example.a2048game.Tiles;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-
 import com.example.a2048game.GameBoard;
 
-import java.util.HashMap;
+
 
 public class Tile {
     private GameBoard callback;
-    private int value;
-    private Position currentPosition;
-    private Position desPosition;
-    private int movingSpeed = 80;
-    private int sizeSpeed =10;
 
+    private int value;
     private int currentPositionX;
     private int currentPositionY;
     private int desPositionX;
     private int desPositionY;
+    private Position currentPosition;
+    private Position desPosition;
 
     private boolean isMoving = false;
-
     private boolean increased = false;
 
+    private BitmapCreator bitmapCreator = new BitmapCreator();
 
-    private final Paint mPaint = new Paint();
-    private TileDrawable drawables = new TileDrawable();
-    private Rect textBounds = new Rect();
-    private HashMap<Integer, Bitmap> tileBitmaps = new HashMap<>();
+    private int currentCellHeight;
+    private int currentCellWidth;
+    private int defaultCellHeight;
+    private int defaultCellWidth;
 
-    private int currentCellSize;
-    private int defaultCellSize;
-
-
-
+    //constructor
     public Tile(int value, Position position, GameBoard callback) {
         this.value = value;
         this.callback = callback;
 
-        this.defaultCellSize = drawables.getCellDefaultHeight();
+        defaultCellHeight = currentCellHeight = bitmapCreator.getCellDefaultHeight();
+        defaultCellWidth = currentCellWidth = bitmapCreator.getCellDefaultWidth();
 
         currentPosition = desPosition = position;
         currentPositionX = desPositionX = currentPosition.getPositionX();
         currentPositionY = desPositionY = currentPosition.getPositionY();
-        currentCellSize = (int)(defaultCellSize/3);
-
-        if (tileBitmaps.isEmpty()){
-            initCellBitmaps();
-        }
-
+        currentCellHeight = (defaultCellHeight/3);
+        currentCellWidth = (defaultCellWidth/3);
     }
 
+    //getters and setters
     public int getValue() { return value; }
     public Position getPosition() { return currentPosition; }
-    public boolean isIncreased(){ return increased; }
 
-
-
+    public boolean notAlreadyIncreased(){ return !increased; }
     public void setIncreased(boolean state) { increased = state; }
 
     public void move(Position position){
-
         this.desPosition = position;
         desPositionX = desPosition.getPositionX();
         desPositionY = desPosition.getPositionY();
-
         this.isMoving = true;
+    }
 
+    public void increaseValue(){
+        this.value *= callback.getExponent();
+        currentCellHeight = (int)(defaultCellHeight*1.5);
+        currentCellWidth = (int)(defaultCellWidth*1.5);
+        increased = false;
     }
 
 
    public void draw (Canvas canvas){
-        Bitmap bitmap = getBitmap(value);
-        bitmap = Bitmap.createScaledBitmap(bitmap,currentCellSize,currentCellSize,false);
-        canvas.drawBitmap(bitmap,currentPositionX+ (int)(defaultCellSize/2-currentCellSize/2) ,currentPositionY + (int)(defaultCellSize/2-currentCellSize/2),null);
+        Bitmap bitmap = bitmapCreator.getBitmap(value);
+        bitmap = Bitmap.createScaledBitmap(bitmap,currentCellWidth,currentCellHeight,false);
+        canvas.drawBitmap(bitmap ,(int)(currentPositionX + (double)(defaultCellWidth/callback.getExponent()-currentCellWidth/callback.getExponent()))
+                                 ,(int)(currentPositionY + (double)(defaultCellHeight/callback.getExponent()-currentCellHeight/callback.getExponent())),null);
         if(isMoving && currentPosition == desPosition ){
             isMoving =  false;
-            if(increased){
-                this.value *=2;
-                currentCellSize = (int)(defaultCellSize*1.5);
-                increased = false;
-            }
+            if(increased)
+               increaseValue();
             callback.finishedMoving(this);
-
         }
    }
 
@@ -95,28 +81,37 @@ public class Tile {
         if(isMoving) {
             updatePosition();
         }
-       updateSize();
+      updateSize();
 
    }
 
    public void updateSize(){
-        if(currentCellSize < defaultCellSize){
-            if(currentCellSize + sizeSpeed > defaultCellSize){
-                currentCellSize = defaultCellSize;
+        //resizing animation
+       int sizeSpeed =10;
+
+        if(currentCellHeight < defaultCellHeight || currentCellWidth < defaultCellWidth){
+            if(currentCellHeight + sizeSpeed > defaultCellHeight || currentCellWidth + sizeSpeed > defaultCellWidth){
+                currentCellHeight = defaultCellHeight;
+                currentCellWidth = defaultCellWidth;
             } else {
-                currentCellSize += sizeSpeed;
+                currentCellHeight += sizeSpeed;
+                currentCellWidth += sizeSpeed;
             }
         }
-       if(currentCellSize > defaultCellSize){
-           if(currentCellSize - sizeSpeed < defaultCellSize){
-               currentCellSize = defaultCellSize;
+       if(currentCellHeight > defaultCellHeight || currentCellWidth > defaultCellWidth){
+           if(currentCellHeight - sizeSpeed < defaultCellHeight || currentCellWidth - sizeSpeed < defaultCellWidth){
+               currentCellHeight = defaultCellHeight;
+               currentCellWidth = defaultCellWidth;
            } else {
-               currentCellSize -= sizeSpeed;
+               currentCellHeight -= sizeSpeed;
+               currentCellWidth -= sizeSpeed;
            }
        }
 
    }
    public void updatePosition(){
+       //sliding animation
+       int movingSpeed = 100;
 
        if (currentPositionX < desPositionX) {
            if (currentPositionX + movingSpeed > desPositionX) {
@@ -150,42 +145,5 @@ public class Tile {
        }
    }
 
-
-
-    public void initCellBitmaps() {
-
-        Drawable drawable;
-
-
-        //set text style
-        mPaint.setTextSize(50);
-        mPaint.setColor(Color.WHITE);
-        mPaint.setFakeBoldText(true);
-        String text;
-        int value;
-        Bitmap bitmap;
-
-
-        for(int i = 1 ; i <= 12 ; i++) {
-
-            value = (int)Math.pow(2,i);
-            drawable = drawables.createDrawable(value);
-            text = Integer.toString(value);
-
-            bitmap=Bitmap.createBitmap(defaultCellSize,defaultCellSize,Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);
-            drawable.setBounds(0,0,defaultCellSize,defaultCellSize);
-            mPaint.getTextBounds(text, 0, text.length(), textBounds);
-            drawable.draw(canvas);
-            canvas.drawText(text, (float)defaultCellSize/2 - textBounds.exactCenterX(), (float)defaultCellSize/2 - textBounds.exactCenterY(), mPaint);
-            tileBitmaps.put(value,bitmap);
-        }
-    }
-
-
-
-    public Bitmap getBitmap (int value){
-        return tileBitmaps.get(value);
-    }
 
 }

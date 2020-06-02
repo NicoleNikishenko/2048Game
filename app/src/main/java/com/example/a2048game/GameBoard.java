@@ -16,6 +16,7 @@ public class GameBoard {
     private Position[][] positions;
     private int boardRows;
     private int boardCols;
+    private int exponent;
 
     Random rand = new Random();
 
@@ -24,16 +25,19 @@ public class GameBoard {
     private ArrayList<Tile> movingTiles;
 
     //constructor
-    public GameBoard(int cols, int rows) {
+    public GameBoard(int rows, int cols, int exponentValue) {
+        exponent = exponentValue;
         boardRows = rows;
         boardCols = cols;
         board = new Tile[rows][cols];
         positions = new Position[rows][cols];
     }
 
-    //get and set
-    public int getHeight() { return boardRows; }
-    public int getWidth() { return boardCols; }
+
+    //getters and setters
+    public int getExponent() { return exponent; }
+    public int getRows() { return boardRows; }
+    public int getCols() { return boardCols; }
     public Tile getTile(int x, int y) { return board[x][y]; }
     public void setPositions (int matrixX ,int matrixY ,int positionX,int positionY){
         Position position = new Position(positionX,positionY);
@@ -41,8 +45,7 @@ public class GameBoard {
     }
 
     public void initBoard(){
-        addRandom();
-        addRandom();
+        //initializing board with 2 random tiles
         addRandom();
         addRandom();
         movingTiles = new ArrayList<>();
@@ -63,7 +66,7 @@ public class GameBoard {
             for(int y = 0; y < boardCols; y++){
                 if (getTile(x, y)==null) {
                     if(count == number){
-                        board[x][y] = new Tile(2,positions[x][y],this);
+                        board[x][y] = new Tile(exponent,positions[x][y],this);
                         return;
                     }
                     count++;
@@ -110,7 +113,7 @@ public class GameBoard {
                                 if (newBoard[k + 1][y] == board[x][y]) {
                                     newBoard[k + 1][y] = null;
                                 }
-                            } else if (newBoard[k][y].getValue() == board[x][y].getValue() && !newBoard[k][y].isIncreased()) {
+                            } else if (newBoard[k][y].getValue() == board[x][y].getValue() && newBoard[k][y].notAlreadyIncreased()) {
                                 newBoard[k][y] = board[x][y];
                                 newBoard[k][y].setIncreased(true);
                                 if (newBoard[k + 1][y] == board[x][y]) {
@@ -129,7 +132,6 @@ public class GameBoard {
     }
 
 
-
     void down(){
         if (!isMoving) {
             isMoving = true;
@@ -145,7 +147,7 @@ public class GameBoard {
                                 if (newBoard[k - 1][y] == board[x][y]) {
                                     newBoard[k - 1][y] = null;
                                 }
-                            } else if (newBoard[k][y].getValue() == board[x][y].getValue() && !newBoard[k][y].isIncreased()) {
+                            } else if (newBoard[k][y].getValue() == board[x][y].getValue() && newBoard[k][y].notAlreadyIncreased()) {
                                 newBoard[k][y] = board[x][y];
                                 newBoard[k][y].setIncreased(true);
                                 if (newBoard[k - 1][y] == board[x][y]) {
@@ -162,6 +164,8 @@ public class GameBoard {
             board = newBoard;
         }
     }
+
+
     void left() {
         if (!isMoving) {
             isMoving = true;
@@ -177,7 +181,7 @@ public class GameBoard {
                                 if (newBoard[x][k + 1] == board[x][y]) {
                                     newBoard[x][k + 1] = null;
                                 }
-                            } else if (newBoard[x][k].getValue() == board[x][y].getValue() && !newBoard[x][k].isIncreased()) {
+                            } else if (newBoard[x][k].getValue() == board[x][y].getValue() && newBoard[x][k].notAlreadyIncreased()) {
                                 newBoard[x][k] = board[x][y];
                                 newBoard[x][k].setIncreased(true);
                                 if (newBoard[x][k + 1] == board[x][y]) {
@@ -194,6 +198,7 @@ public class GameBoard {
             board = newBoard;
         }
     }
+
 
     void right(){
         if (!isMoving) {
@@ -210,7 +215,7 @@ public class GameBoard {
                                 if (newBoard[x][k - 1] == board[x][y]) {
                                     newBoard[x][k - 1] = null;
                                 }
-                            } else if (newBoard[x][k].getValue() == board[x][y].getValue() && !newBoard[x][k].isIncreased()) {
+                            } else if (newBoard[x][k].getValue() == board[x][y].getValue() && newBoard[x][k].notAlreadyIncreased()) {
                                 newBoard[x][k] = board[x][y];
                                 newBoard[x][k].setIncreased(true);
                                 if (newBoard[x][k - 1] == board[x][y]) {
@@ -228,6 +233,7 @@ public class GameBoard {
         }
     }
 
+
     public void moveTiles(){
         //checking which tiles changed position and moving them accordingly
         for (int x = 0; x < boardRows; x++) {
@@ -241,6 +247,7 @@ public class GameBoard {
                 }
             }
         }
+        //if board did'nt changes take no action, else new spawn is needed
         if (movingTiles.isEmpty()) {
             isMoving = false;
         }
@@ -250,6 +257,7 @@ public class GameBoard {
 
 
     public void spawn(){
+        //spawning new random only after finishMoving is complete
         if(spawnNeeded){
             addRandom();
             spawnNeeded = false;
@@ -257,7 +265,7 @@ public class GameBoard {
     }
 
     public void finishedMoving(Tile t) {
-    //finish moving is false only if all tiles are at their place
+    //finish moving is false only if all tiles are at their right place
         movingTiles.remove(t);
         if (movingTiles.isEmpty()) {
             isMoving = false;
