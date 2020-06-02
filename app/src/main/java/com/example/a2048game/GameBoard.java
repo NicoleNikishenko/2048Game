@@ -100,21 +100,21 @@ public class GameBoard {
            isMoving = true;
             newBoard = new Tile[boardRows][boardCols];
 
-            for (int i = 0; i < boardRows; i++) {
-                for (int j = 0; j < boardCols; j++) {
-                    if (board[i][j] != null) {
-                        newBoard[i][j] = board[i][j];
-                        for (int k = i - 1; k >= 0; k--) {
-                            if (newBoard[k][j] == null) {
-                                newBoard[k][j] = board[i][j];
-                                if (newBoard[k + 1][j] == board[i][j]) {
-                                    newBoard[k + 1][j] = null;
+            for (int x = 0; x < boardRows; x++) {
+                for (int y = 0; y < boardCols; y++) {
+                    if (board[x][y] != null) {
+                        newBoard[x][y] = board[x][y];
+                        for (int k = x - 1; k >= 0; k--) {
+                            if (newBoard[k][y] == null) {
+                                newBoard[k][y] = board[x][y];
+                                if (newBoard[k + 1][y] == board[x][y]) {
+                                    newBoard[k + 1][y] = null;
                                 }
-                            } else if (newBoard[k][j].getValue() == board[i][j].getValue() && !newBoard[k][j].isIncreased()) {
-                                newBoard[k][j] = board[i][j];
-                                newBoard[k][j].setIncreased(true);
-                                if (newBoard[k + 1][j] == board[i][j]) {
-                                    newBoard[k + 1][j] = null;
+                            } else if (newBoard[k][y].getValue() == board[x][y].getValue() && !newBoard[k][y].isIncreased()) {
+                                newBoard[k][y] = board[x][y];
+                                newBoard[k][y].setIncreased(true);
+                                if (newBoard[k + 1][y] == board[x][y]) {
+                                    newBoard[k + 1][y] = null;
                                 }
                             } else {
                                 break;
@@ -135,21 +135,21 @@ public class GameBoard {
             isMoving = true;
             newBoard = new Tile[boardRows][boardCols];
 
-            for (int i = 3; i >= 0; i--) {
-                for (int j = 0; j < 4; j++) {
-                    if (board[i][j] != null) {
-                        newBoard[i][j] = board[i][j];
-                        for (int k = i + 1; k < 4; k++) {
-                            if (newBoard[k][j] == null) {
-                                newBoard[k][j] = board[i][j];
-                                if (newBoard[k - 1][j] == board[i][j]) {
-                                    newBoard[k - 1][j] = null;
+            for (int x = boardRows-1 ; x >= 0; x--) {
+                for (int y = 0; y < boardCols; y++) {
+                    if (board[x][y] != null) {
+                        newBoard[x][y] = board[x][y];
+                        for (int k = x + 1; k < boardRows; k++) {
+                            if (newBoard[k][y] == null) {
+                                newBoard[k][y] = board[x][y];
+                                if (newBoard[k - 1][y] == board[x][y]) {
+                                    newBoard[k - 1][y] = null;
                                 }
-                            } else if (newBoard[k][j].getValue() == board[i][j].getValue() && !newBoard[k][j].isIncreased()) {
-                                newBoard[k][j] = board[i][j];
-                                newBoard[k][j].setIncreased(true);
-                                if (newBoard[k - 1][j] == board[i][j]) {
-                                    newBoard[k - 1][j] = null;
+                            } else if (newBoard[k][y].getValue() == board[x][y].getValue() && !newBoard[k][y].isIncreased()) {
+                                newBoard[k][y] = board[x][y];
+                                newBoard[k][y].setIncreased(true);
+                                if (newBoard[k - 1][y] == board[x][y]) {
+                                    newBoard[k - 1][y] = null;
                                 }
                             } else {
                                 break;
@@ -167,21 +167,21 @@ public class GameBoard {
             isMoving = true;
             newBoard = new Tile[boardRows][boardCols];
 
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    if (board[i][j] != null) {
-                        newBoard[i][j] = board[i][j];
-                        for (int k = j - 1; k >= 0; k--) {
-                            if (newBoard[i][k] == null) {
-                                newBoard[i][k] = board[i][j];
-                                if (newBoard[i][k + 1] == board[i][j]) {
-                                    newBoard[i][k + 1] = null;
+            for (int x = 0; x < boardRows; x++) {
+                for (int y = 0; y < boardCols; y++) {
+                    if (board[x][y] != null) {
+                        newBoard[x][y] = board[x][y];
+                        for (int k = y - 1; k >= 0; k--) {
+                            if (newBoard[x][k] == null) {
+                                newBoard[x][k] = board[x][y];
+                                if (newBoard[x][k + 1] == board[x][y]) {
+                                    newBoard[x][k + 1] = null;
                                 }
-                            } else if (newBoard[i][k].getValue() == board[i][j].getValue() && !newBoard[i][k].isIncreased()) {
-                                newBoard[i][k] = board[i][j];
-                                newBoard[i][k].setIncreased(true);
-                                if (newBoard[i][k + 1] == board[i][j]) {
-                                    newBoard[i][k + 1] = null;
+                            } else if (newBoard[x][k].getValue() == board[x][y].getValue() && !newBoard[x][k].isIncreased()) {
+                                newBoard[x][k] = board[x][y];
+                                newBoard[x][k].setIncreased(true);
+                                if (newBoard[x][k + 1] == board[x][y]) {
+                                    newBoard[x][k + 1] = null;
                                 }
                             } else {
                                 break;
@@ -200,21 +200,21 @@ public class GameBoard {
             isMoving = true;
             newBoard = new Tile[boardRows][boardCols];
 
-            for (int i = 0; i < 4; i++) {
-                for (int j = 3; j >= 0; j--) {
-                    if (board[i][j] != null) {
-                        newBoard[i][j] = board[i][j];
-                        for (int k = j + 1; k < 4; k++) {
-                            if (newBoard[i][k] == null) {
-                                newBoard[i][k] = board[i][j];
-                                if (newBoard[i][k - 1] == board[i][j]) {
-                                    newBoard[i][k - 1] = null;
+            for (int x = 0; x < boardRows; x++) {
+                for (int y = boardCols-1 ; y >= 0; y--) {
+                    if (board[x][y] != null) {
+                        newBoard[x][y] = board[x][y];
+                        for (int k = y + 1; k < boardCols; k++) {
+                            if (newBoard[x][k] == null) {
+                                newBoard[x][k] = board[x][y];
+                                if (newBoard[x][k - 1] == board[x][y]) {
+                                    newBoard[x][k - 1] = null;
                                 }
-                            } else if (newBoard[i][k].getValue() == board[i][j].getValue() && !newBoard[i][k].isIncreased()) {
-                                newBoard[i][k] = board[i][j];
-                                newBoard[i][k].setIncreased(true);
-                                if (newBoard[i][k - 1] == board[i][j]) {
-                                    newBoard[i][k - 1] = null;
+                            } else if (newBoard[x][k].getValue() == board[x][y].getValue() && !newBoard[x][k].isIncreased()) {
+                                newBoard[x][k] = board[x][y];
+                                newBoard[x][k].setIncreased(true);
+                                if (newBoard[x][k - 1] == board[x][y]) {
+                                    newBoard[x][k - 1] = null;
                                 }
                             } else {
                                 break;
