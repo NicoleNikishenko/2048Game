@@ -48,6 +48,8 @@ public class GameBoard {
         //initializing board with 2 random tiles
         addRandom();
         addRandom();
+
+
         movingTiles = new ArrayList<>();
     }
 
