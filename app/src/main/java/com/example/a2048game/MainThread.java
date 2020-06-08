@@ -38,7 +38,6 @@ public class MainThread extends Thread {
                 synchronized (surfaceHolder) {
                     gameView.update();
                     gameView.draw(canvas);
-
                 }
             } catch (Exception e){
                 e.printStackTrace();
@@ -55,12 +54,16 @@ public class MainThread extends Thread {
             waitTime =  targetTime - timeMillis;
 
             try {
-                if (waitTime > 0)
+                if (waitTime > 0) {
                     sleep(waitTime);
+
+                }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
         }
+
     }
 

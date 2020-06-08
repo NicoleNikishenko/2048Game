@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">2048Game</string>
+    <string name="gameover_title">Game Over</string>
+    <string name="gameover_yourscore">Your score :</string>
 </resources>

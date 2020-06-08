@@ -1,23 +1,34 @@
 package com.example.a2048game;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Looper;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.a2048game.Tiles.BitmapCreator;
 
 
 public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
+
     private MainThread thread;
     GameBoard gameBoard;
     Drawable backgroundRectangle = getResources().getDrawable(R.drawable.background_rectangle);
     Drawable cellRectangle = getResources().getDrawable(R.drawable.cell_rectangle);
     boolean isInit;
+
+    SurfaceHolder holder = this.getHolder();
+    AlertDialog.Builder builder;
 
 
 
@@ -33,6 +44,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         int exponent = 2;
         gameBoard = new GameBoard(4, 4, exponent);
         BitmapCreator.exponent= exponent;
+
+        builder = new AlertDialog.Builder(MainActivity.getContext());
     }
 
 
@@ -65,6 +78,9 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
 
     public void update() {
+        if(gameBoard.isGameOver()){
+            showGameOverDialog();
+        }
         if(isInit) {
             gameBoard.update();
         }
@@ -74,6 +90,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
+
 
         drawDrawable(canvas, backgroundRectangle, 0, 0, getWidth(), getHeight());
         drawEmptyBoard(canvas);
@@ -85,6 +102,26 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         gameBoard.draw(canvas);
     }
 
+
+    public static void showGameOverDialog() {
+        Looper.prepare();
+
+        Toast.makeText(MainActivity.getContext(), "GameOverDialog", Toast.LENGTH_SHORT).show();
+        final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.getContext());
+
+        LayoutInflater inflater = (LayoutInflater) MainActivity.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View dialogView = inflater.inflate(R.layout.gameover_layout, null, false);
+
+        builder.setView(dialogView).setPositiveButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).show();
+
+        Looper.loop();
+    }
 
     private void drawEmptyBoard (Canvas canvas){
         drawDrawable(canvas, backgroundRectangle, 0, 0, getWidth(), getHeight());
@@ -140,9 +177,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     private void initSwipeListener() {
         setOnTouchListener(new OnSwipeTouchListener(this.getContext()) {
-            public void onSwipeTop() {
-                gameBoard.up();
-            }
+            public void onSwipeTop() { gameBoard.up(); }
             public void onSwipeRight() {
                 gameBoard.right();
             }
@@ -159,6 +194,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     public boolean performClick() {
         return super.performClick();
     }
+
 
 }
 

@@ -69,7 +69,7 @@ public class Tile {
         bitmap = Bitmap.createScaledBitmap(bitmap,currentCellWidth,currentCellHeight,false);
         canvas.drawBitmap(bitmap ,(int)(currentPositionX + (double)(defaultCellWidth/callback.getExponent()-currentCellWidth/callback.getExponent()))
                                  ,(int)(currentPositionY + (double)(defaultCellHeight/callback.getExponent()-currentCellHeight/callback.getExponent())),null);
-        if(isMoving && currentPosition == desPosition ){
+        if(isMoving && currentPosition == desPosition && currentCellWidth == defaultCellWidth){
             isMoving =  false;
             if(increased)
                increaseValue();
@@ -93,6 +93,7 @@ public class Tile {
             if(currentCellHeight + sizeSpeed > defaultCellHeight || currentCellWidth + sizeSpeed > defaultCellWidth){
                 currentCellHeight = defaultCellHeight;
                 currentCellWidth = defaultCellWidth;
+
             } else {
                 currentCellHeight += sizeSpeed;
                 currentCellWidth += sizeSpeed;
@@ -102,6 +103,7 @@ public class Tile {
            if(currentCellHeight - sizeSpeed < defaultCellHeight || currentCellWidth - sizeSpeed < defaultCellWidth){
                currentCellHeight = defaultCellHeight;
                currentCellWidth = defaultCellWidth;
+
            } else {
                currentCellHeight -= sizeSpeed;
                currentCellWidth -= sizeSpeed;
@@ -145,5 +147,7 @@ public class Tile {
        }
    }
 
-
+    public boolean needsToUpdate(){
+        return currentPosition != desPosition || currentCellWidth != defaultCellWidth;
+    }
 }

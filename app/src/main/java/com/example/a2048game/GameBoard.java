@@ -1,12 +1,18 @@
 package com.example.a2048game;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.a2048game.Tiles.Position;
 import com.example.a2048game.Tiles.Tile;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import static java.lang.Thread.sleep;
 
 public class GameBoard {
 
@@ -24,6 +30,8 @@ public class GameBoard {
     private boolean spawnNeeded = false;
     private ArrayList<Tile> movingTiles;
 
+    private boolean gameOver = false;
+
     //constructor
     public GameBoard(int rows, int cols, int exponentValue) {
         exponent = exponentValue;
@@ -35,6 +43,7 @@ public class GameBoard {
 
 
     //getters and setters
+    public boolean isGameOver(){ return gameOver; }
     public int getExponent() { return exponent; }
     public int getRows() { return boardRows; }
     public int getCols() { return boardCols; }
@@ -44,10 +53,33 @@ public class GameBoard {
         positions[matrixX][matrixY]= position;
     }
 
+
+
     public void initBoard(){
+
         //initializing board with 2 random tiles
-        addRandom();
-        addRandom();
+//        addRandom();
+//        addRandom();
+
+
+
+        board[0][0] = new Tile(2,positions[0][0],this);
+        board[0][1] = new Tile(4,positions[0][1],this);
+        board[0][2] = new Tile(2,positions[0][2],this);
+        board[0][3] = new Tile(4,positions[0][3],this);
+        board[1][0] = new Tile(4,positions[1][0],this);
+        board[1][1] = new Tile(2,positions[1][1],this);
+        board[1][2] = new Tile(4,positions[1][2],this);
+        board[1][3] = new Tile(2,positions[1][3],this);
+        board[2][0] = new Tile(2,positions[2][0],this);
+        board[2][1] = new Tile(4,positions[2][1],this);
+        board[2][2] = new Tile(2,positions[2][2],this);
+        board[2][3] = new Tile(4,positions[2][3],this);
+        board[3][0] = new Tile(4,positions[3][1],this);
+        board[3][1] = new Tile(2,positions[3][2],this);
+        board[3][2] = new Tile(4,positions[3][3],this);
+
+
         movingTiles = new ArrayList<>();
     }
 
@@ -77,22 +109,29 @@ public class GameBoard {
     }
 
     public void draw(Canvas canvas){
-        for (int x = 0; x < boardRows; x++) {
-            for (int y = 0; y < boardCols; y++) {
-                if (board[x][y] != null) {
-                    board[x][y].draw(canvas);
+            for (int x = 0; x < boardRows; x++) {
+                for (int y = 0; y < boardCols; y++) {
+                    if (board[x][y] != null) {
+                        board[x][y].draw(canvas);
+                    }
                 }
             }
-        }
     }
 
     public void update() {
-        for (int x = 0; x < boardRows; x++) {
-            for (int y = 0; y < boardCols; y++) {
-                if (board[x][y] != null) {
-                    board[x][y].update();
+        boolean updating = false;
+            for (int x = 0; x < boardRows; x++) {
+                for (int y = 0; y < boardCols; y++) {
+                    if (board[x][y] != null) {
+                        board[x][y].update();
+
+                        if(board[x][y].needsToUpdate())
+                            updating = true;
+                    }
                 }
             }
+        if (!updating){
+            checkIfGameOver();
         }
     }
 
@@ -272,5 +311,35 @@ public class GameBoard {
             spawn();
         }
     }
+
+    public void checkIfGameOver() {
+
+        gameOver = true;
+
+        for (int i = 0; i < 4; i++) {  //this loop will check if there are any empty tiles
+            for (int j = 0; j < 4; j++) {
+
+                if (board[i][j] == null) {
+                    gameOver = false;
+                    break; //will jump out of the loop
+                }
+            }
+        }
+        if (gameOver) {  //this loop will check if there are any neighbors who can be merged
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+
+                    if ((i > 0 && board[i - 1][j].getValue() == board[i][j].getValue()) ||
+                            (i < 3 && board[i + 1][j].getValue() == board[i][j].getValue()) ||
+                            (j > 0 && board[i][j - 1].getValue() == board[i][j].getValue()) ||
+                            (j < 3 && board[i][j + 1].getValue() == board[i][j].getValue())) {
+                        gameOver = false;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
 
 }
