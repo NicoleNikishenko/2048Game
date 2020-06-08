@@ -16,31 +16,41 @@ public class GameBoard {
     private Position[][] positions;
     private int boardRows;
     private int boardCols;
-
     Random rand = new Random();
-
     private boolean isMoving = false;
     private boolean spawnNeeded = false;
     private ArrayList<Tile> movingTiles;
+    private boolean gameOver = false;
+    private GameViewCallback callback;
 
     //constructor
-    public GameBoard(int cols, int rows) {
+    public GameBoard(int cols, int rows, GameViewCallback callback) {
         boardRows = rows;
         boardCols = cols;
         board = new Tile[rows][cols];
         positions = new Position[rows][cols];
+        this.callback = callback;
     }
 
     //get and set
-    public int getHeight() { return boardRows; }
-    public int getWidth() { return boardCols; }
-    public Tile getTile(int x, int y) { return board[x][y]; }
-    public void setPositions (int matrixX ,int matrixY ,int positionX,int positionY){
-        Position position = new Position(positionX,positionY);
-        positions[matrixX][matrixY]= position;
+    public int getHeight() {
+        return boardRows;
     }
 
-    public void initBoard(){
+    public int getWidth() {
+        return boardCols;
+    }
+
+    public Tile getTile(int x, int y) {
+        return board[x][y];
+    }
+
+    public void setPositions(int matrixX, int matrixY, int positionX, int positionY) {
+        Position position = new Position(positionX, positionY);
+        positions[matrixX][matrixY] = position;
+    }
+
+    public void initBoard() {
         addRandom();
         addRandom();
         addRandom();
@@ -49,21 +59,21 @@ public class GameBoard {
     }
 
     void addRandom() {
-    // a new tile is spawning in a random empty place on the board
+        // a new tile is spawning in a random empty place on the board
         int count = 0;
-        for (int x = 0; x < boardRows; x++){
-            for(int y = 0; y < boardCols; y++){
+        for (int x = 0; x < boardRows; x++) {
+            for (int y = 0; y < boardCols; y++) {
                 if (getTile(x, y) == null)
                     count++;
             }
         }
         int number = rand.nextInt(count);
         count = 0;
-        for (int x = 0; x < boardRows; x++){
-            for(int y = 0; y < boardCols; y++){
-                if (getTile(x, y)==null) {
-                    if(count == number){
-                        board[x][y] = new Tile(2,positions[x][y],this);
+        for (int x = 0; x < boardRows; x++) {
+            for (int y = 0; y < boardCols; y++) {
+                if (getTile(x, y) == null) {
+                    if (count == number) {
+                        board[x][y] = new Tile(2, positions[x][y], this);
                         return;
                     }
                     count++;
@@ -73,7 +83,7 @@ public class GameBoard {
 
     }
 
-    public void draw(Canvas canvas){
+    public void draw(Canvas canvas) {
         for (int x = 0; x < boardRows; x++) {
             for (int y = 0; y < boardCols; y++) {
                 if (board[x][y] != null) {
@@ -81,6 +91,11 @@ public class GameBoard {
                 }
             }
         }
+
+        if (gameOver) {
+            callback.gameOver();
+        }
+
     }
 
     public void update() {
@@ -94,10 +109,9 @@ public class GameBoard {
     }
 
 
-
-    void up(){
+    void up() {
         if (!isMoving) {
-           isMoving = true;
+            isMoving = true;
             newBoard = new Tile[boardRows][boardCols];
 
             for (int x = 0; x < boardRows; x++) {
@@ -129,13 +143,12 @@ public class GameBoard {
     }
 
 
-
-    void down(){
+    void down() {
         if (!isMoving) {
             isMoving = true;
             newBoard = new Tile[boardRows][boardCols];
 
-            for (int x = boardRows-1 ; x >= 0; x--) {
+            for (int x = boardRows - 1; x >= 0; x--) {
                 for (int y = 0; y < boardCols; y++) {
                     if (board[x][y] != null) {
                         newBoard[x][y] = board[x][y];
@@ -162,6 +175,7 @@ public class GameBoard {
             board = newBoard;
         }
     }
+
     void left() {
         if (!isMoving) {
             isMoving = true;
@@ -195,13 +209,13 @@ public class GameBoard {
         }
     }
 
-    void right(){
+    void right() {
         if (!isMoving) {
             isMoving = true;
             newBoard = new Tile[boardRows][boardCols];
 
             for (int x = 0; x < boardRows; x++) {
-                for (int y = boardCols-1 ; y >= 0; y--) {
+                for (int y = boardCols - 1; y >= 0; y--) {
                     if (board[x][y] != null) {
                         newBoard[x][y] = board[x][y];
                         for (int k = y + 1; k < boardCols; k++) {
@@ -228,12 +242,12 @@ public class GameBoard {
         }
     }
 
-    public void moveTiles(){
+    public void moveTiles() {
         //checking which tiles changed position and moving them accordingly
         for (int x = 0; x < boardRows; x++) {
             for (int y = 0; y < boardCols; y++) {
                 Tile t = newBoard[x][y];
-                if(t != null) {
+                if (t != null) {
                     if (t.getPosition() != positions[x][y]) {
                         movingTiles.add(t);
                         t.move(positions[x][y]);
@@ -243,26 +257,56 @@ public class GameBoard {
         }
         if (movingTiles.isEmpty()) {
             isMoving = false;
-        }
-        else
+        } else
             spawnNeeded = true;
     }
 
 
-    public void spawn(){
-        if(spawnNeeded){
+    public void spawn() {
+        if (spawnNeeded) {
             addRandom();
             spawnNeeded = false;
         }
     }
 
     public void finishedMoving(Tile t) {
-    //finish moving is false only if all tiles are at their place
+        //finish moving is false only if all tiles are at their place
         movingTiles.remove(t);
         if (movingTiles.isEmpty()) {
             isMoving = false;
-            spawn();
+            spawn(); //after we spawned a new tile we want to check if the game is over
+            isGameOver();
         }
     }
 
+    private void isGameOver() {
+
+        gameOver = true;
+
+        for (int i = 0; i < 4; i++) {  //this loop will check if there are any empty tiles
+            for (int j = 0; j < 4; j++) {
+
+                if (board[i][j] == null) {
+                    gameOver = false;
+                    break; //will jump out of the loop
+                }
+            }
+        }
+        if (gameOver) {  //this loop will check if there are any neighbors who can be merged
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+
+                    if ((i > 0 && board[i - 1][j].getValue() == board[i][j].getValue()) ||
+                            (i < 3 && board[i + 1][j].getValue() == board[i][j].getValue()) ||
+                            (j > 0 && board[i][j - 1].getValue() == board[i][j].getValue()) ||
+                            (j < 3 && board[i][j + 1].getValue() == board[i][j].getValue())) {
+                        gameOver = false;
+
+                    }
+                }
+            }
+
+        }
+
+    }
 }

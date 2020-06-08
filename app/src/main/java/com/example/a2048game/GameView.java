@@ -7,24 +7,30 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
+import com.example.a2048game.Score.GameOver;
 import com.example.a2048game.Tiles.TileDrawable;
 
 
-public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
+public class GameView  extends SurfaceView  implements SurfaceHolder.Callback, GameViewCallback{
 
+    Context context;
     private MainThread thread;
     GameBoard gameBoard;
     Drawable backgroundRectangle = getResources().getDrawable(R.drawable.background_rectangle);
     Drawable cellRectangle = getResources().getDrawable(R.drawable.cell_rectangle);
     TileDrawable tileDrawable;
     boolean isInit;
+    private boolean isgameover = false;
+    private GameOver gameOverLayout;
 
 
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
+        Toast.makeText(context,"GameView Constructor", Toast.LENGTH_SHORT).show();
+        this.context = context;
         getHolder().addCallback(this);
         setZOrderOnTop(true);    // necessary
         getHolder().setFormat(PixelFormat.TRANSPARENT);
@@ -35,7 +41,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
         isInit = false;
         initSwipeListener();
-        gameBoard = new GameBoard(4, 4);
+        gameBoard = new GameBoard(4, 4, this);
+        this.gameOverLayout = new GameOver(this , context);
     }
 
 
@@ -68,9 +75,11 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
 
     public void update() {
-        if(isInit) {
+
+        if(isInit && !isgameover) {
             gameBoard.update();
         }
+
     }
 
 
@@ -86,6 +95,13 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         } isInit=true;
 
         gameBoard.draw(canvas);
+
+        if(isgameover) {
+            gameOverLayout.showGameOverDialog();
+            Toast.makeText(context,"CallShowGameOverDialog", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
     private void initSwipeListener() {
@@ -164,7 +180,15 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         return dp * getContext().getResources().getDisplayMetrics().density;
     }
 
+    @Override
+    public void gameOver() {
+        isgameover = true;
+        Toast.makeText(context,"callback to GameView", Toast.LENGTH_SHORT).show();
+    }
+
 }
+
+
 
 
 

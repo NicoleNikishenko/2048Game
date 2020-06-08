@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/gameovertitle_tv"
+        android:text="@string/gameover_title"
+        android:gravity="center"
+        android:textSize="45sp"
+        android:textColor="#000"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gameoveryourscore_tv"
+        android:gravity="center"
+        android:layout_below="@id/gameovertitle_tv"
+        android:text="@string/gameover_yourscore"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="30dp"
+        android:textSize="25sp"
+        android:textColor="#000"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gameoverscore_tv"
+        android:gravity="center"
+        android:textColor="#000"
+        android:textSize="25sp"
+        android:layout_below="@id/gameovertitle_tv"
+        android:layout_toRightOf="@id/gameoveryourscore_tv"
+        android:text="500"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="30dp"/>
+
+
+
+
+</RelativeLayout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">2048Game</string>
+    <string name="gameover_title">המשחק נגמר</string>
+    <string name="gameover_yourscore">"התוצאה שלך : "</string>
+</resources>
