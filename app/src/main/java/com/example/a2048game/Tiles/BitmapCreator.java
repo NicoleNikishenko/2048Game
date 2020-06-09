@@ -8,7 +8,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.a2048game.MainActivity;
 import com.example.a2048game.R;
@@ -22,6 +25,7 @@ public class BitmapCreator {
     public static int cellDefaultHeight;
     public static int cellDefaultWidth;
     public static int exponent;
+
 
     private final Paint mPaint = new Paint();
     private Rect textBounds = new Rect();
@@ -38,7 +42,7 @@ public class BitmapCreator {
 
 
     public Drawable createDrawable (int index){
-        Drawable drawable = MainActivity.getContext().getDrawable(R.drawable.cell_rectangle);
+        Drawable drawable = MainActivity.getContext().getDrawable(R.drawable.gameboard_cell_shape);
         if (drawable != null) {
             switch (index) {
                 case 0:
@@ -91,9 +95,11 @@ public class BitmapCreator {
         Canvas canvas = new Canvas(bitmap);
 
         //set text style and size
+
+        Typeface customTypeface = ResourcesCompat.getFont(context, R.font.luckiest_guy);
+        mPaint.setTypeface(customTypeface);
         mPaint.setColor(Color.WHITE);
-        mPaint.setFakeBoldText(true);
-        int textSize = 70;
+        int textSize = 90;
         mPaint.setTextSize(textSize);
         drawable.setBounds(0,0,cellDefaultWidth,cellDefaultHeight);
         mPaint.getTextBounds(text, 0, text.length(), textBounds);

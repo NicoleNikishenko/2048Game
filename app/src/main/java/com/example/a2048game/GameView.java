@@ -15,8 +15,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     private MainThread thread;
     GameBoard gameBoard;
-    Drawable backgroundRectangle = getResources().getDrawable(R.drawable.background_rectangle);
-    Drawable cellRectangle = getResources().getDrawable(R.drawable.cell_rectangle);
+    Drawable backgroundRectangle = getResources().getDrawable(R.drawable.gameboard_background);
+    Drawable cellRectangle = getResources().getDrawable(R.drawable.gameboard_cell_shape);
     boolean isInit;
 
 

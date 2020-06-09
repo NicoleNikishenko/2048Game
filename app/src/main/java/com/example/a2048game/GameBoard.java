@@ -47,6 +47,9 @@ public class GameBoard {
     public void initBoard(){
         //initializing board with 2 random tiles
         addRandom();
+        addRandom();addRandom();
+        addRandom();
+        addRandom();
         addRandom();
 
 
@@ -68,7 +71,7 @@ public class GameBoard {
             for(int y = 0; y < boardCols; y++){
                 if (getTile(x, y)==null) {
                     if(count == number){
-                        board[x][y] = new Tile(exponent,positions[x][y],this);
+                        board[x][y] = new Tile(8192,positions[x][y],this);
                         return;
                     }
                     count++;
