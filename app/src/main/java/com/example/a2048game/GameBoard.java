@@ -3,6 +3,8 @@ package com.example.a2048game;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
+import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -33,6 +35,7 @@ public class GameBoard {
     private boolean gameOver = false;
 
     private GameView callback;
+    private static Context mContext;
 
 
 

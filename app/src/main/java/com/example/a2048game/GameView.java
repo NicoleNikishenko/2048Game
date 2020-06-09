@@ -121,13 +121,14 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
         if (!isInit) {
             gameBoard.initBoard();
+            mainActivity.updateScore(score.getScore(),score.getTopScore());
         } isInit=true;
 
         gameBoard.draw(canvas);
     }
 
 
-    public static void showGameOverDialog() {
+    public void showGameOverDialog() {
         Looper.prepare();
 
         Toast.makeText(MainActivity.getContext(), "GameOverDialog", Toast.LENGTH_SHORT).show();
@@ -221,12 +222,11 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
 
     public void updateScore(int value){
-
-
         score.updateScore(value);
         mainActivity.updateScore(score.getScore(),score.getTopScore());
 
     }
+
 
 }
 

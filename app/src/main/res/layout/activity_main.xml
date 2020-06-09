@@ -29,7 +29,7 @@
                     android:textColor="@color/valueEmpty"
                     android:textSize="30sp" />
                 <TextView
-
+                    android:id="@+id/tv_best_score"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginTop="13dp"
@@ -40,17 +40,18 @@
                     android:paddingHorizontal="15dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
-                    android:text="1235"
+                    android:minEms="3"
                     android:textColor="@color/valueEmpty"
                     android:textSize="25sp" />
             </LinearLayout>
 
              <TextView
+                 android:id="@+id/tv_current_score"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="445345"
+                android:text="Start!"
                 android:autoSizeTextType="uniform"
                 android:fontFamily="@font/luckiest_guy"
                 android:maxLines="2"
@@ -72,7 +73,7 @@
         android:layout_height="50dp"
         android:layout_gravity="center_vertical"
         android:layout_marginHorizontal="10dp"
-        android:background="@drawable/btn_round_blue"
+        android:background="@drawable/btn_round_orange"
         android:layout_margin="10dp"
         android:layout_alignParentEnd="true"/>
 
@@ -91,58 +92,6 @@
         android:layout_above="@id/game_bar">
 
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/score_title"
-                android:gravity="center"
-
-                android:textSize="30sp"
-                android:textColor="#000"
-                android:text="@string/main_score"
-                android:layout_marginTop="20sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/topscore_title"
-                android:gravity="center"
-                android:textSize="30sp"
-                android:textColor="#000"
-                android:text="@string/main_topscore"
-                android:layout_toRightOf="@id/score_title"
-                android:layout_marginTop="20sp"
-                android:layout_marginLeft="35dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/score_value"
-                android:gravity="center"
-                android:textSize="25sp"
-                android:textColor="#000"
-                android:layout_below="@id/score_title"
-                android:layout_marginLeft="20dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/topscore_value"
-                android:gravity="center"
-                android:textSize="25sp"
-                android:textColor="#000"
-                android:layout_below="@id/score_title"
-                android:layout_toRightOf="@id/score_value"
-                android:layout_marginLeft="105dp"/>
-
-
-
-    </RelativeLayout>
 
     <com.example.a2048game.GameView
         android:id="@+id/game_view"
