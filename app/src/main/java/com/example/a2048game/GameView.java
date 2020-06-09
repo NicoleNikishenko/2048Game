@@ -1,4 +1,5 @@
 package com.example.a2048game;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
@@ -7,20 +8,28 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.a2048game.Tiles.BitmapCreator;
 
+import java.util.zip.Inflater;
+
 
 public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
+    private static final String APP_NAME = "2048Project";
 
+    private int scWidth, scHeight;
+    private Context context;
     private MainThread thread;
     GameBoard gameBoard;
     Drawable backgroundRectangle = getResources().getDrawable(R.drawable.background_rectangle);
@@ -30,10 +39,20 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     SurfaceHolder holder = this.getHolder();
     AlertDialog.Builder builder;
 
+    private Score score;
+    MainActivity mainActivity;
+
+
+
 
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
+        scWidth = dm.widthPixels;
+        scHeight = dm.widthPixels;
 
         getHolder().addCallback(this);
         setZOrderOnTop(true);    // necessary
@@ -42,10 +61,16 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         isInit = false;
         initSwipeListener();
         int exponent = 2;
-        gameBoard = new GameBoard(4, 4, exponent);
+        this.score = new Score(getResources(), 0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE));
+
+        gameBoard = new GameBoard(4, 4, exponent, this);
         BitmapCreator.exponent= exponent;
 
+        this.context = context;
         builder = new AlertDialog.Builder(MainActivity.getContext());
+
+        this.mainActivity = (MainActivity)context;
+
     }
 
 
@@ -90,7 +115,6 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-
 
         drawDrawable(canvas, backgroundRectangle, 0, 0, getWidth(), getHeight());
         drawEmptyBoard(canvas);
@@ -195,6 +219,14 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         return super.performClick();
     }
 
+
+    public void updateScore(int value){
+
+
+        score.updateScore(value);
+        mainActivity.updateScore(score.getScore(),score.getTopScore());
+
+    }
 
 }
 

@@ -32,13 +32,19 @@ public class GameBoard {
 
     private boolean gameOver = false;
 
+    private GameView callback;
+
+
+
     //constructor
-    public GameBoard(int rows, int cols, int exponentValue) {
+    public GameBoard(int rows, int cols, int exponentValue, GameView callback) {
         exponent = exponentValue;
         boardRows = rows;
         boardCols = cols;
         board = new Tile[rows][cols];
         positions = new Position[rows][cols];
+        this.callback = callback;
+
     }
 
 
@@ -58,30 +64,12 @@ public class GameBoard {
     public void initBoard(){
 
         //initializing board with 2 random tiles
-//        addRandom();
-//        addRandom();
-
-
-
-        board[0][0] = new Tile(2,positions[0][0],this);
-        board[0][1] = new Tile(4,positions[0][1],this);
-        board[0][2] = new Tile(2,positions[0][2],this);
-        board[0][3] = new Tile(4,positions[0][3],this);
-        board[1][0] = new Tile(4,positions[1][0],this);
-        board[1][1] = new Tile(2,positions[1][1],this);
-        board[1][2] = new Tile(4,positions[1][2],this);
-        board[1][3] = new Tile(2,positions[1][3],this);
-        board[2][0] = new Tile(2,positions[2][0],this);
-        board[2][1] = new Tile(4,positions[2][1],this);
-        board[2][2] = new Tile(2,positions[2][2],this);
-        board[2][3] = new Tile(4,positions[2][3],this);
-        board[3][0] = new Tile(4,positions[3][1],this);
-        board[3][1] = new Tile(2,positions[3][2],this);
-        board[3][2] = new Tile(4,positions[3][3],this);
-
+        addRandom();
+        addRandom();
 
         movingTiles = new ArrayList<>();
     }
+
 
     void addRandom() {
     // a new tile is spawning in a random empty place on the board
@@ -339,6 +327,11 @@ public class GameBoard {
                 }
             }
         }
+    }
+
+    public void updateScore(int value){
+        callback.updateScore(value);
+
     }
 
 

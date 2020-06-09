@@ -2,4 +2,6 @@
     <string name="app_name">2048Game</string>
     <string name="gameover_title">Game Over</string>
     <string name="gameover_yourscore">Your score :</string>
+    <string name="main_score">Score</string>
+    <string name="main_topscore">Record</string>
 </resources>

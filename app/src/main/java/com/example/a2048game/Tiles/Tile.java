@@ -71,8 +71,10 @@ public class Tile {
                                  ,(int)(currentPositionY + (double)(defaultCellHeight/callback.getExponent()-currentCellHeight/callback.getExponent())),null);
         if(isMoving && currentPosition == desPosition && currentCellWidth == defaultCellWidth){
             isMoving =  false;
-            if(increased)
-               increaseValue();
+            if(increased) {
+                callback.updateScore(this.getValue());
+                increaseValue();
+            }
             callback.finishedMoving(this);
         }
    }
