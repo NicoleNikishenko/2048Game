@@ -25,19 +25,6 @@
             android:layout_marginTop="30dp"
             android:layout_marginBottom="20dp"/>
 
-    <Button
-        android:id="@+id/new_game_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="New Game"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:padding="10dp"
-        android:background="@drawable/menu_btn"
-        android:layout_marginVertical="10dp"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginBottom="10dp"/>
         <Button
             android:id="@+id/new_game_btn"
             android:layout_width="match_parent"
@@ -49,34 +36,48 @@
             android:padding="10dp"
             android:background="@drawable/menu_btn"
             android:layout_marginVertical="10dp"
-            android:layout_marginHorizontal="40dp"/>
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginBottom="10dp"/>
+
         <Button
-            android:id="@+id/new_game_btn"
+            android:id="@+id/load_game_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="New Game"
+            android:text="Load Game"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold"
             android:padding="10dp"
-            android:background="@drawable/menu_btn"
-            android:layout_marginVertical="10dp"
-            android:layout_marginHorizontal="40dp"/>
-        <Button
-            android:id="@+id/new_game_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="New Game"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:padding="10dp"
-            android:background="@drawable/menu_btn"
+            android:background="@drawable/menu_btn2"
             android:layout_marginVertical="10dp"
             android:layout_marginHorizontal="40dp"/>
 
+        <Button
+            android:id="@+id/settings_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:background="@drawable/menu_btn3"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="40dp"/>
+
+        <Button
+            android:id="@+id/leader_board_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Leader Board"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:background="@drawable/menu_btn4"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="40dp"/>
 
     </LinearLayout>
-
 
 </RelativeLayout>

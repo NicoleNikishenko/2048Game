@@ -93,7 +93,7 @@ public class BitmapCreator {
         //set text style and size
         mPaint.setColor(Color.WHITE);
         mPaint.setFakeBoldText(true);
-        int textSize = 60;
+        int textSize = 70;
         mPaint.setTextSize(textSize);
         drawable.setBounds(0,0,cellDefaultWidth,cellDefaultHeight);
         mPaint.getTextBounds(text, 0, text.length(), textBounds);

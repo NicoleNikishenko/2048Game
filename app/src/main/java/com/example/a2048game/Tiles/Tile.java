@@ -38,8 +38,8 @@ public class Tile {
         currentPosition = desPosition = position;
         currentPositionX = desPositionX = currentPosition.getPositionX();
         currentPositionY = desPositionY = currentPosition.getPositionY();
-        currentCellHeight = (defaultCellHeight/3);
-        currentCellWidth = (defaultCellWidth/3);
+        currentCellHeight = (defaultCellHeight/5);
+        currentCellWidth = (defaultCellWidth/5);
     }
 
     //getters and setters
@@ -58,8 +58,8 @@ public class Tile {
 
     public void increaseValue(){
         this.value *= callback.getExponent();
-        currentCellHeight = (int)(defaultCellHeight*1.5);
-        currentCellWidth = (int)(defaultCellWidth*1.5);
+        currentCellHeight = (int)(defaultCellHeight*1.4);
+        currentCellWidth = (int)(defaultCellWidth*1.4);
         increased = false;
     }
 
@@ -87,7 +87,7 @@ public class Tile {
 
    public void updateSize(){
         //resizing animation
-       int sizeSpeed =10;
+       int sizeSpeed =20;
 
         if(currentCellHeight < defaultCellHeight || currentCellWidth < defaultCellWidth){
             if(currentCellHeight + sizeSpeed > defaultCellHeight || currentCellWidth + sizeSpeed > defaultCellWidth){
