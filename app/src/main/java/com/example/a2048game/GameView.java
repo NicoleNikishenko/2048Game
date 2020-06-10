@@ -103,7 +103,14 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
 
     public void update() {
+
         if(gameBoard.isGameOver()){
+
+            if(score.isNewHighScore()) //if we have a new highscore we will update the entire leaderboard. else we will check if we got a new midscore and if so we will update the leaderboard appropriately
+                score.updateLeaderBoard();
+            else
+                score.checkIfNewMidScore();
+
             showGameOverDialog();
         }
         if(isInit) {
@@ -198,6 +205,13 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         resetBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
+                if(score.isNewHighScore())
+                    score.updateLeaderBoard();
+                else
+                    score.checkIfNewMidScore();
+                score.refreshLeaderBoard();
+
                 gameBoard.resetGame();
                 mainActivity.updateScore(score.getScore(),score.getTopScore());
             }
@@ -235,6 +249,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
             @Override
             public void onClick(View v) {
+
                 gameBoard.resetGame();
                 gameOverDialog.dismiss();
 
