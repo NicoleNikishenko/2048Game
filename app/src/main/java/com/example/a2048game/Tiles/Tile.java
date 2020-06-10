@@ -46,8 +46,21 @@ public class Tile {
     public int getValue() { return value; }
     public Position getPosition() { return currentPosition; }
 
+    public void setPosition(Position position) {
+        this.currentPosition = position;
+        this.desPosition = position;
+    }
+    public void setValue(int value){
+        this.value = value;
+    }
+
+
     public boolean notAlreadyIncreased(){ return !increased; }
     public void setIncreased(boolean state) { increased = state; }
+    public Tile copyTile (){
+        Tile tile = new Tile(this.value,this.currentPosition,this.callback);
+        return tile;
+    }
 
     public void move(Position position){
         this.desPosition = position;

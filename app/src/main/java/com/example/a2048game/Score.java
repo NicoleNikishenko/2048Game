@@ -26,11 +26,9 @@ public class Score {
     }
 
     public void updateScore(int value){
-
-        score += value;
+        score = value;
         checkTopScore();
     }
-
     public void checkTopScore(){
 
         topScore = prefs.getInt(TOP_SCORE_PREF,0);
