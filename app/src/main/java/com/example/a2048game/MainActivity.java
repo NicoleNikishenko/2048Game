@@ -1,22 +1,14 @@
 package com.example.a2048game;
-
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private static Context mContext;
     private TextView scoreTv;
     private TextView topScoreTv;
+    Dialog epicDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
 
@@ -56,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(score != 0) {
+                if(score == 0) {
+                    scoreTv.setText("START!");
+                } else {
                     scoreTv.setText(Integer.toString(score));
                 }
                 topScoreTv.setText(Integer.toString(topScore));

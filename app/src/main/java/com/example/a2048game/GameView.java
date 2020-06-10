@@ -1,47 +1,40 @@
 package com.example.a2048game;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.Button;
+import android.widget.ImageButton;
 import androidx.appcompat.app.AlertDialog;
-
 import com.example.a2048game.Tiles.BitmapCreator;
 
-import java.util.zip.Inflater;
 
 
 public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     private static final String APP_NAME = "2048Project";
 
-    private int scWidth, scHeight;
-    private Context context;
     private MainThread thread;
+    private boolean isInit;
+    private Score score;
     GameBoard gameBoard;
     Drawable backgroundRectangle = getResources().getDrawable(R.drawable.gameboard_background);
     Drawable cellRectangle = getResources().getDrawable(R.drawable.gameboard_cell_shape);
-    boolean isInit;
 
-    SurfaceHolder holder = this.getHolder();
     AlertDialog.Builder builder;
 
-    private Score score;
     MainActivity mainActivity;
-
+    private Dialog gameOverDialog;
 
 
 
@@ -51,25 +44,22 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
         DisplayMetrics dm = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
-        scWidth = dm.widthPixels;
-        scHeight = dm.widthPixels;
+
 
         getHolder().addCallback(this);
         setZOrderOnTop(true);    // necessary
         getHolder().setFormat(PixelFormat.TRANSPARENT);
 
+        this.mainActivity = (MainActivity)context;
+
         isInit = false;
-        initSwipeListener();
         int exponent = 2;
         this.score = new Score(getResources(), 0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE));
-
         gameBoard = new GameBoard(4, 4, exponent, this);
-        BitmapCreator.exponent= exponent;
+        BitmapCreator.exponent = exponent;
 
-        this.context = context;
         builder = new AlertDialog.Builder(MainActivity.getContext());
-
-        this.mainActivity = (MainActivity)context;
+        gameOverDialog = new Dialog(context);
 
     }
 
@@ -80,11 +70,21 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         thread = new MainThread(holder, this);
         thread.setRunning(true);
         thread.start();
+
+        //Initializing board
+        prepareGameOverDialog();
+        initSwipeListener();
+        initClickListeners();
+        gameBoard.initBoard();
+        mainActivity.updateScore(score.getScore(),score.getTopScore());
+        isInit=true;
+
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         thread.setSurfaceHolder(holder);
+
     }
 
     @Override
@@ -118,35 +118,10 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
         drawDrawable(canvas, backgroundRectangle, 0, 0, getWidth(), getHeight());
         drawEmptyBoard(canvas);
-
-        if (!isInit) {
-            gameBoard.initBoard();
-            mainActivity.updateScore(score.getScore(),score.getTopScore());
-        } isInit=true;
-
         gameBoard.draw(canvas);
     }
 
 
-    public void showGameOverDialog() {
-        Looper.prepare();
-
-        Toast.makeText(MainActivity.getContext(), "GameOverDialog", Toast.LENGTH_SHORT).show();
-        final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.getContext());
-
-        LayoutInflater inflater = (LayoutInflater) MainActivity.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View dialogView = inflater.inflate(R.layout.gameover_layout, null, false);
-
-        builder.setView(dialogView).setPositiveButton("Close", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        }).show();
-
-        Looper.loop();
-    }
 
     private void drawEmptyBoard (Canvas canvas){
         drawDrawable(canvas, backgroundRectangle, 0, 0, getWidth(), getHeight());
@@ -202,9 +177,12 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     private void initSwipeListener() {
         setOnTouchListener(new OnSwipeTouchListener(this.getContext()) {
-            public void onSwipeTop() { gameBoard.up(); }
+            public void onSwipeTop() {
+               gameBoard.up();
+            }
             public void onSwipeRight() {
-                gameBoard.right();
+               gameBoard.right();
+
             }
             public void onSwipeLeft() {
                 gameBoard.left();
@@ -213,6 +191,27 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
                 gameBoard.down();
             }
         });
+    }
+
+    private void initClickListeners() {
+        ImageButton resetBtn = mainActivity.findViewById(R.id.btn_reset);
+        resetBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                gameBoard.resetGame();
+                mainActivity.updateScore(score.getScore(),score.getTopScore());
+            }
+        });
+
+        ImageButton undoBtn = mainActivity.findViewById(R.id.btn_undo);
+        undoBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                gameBoard.undoMove();
+                mainActivity.updateScore(score.getScore(),score.getTopScore());
+            }
+        });
+
     }
 
     @Override
@@ -227,6 +226,31 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     }
 
+    public void prepareGameOverDialog(){
+        gameOverDialog.setContentView(R.layout.gameover_layout);
+        gameOverDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button btn = gameOverDialog.findViewById(R.id.btn_try_again);
+        btn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                gameBoard.resetGame();
+                gameOverDialog.dismiss();
+
+            }
+        });
+    }
+
+    public void showGameOverDialog() {
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                gameOverDialog.show();
+            }
+        });
+
+    }
 
 }
 
