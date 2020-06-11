@@ -1,4 +1,4 @@
-package com.example.a2048game;
+package com.example.a2048game.Game;
 
 import android.graphics.Canvas;
 
@@ -31,8 +31,8 @@ public class GameBoard {
     private boolean gameOver = false;
 
     private GameView callback;
-    private int currentScore;
-    private int oldScore;
+    private long currentScore;
+    private long oldScore;
 
 
 
@@ -331,7 +331,7 @@ public class GameBoard {
 
 
 
-        public void updateScore(int value){
+        public void updateScore(long value){
         currentScore += value;
         callback.updateScore(currentScore);
     }
@@ -366,7 +366,7 @@ public class GameBoard {
         //reset the game and score
         gameOver = false;
         canUndo = false;
-        
+
         for (int x = 0; x < boardRows; x++) {
             for (int y = 0; y < boardCols; y++) {
                 board[x][y] = null;

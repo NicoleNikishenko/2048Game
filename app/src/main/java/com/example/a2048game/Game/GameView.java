@@ -1,4 +1,4 @@
-package com.example.a2048game;
+package com.example.a2048game.Game;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -15,7 +15,11 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+
 import androidx.appcompat.app.AlertDialog;
+
+import com.example.a2048game.MainActivity;
+import com.example.a2048game.R;
 import com.example.a2048game.Tiles.BitmapCreator;
 
 
@@ -39,6 +43,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
 
 
+
+
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -53,13 +59,17 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         this.mainActivity = (MainActivity)context;
 
         isInit = false;
-        int exponent = 2;
-        this.score = new Score(getResources(), 0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE));
-        gameBoard = new GameBoard(4, 4, exponent, this);
+        int exponent = mainActivity.getBoardExponent();
+        int rows = mainActivity.getBoardRows();
+        int cols = mainActivity.getBoardCols();
+
+        this.score = new Score(getResources(), (long)0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE));
+        gameBoard = new GameBoard(rows, cols, exponent, this);
         BitmapCreator.exponent = exponent;
 
         builder = new AlertDialog.Builder(MainActivity.getContext());
         gameOverDialog = new Dialog(context);
+
 
     }
 
@@ -68,6 +78,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         thread = new MainThread(holder, this);
+        mainActivity.setThread(thread);
         thread.setRunning(true);
         thread.start();
 
@@ -95,6 +106,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
                 thread.setRunning(false);
                 thread.join();
                 retry = false;
+                BitmapCreator bitmapCreator = new BitmapCreator();
+                bitmapCreator.clearBitmapArray();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -128,7 +141,13 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
         //adding padding to frame
 
+
         int padding = (int) pxFromDp(3);
+
+        if (gameBoard.getRows() == 6){
+            padding = (int) pxFromDp(1);
+        }
+
         int width = getWidth() - padding * 2;
         int height = getHeight() - padding * 2;
 
@@ -220,7 +239,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     }
 
 
-    public void updateScore(int value){
+    public void updateScore(long value){
         score.updateScore(value);
         mainActivity.updateScore(score.getScore(),score.getTopScore());
 
@@ -249,8 +268,9 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
                 gameOverDialog.show();
             }
         });
-
     }
+
+
 
 }
 

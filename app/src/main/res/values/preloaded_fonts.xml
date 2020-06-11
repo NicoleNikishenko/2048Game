@@ -2,8 +2,10 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
 
+        <item>@font/benchnine</item>
         <item>@font/coming_soon</item>
         <item>@font/luckiest_guy</item>
         <item>@font/montserrat_alternates</item>
+        <item>@font/mouse_memoirs</item>
     </array>
 </resources>

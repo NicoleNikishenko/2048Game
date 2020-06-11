@@ -1,4 +1,4 @@
-package com.example.a2048game;
+package com.example.a2048game.Game;
 
 import android.content.Context;
 import android.view.GestureDetector;

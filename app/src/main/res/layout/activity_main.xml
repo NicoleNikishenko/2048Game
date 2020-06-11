@@ -45,23 +45,23 @@
                     android:textSize="25sp" />
             </LinearLayout>
 
-             <TextView
-                 android:id="@+id/tv_current_score"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="Start!"
-                android:autoSizeTextType="uniform"
-                android:fontFamily="@font/luckiest_guy"
-                android:maxLines="2"
-                android:padding="3dp"
-                android:layout_marginBottom="5dp"
-                android:textAlignment="center"
-                android:textColor="@color/valueEmpty"
-                android:textSize="35sp"
-                android:textStyle="italic"
-                 android:layout_marginHorizontal="80dp"/>
+        <TextView
+            android:id="@+id/tv_current_score"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="80dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="@font/luckiest_guy"
+            android:maxLines="2"
+            android:padding="3dp"
+            android:text="Start!"
+            android:textAlignment="center"
+            android:textColor="@color/valueEmpty"
+            android:textSize="35sp"
+            android:textStyle="italic" />
 
          </LinearLayout>
 
@@ -85,14 +85,14 @@
 
         <LinearLayout
             android:id="@+id/game_layout"
-            android:layout_width="400dp"
-            android:layout_height="400dp"
+            android:layout_width="380dp"
+            android:layout_height="380dp"
             android:background="@drawable/gameboard_cell_shape"
             android:layout_marginBottom="30dp"
             android:layout_centerInParent="true"
             android:padding="5dp">
 
-            <com.example.a2048game.GameView
+            <com.example.a2048game.Game.GameView
                 android:id="@+id/game_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -110,7 +110,6 @@
         android:layout_centerHorizontal="true"
         android:paddingHorizontal="30dp"
         android:background="@drawable/pic_menu_bottom_bar"
-        android:layout_below="@id/game_layout"
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="30dp">

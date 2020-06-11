@@ -15,11 +15,21 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.home_screen_layout);
 
         Button btnNewGame = findViewById(R.id.btn_new_game);
+        Button btnLoadGame = findViewById(R.id.btn_load_game);
         btnNewGame.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnLoadGame.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this,CustomGameActivity.class);
                 startActivity(intent);
             }
         });

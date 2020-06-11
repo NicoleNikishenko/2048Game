@@ -2,14 +2,14 @@ package com.example.a2048game.Tiles;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import com.example.a2048game.GameBoard;
+import com.example.a2048game.Game.GameBoard;
 
 
 
 public class Tile {
     private GameBoard callback;
 
-    private int value;
+    private long value;
     private int currentPositionX;
     private int currentPositionY;
     private int desPositionX;
@@ -28,7 +28,7 @@ public class Tile {
     private int defaultCellWidth;
 
     //constructor
-    public Tile(int value, Position position, GameBoard callback) {
+    public Tile(long value, Position position, GameBoard callback) {
         this.value = value;
         this.callback = callback;
 
@@ -43,7 +43,7 @@ public class Tile {
     }
 
     //getters and setters
-    public int getValue() { return value; }
+    public long getValue() { return value; }
     public Position getPosition() { return currentPosition; }
 
     public void setPosition(Position position) {

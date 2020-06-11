@@ -36,15 +36,15 @@
             android:layout_gravity="center"/>
 
         <TextView
+            android:id="@+id/tv_gameOver_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_gameOver_score"
-            android:fontFamily="@font/luckiest_guy"
-            android:textColor="@color/valueOther"
-            android:textSize="25sp"
-            android:text="5454534500"
+            android:layout_gravity="center"
             android:layout_margin="5dp"
-            android:layout_gravity="center"/>
+            android:fontFamily="@font/montserrat_alternates"
+            android:text="5454534500"
+            android:textColor="@color/valueOther"
+            android:textSize="25sp" />
     </LinearLayout>
 
     <LinearLayout
