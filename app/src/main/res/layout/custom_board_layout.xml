@@ -27,6 +27,7 @@
             android:layout_alignParentStart="true"/>
 
         <LinearLayout
+            android:layoutDirection="ltr"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/tv_create_board"
@@ -171,6 +172,7 @@
             android:weightSum="2">
 
             <RadioGroup
+                android:layoutDirection="ltr"
                 android:id="@+id/rg_exponent_top"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

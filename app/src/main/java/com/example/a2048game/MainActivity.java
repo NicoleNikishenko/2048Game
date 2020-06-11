@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,HomeActivity.class);
                 startActivity(intent);
+                destroyGameThread();
             }
         });
 
@@ -130,8 +131,7 @@ public class MainActivity extends AppCompatActivity {
         this.thread = thread;
     }
 
-    @Override
-    public void onBackPressed() {
+    public void destroyGameThread(){
         super.onBackPressed();
         boolean retry = true;
         while (retry) {
@@ -145,6 +145,11 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        destroyGameThread();
     }
 }
 
