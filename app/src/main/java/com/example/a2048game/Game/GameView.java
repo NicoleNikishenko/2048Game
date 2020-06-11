@@ -15,6 +15,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -84,11 +85,11 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
         //Initializing board
         prepareGameOverDialog();
-        initSwipeListener();
-        initClickListeners();
         gameBoard.initBoard();
         mainActivity.updateScore(score.getScore(),score.getTopScore());
         isInit=true;
+        initClickListeners();
+        initSwipeListener();
 
     }
 
@@ -248,8 +249,10 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     public void prepareGameOverDialog(){
         gameOverDialog.setContentView(R.layout.gameover_layout);
         gameOverDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
+        gameOverDialog.setCancelable(false);
         Button btn = gameOverDialog.findViewById(R.id.btn_try_again);
+
+
         btn.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -265,6 +268,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         mainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                final TextView tvScore = gameOverDialog.findViewById(R.id.game_over_score_line);
+                tvScore.setText(String.valueOf(score.getScore()));
                 gameOverDialog.show();
             }
         });

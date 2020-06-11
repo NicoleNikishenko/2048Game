@@ -26,6 +26,7 @@ public class GameBoard {
     private boolean isMoving = false;
     private boolean spawnNeeded = false;
     private boolean canUndo;
+    private boolean boardIsInitialized;
     private ArrayList<Tile> movingTiles;
 
     private boolean gameOver = false;
@@ -45,6 +46,7 @@ public class GameBoard {
         positions = new Position[rows][cols];
         this.callback = callback;
         currentScore = 0;
+        boardIsInitialized = false;
 
     }
 
@@ -64,9 +66,12 @@ public class GameBoard {
 
     public void initBoard(){
         //initializing board with 2 random tiles
-        addRandom();
-        addRandom();
-        movingTiles = new ArrayList<>();
+        if(!boardIsInitialized) {
+            addRandom();
+            addRandom();
+            movingTiles = new ArrayList<>();
+            boardIsInitialized = true;
+        }
     }
 
 
