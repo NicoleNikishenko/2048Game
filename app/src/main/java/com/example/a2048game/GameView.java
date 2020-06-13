@@ -18,11 +18,16 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AlertDialog;
 import com.example.a2048game.Tiles.BitmapCreator;
 
+import java.util.Random;
 
 
 public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     private static final String APP_NAME = "2048Project";
+    private static final String SELECTED_GAME_MODE = "gameMode";
+    private static final int GAME_MODE_CLASSIC = 0;
+    private static final int GAME_MODE_SHUFFLE = 1;
+    private static final int GAME_MODE_SOLID_TILE = 2;
 
     private MainThread thread;
     private boolean isInit;
@@ -35,6 +40,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     MainActivity mainActivity;
     private Dialog gameOverDialog;
+
+    private int gameMode;
 
 
 
@@ -55,7 +62,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         isInit = false;
         int exponent = 2;
         this.score = new Score(getResources(), 0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE));
-        gameBoard = new GameBoard(4, 4, exponent, this);
+        gameMode = getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE).getInt(SELECTED_GAME_MODE,0);
+        gameBoard = new GameBoard(4, 4, exponent, this, gameMode);
         BitmapCreator.exponent = exponent;
 
         builder = new AlertDialog.Builder(MainActivity.getContext());
@@ -186,6 +194,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         setOnTouchListener(new OnSwipeTouchListener(this.getContext()) {
             public void onSwipeTop() {
                gameBoard.up();
+
             }
             public void onSwipeRight() {
                gameBoard.right();
@@ -193,9 +202,11 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
             }
             public void onSwipeLeft() {
                 gameBoard.left();
+
             }
             public void onSwipeBottom() {
                 gameBoard.down();
+
             }
         });
     }
@@ -223,6 +234,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
             public void onClick(View v) {
                 gameBoard.undoMove();
                 mainActivity.updateScore(score.getScore(),score.getTopScore());
+
+
             }
         });
 
@@ -266,6 +279,10 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         });
 
     }
+
+
+
+
 
 }
 
