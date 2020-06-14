@@ -62,7 +62,7 @@ public class GameBoard {
         boardIsInitialized = false;
         this.gameMode = gameMode;
 
-
+        
     }
 
 
