@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Paint;
 
-public class Score {
+public class Score{
 
     private static final int GAME_MODE_CLASSIC = 0;
     private static final int GAME_MODE_SHUFFLE = 1;
