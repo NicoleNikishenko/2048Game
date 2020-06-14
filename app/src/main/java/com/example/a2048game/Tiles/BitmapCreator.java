@@ -122,6 +122,9 @@ public class BitmapCreator {
 
 
     public Bitmap getBitmap (long value){
+        if(value == 1){
+            return createBlockTile();
+        }
         //calculating index according to value
         double val = Math.log(value) / Math.log(exponent);
         val = Math.round(val);
@@ -145,4 +148,12 @@ public class BitmapCreator {
     }
 
 
+    public Bitmap createBlockTile(){
+        Drawable drawable = MainActivity.getContext().getDrawable(R.drawable.gameboard_block_shape);
+        Bitmap bitmap = Bitmap.createBitmap(cellDefaultWidth,cellDefaultHeight,Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0,0,cellDefaultWidth,cellDefaultHeight);
+        drawable.draw(canvas);
+        return bitmap;
+    }
 }

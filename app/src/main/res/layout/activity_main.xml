@@ -153,5 +153,21 @@
                 android:background="@drawable/btn_round_white"/>
 
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/shuffling_msg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#BF000000"
+        android:visibility="gone">
+        <TextView
+            android:id="@+id/tv_shuffling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text=" Shuffle!!!"
+            android:textSize="40sp"
+            android:fontFamily="@font/luckiest_guy"
+            android:textColor="@color/value2"/>
+    </LinearLayout>
 
 </RelativeLayout>

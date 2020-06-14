@@ -20,8 +20,8 @@ public class Tile {
     private boolean isMoving = false;
     private boolean increased = false;
     private boolean isSolid = false;
+    private boolean isSolidGone=false;
     private int solidLives;
-
     private BitmapCreator bitmapCreator = new BitmapCreator();
 
     private int currentCellHeight;
@@ -66,15 +66,14 @@ public class Tile {
     public Position getPosition() { return currentPosition; }
     public int getSolidLives(){ return solidLives;}
     public boolean isSolid(){ return isSolid;}
-    public void  decreaseLiveCount(){ this.solidLives--;}
+    public void  decreaseLiveCount(){ this.solidLives--; }
+
 
     public void setPosition(Position position) {
         this.currentPosition = position;
         this.desPosition = position;
     }
-    public void setValue(int value){
-        this.value = value;
-    }
+    public void setValue(int value){ this.value = value; }
 
 
     public boolean notAlreadyIncreased(){ return !increased; }
@@ -115,6 +114,10 @@ public class Tile {
    }
 
    public void update() {
+        if(isSolid && solidLives == 1){
+            removeSolidBlock();
+            return;
+        }
         if(isMoving) {
             updatePosition();
         }
@@ -186,5 +189,17 @@ public class Tile {
 
     public boolean needsToUpdate(){
         return currentPosition != desPosition || currentCellWidth != defaultCellWidth;
+    }
+
+    void removeSolidBlock(){
+        int sizeSpeed =20;
+        if(currentCellHeight - sizeSpeed <= 0 || currentCellWidth - sizeSpeed <= 0){
+            isSolidGone = true;
+        }
+        currentCellHeight = (int)( currentCellHeight - sizeSpeed);
+        currentCellWidth = (int)( currentCellHeight - sizeSpeed);
+    }
+    public Boolean isSolidGone(){
+        return isSolidGone;
     }
 }

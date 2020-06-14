@@ -1,4 +1,4 @@
-package com.example.a2048game;
+package com.example.a2048game.Game;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -8,13 +8,16 @@ import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -71,8 +74,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
         this.score = new Score(getResources(), (long)0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE));
 
-        gameMode = getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE).getInt(SELECTED_GAME_MODE,0);
-        gameBoard = new GameBoard(rows, cols, exponent, this,gameMode);
+        gameMode = getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE).getInt(SELECTED_GAME_MODE,1);
+        gameBoard = new GameBoard(rows, cols, exponent, this ,gameMode);
         BitmapCreator.exponent = exponent;
 
         builder = new AlertDialog.Builder(MainActivity.getContext());
@@ -208,19 +211,10 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     private void initSwipeListener() {
         setOnTouchListener(new OnSwipeTouchListener(this.getContext()) {
-            public void onSwipeTop() {
-               gameBoard.up();
-            }
-            public void onSwipeRight() {
-               gameBoard.right();
-
-            }
-            public void onSwipeLeft() {
-                gameBoard.left();
-            }
-            public void onSwipeBottom() {
-                gameBoard.down();
-            }
+            public void onSwipeTop() { if(!dialogOpen)gameBoard.up(); }
+            public void onSwipeRight() { if(!dialogOpen)gameBoard.right(); }
+            public void onSwipeLeft() { if(!dialogOpen)gameBoard.left(); }
+            public void onSwipeBottom() { if(!dialogOpen)gameBoard.down(); }
         });
     }
 
@@ -249,7 +243,6 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
                 mainActivity.updateScore(score.getScore(),score.getTopScore());
             }
         });
-
     }
 
     @Override
@@ -290,6 +283,39 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
             }
         });
 
+    }
+    public void ShowShufflingMsg(){
+        //displaying shuffle msg and placing it on top of score bar
+        final LinearLayout shufflingLayout = mainActivity.findViewById(R.id.shuffling_msg);
+        TextView score = mainActivity.findViewById(R.id.tv_current_score);
+        final TextView shufflingText = mainActivity.findViewById(R.id.tv_shuffling);
+        final float spacing = (int)convertPixelsToDp(score.getY(),MainActivity.getContext());
+        final float padding = pxFromDp(spacing);
+        final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0, (int)padding, 0, 0);
+
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialogOpen = true;
+                shufflingText.setLayoutParams(params);
+                shufflingLayout.setVisibility(VISIBLE);
+                new CountDownTimer(1000, 500) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                    }
+                    @Override
+                    public void onFinish() {
+                        shufflingLayout.setVisibility(GONE);
+                        dialogOpen = false;
+                    }
+                }.start();
+            }
+        });
+    }
+
+    public static float convertPixelsToDp(float px, Context context){
+        return px / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
 }
