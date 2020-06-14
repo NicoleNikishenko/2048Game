@@ -52,6 +52,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         DisplayMetrics dm = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
 
+        gameMode = getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE).getInt(SELECTED_GAME_MODE,0);
+        
 
         getHolder().addCallback(this);
         setZOrderOnTop(true);    // necessary
@@ -61,8 +63,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
         isInit = false;
         int exponent = 2;
-        this.score = new Score(getResources(), 0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE));
-        gameMode = getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE).getInt(SELECTED_GAME_MODE,0);
+        this.score = new Score(getResources(), 0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE), gameMode);
         gameBoard = new GameBoard(4, 4, exponent, this, gameMode);
         BitmapCreator.exponent = exponent;
 
