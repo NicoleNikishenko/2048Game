@@ -19,6 +19,8 @@ public class Tile {
 
     private boolean isMoving = false;
     private boolean increased = false;
+    private boolean isSolid = false;
+    private int solidLives;
 
     private BitmapCreator bitmapCreator = new BitmapCreator();
 
@@ -42,9 +44,29 @@ public class Tile {
         currentCellWidth = (defaultCellWidth/5);
     }
 
+    public Tile(int value, Position position, GameBoard callback, int solidLives) {
+        this.value = value;
+        this.callback = callback;
+
+        defaultCellHeight = currentCellHeight = bitmapCreator.getCellDefaultHeight();
+        defaultCellWidth = currentCellWidth = bitmapCreator.getCellDefaultWidth();
+
+        currentPosition = desPosition = position;
+        currentPositionX = desPositionX = currentPosition.getPositionX();
+        currentPositionY = desPositionY = currentPosition.getPositionY();
+        currentCellHeight = (defaultCellHeight/5);
+        currentCellWidth = (defaultCellWidth/5);
+
+        this.isSolid = true;
+        this.solidLives = solidLives;
+    }
+
     //getters and setters
     public int getValue() { return value; }
     public Position getPosition() { return currentPosition; }
+    public int getSolidLives(){ return solidLives;}
+    public boolean isSolid(){ return isSolid;}
+    public void  decreaseLiveCount(){ this.solidLives--;}
 
     public void setPosition(Position position) {
         this.currentPosition = position;

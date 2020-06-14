@@ -16,6 +16,7 @@ public class GameBoard {
     private static final int GAME_MODE_CLASSIC = 0;
     private static final int GAME_MODE_SHUFFLE = 1;
     private static final int GAME_MODE_SOLID_TILE = 2;
+    private static final int NUM_SOLID_LIVES = 5;
 
 
     private Tile[][] tempBoard;
@@ -53,7 +54,6 @@ public class GameBoard {
         currentScore = 0;
         this.gameMode = gameMode;
 
-        //this.gameMode = GAME_MODE_SHUFFLE; //this line sets gamemode to shuffle its here just to test shuffle
 
     }
 
@@ -165,10 +165,7 @@ public class GameBoard {
             moveTiles();
             board = tempBoard;
 
-            if(gameMode == GAME_MODE_SHUFFLE)
-                shuffleBoard();
-            if(gameMode == GAME_MODE_SOLID_TILE)
-                addRandomSolidTile();
+
         }
     }
 
@@ -205,10 +202,7 @@ public class GameBoard {
             moveTiles();
             board = tempBoard;
 
-            if(gameMode == GAME_MODE_SHUFFLE)
-                shuffleBoard();
-            if(gameMode == GAME_MODE_SOLID_TILE)
-                addRandomSolidTile();
+
         }
     }
 
@@ -245,10 +239,7 @@ public class GameBoard {
             moveTiles();
             board = tempBoard;
 
-            if(gameMode == GAME_MODE_SHUFFLE)
-                shuffleBoard();
-            if(gameMode == GAME_MODE_SOLID_TILE)
-                addRandomSolidTile();
+
         }
     }
 
@@ -285,10 +276,7 @@ public class GameBoard {
             moveTiles();
             board = tempBoard;
 
-            if(gameMode == GAME_MODE_SHUFFLE)
-                shuffleBoard();
-            if(gameMode == GAME_MODE_SOLID_TILE)
-                addRandomSolidTile();
+
         }
     }
 
@@ -329,6 +317,12 @@ public class GameBoard {
         if (movingTiles.isEmpty()) {
             isMoving = false;
             spawn();
+            if(gameMode == GAME_MODE_SHUFFLE)
+                shuffleBoard();
+            if(gameMode == GAME_MODE_SOLID_TILE){
+                decreaseSolidLives();
+                addRandomSolidTile();}
+
         }
     }
 
@@ -428,6 +422,7 @@ public class GameBoard {
                             randY = rand.nextInt(boardCols);
 
                             if (newBoard[randX][randY] == null) {
+
                                 newBoard[randX][randY] = new Tile(board[x][y].getValue(), positions[randX][randY], this);
                                 moved = true;
                             }
@@ -444,7 +439,7 @@ public class GameBoard {
     }
 
 
-    void addRandomSolidTile() {
+    public void addRandomSolidTile() {
 
         int num = rand.nextInt(100); //will return and num between 0 and 100
 
@@ -463,7 +458,7 @@ public class GameBoard {
                 for (int y = 0; y < boardCols; y++) {
                     if (getTile(x, y) == null) {
                         if (count == number) {
-                            board[x][y] = new Tile(64, positions[x][y], this); //here we need to send a special value and set a bitmap to look like a solid block, value should be a special one that can never be merged with
+                            board[x][y] = new Tile(64, positions[x][y], this, NUM_SOLID_LIVES); //here we need to send a special value and set a bitmap to look like a solid block, value should be a special one that can never be merged with
                             return;
                         }
                         count++;
@@ -471,6 +466,25 @@ public class GameBoard {
                 }
             }
         }
+    }
+
+    public void decreaseSolidLives(){
+
+        for (int x = 0; x < boardRows; x++) {
+            for (int y = 0; y < boardCols; y++) {
+                if(board[x][y] != null && board[x][y].isSolid())
+                    if(board[x][y].getSolidLives() == 1)
+                        board[x][y] = null;
+                    else
+                        board[x][y].decreaseLiveCount();
+
+
+            }
+        }
+
+
+
+
     }
 
 }
