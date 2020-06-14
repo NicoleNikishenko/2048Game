@@ -14,7 +14,6 @@ import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -49,8 +48,6 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     MainActivity mainActivity;
     private Dialog gameOverDialog;
-
-    private int gameMode;
 
 
 
