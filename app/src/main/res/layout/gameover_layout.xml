@@ -17,7 +17,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="20dp"/>
     <LinearLayout
-        android:id="@+id/score_line"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -36,15 +36,14 @@
             android:layout_gravity="center"/>
 
         <TextView
+            android:id="@+id/game_over_score_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_gameOver_score"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
             android:fontFamily="@font/luckiest_guy"
             android:textColor="@color/valueOther"
-            android:textSize="25sp"
-            android:text="5454534500"
-            android:layout_margin="5dp"
-            android:layout_gravity="center"/>
+            android:textSize="25sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -55,7 +54,7 @@
         <Button
             android:id="@+id/btn_try_again"
             android:text="Try Again"
-            android:textColor="@color/valueEmpty"
+            android:textColor="#FFFFFF"
             android:fontFamily="@font/luckiest_guy"
             android:textSize="20sp"
             android:layout_width="0dp"
@@ -66,6 +65,10 @@
         <Button
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:text="Leader board"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:fontFamily="@font/luckiest_guy"
             android:layout_height="match_parent"
             android:background="@drawable/btn_rectangle_yellow"
             android:layout_margin="7dp"/>

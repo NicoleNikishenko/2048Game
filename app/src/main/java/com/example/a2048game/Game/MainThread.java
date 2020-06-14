@@ -1,4 +1,4 @@
-package com.example.a2048game;
+package com.example.a2048game.Game;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;

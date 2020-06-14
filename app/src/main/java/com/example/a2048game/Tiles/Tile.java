@@ -2,14 +2,14 @@ package com.example.a2048game.Tiles;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import com.example.a2048game.GameBoard;
+import com.example.a2048game.Game.GameBoard;
 
 
 
 public class Tile {
     private GameBoard callback;
 
-    private int value;
+    private long value;
     private int currentPositionX;
     private int currentPositionY;
     private int desPositionX;
@@ -20,8 +20,8 @@ public class Tile {
     private boolean isMoving = false;
     private boolean increased = false;
     private boolean isSolid = false;
+    private boolean isSolidGone=false;
     private int solidLives;
-
     private BitmapCreator bitmapCreator = new BitmapCreator();
 
     private int currentCellHeight;
@@ -30,7 +30,7 @@ public class Tile {
     private int defaultCellWidth;
 
     //constructor
-    public Tile(int value, Position position, GameBoard callback) {
+    public Tile(long value, Position position, GameBoard callback) {
         this.value = value;
         this.callback = callback;
 
@@ -62,19 +62,18 @@ public class Tile {
     }
 
     //getters and setters
-    public int getValue() { return value; }
+    public long getValue() { return value; }
     public Position getPosition() { return currentPosition; }
     public int getSolidLives(){ return solidLives;}
     public boolean isSolid(){ return isSolid;}
-    public void  decreaseLiveCount(){ this.solidLives--;}
+    public void  decreaseLiveCount(){ this.solidLives--; }
+
 
     public void setPosition(Position position) {
         this.currentPosition = position;
         this.desPosition = position;
     }
-    public void setValue(int value){
-        this.value = value;
-    }
+    public void setValue(int value){ this.value = value; }
 
 
     public boolean notAlreadyIncreased(){ return !increased; }
@@ -115,6 +114,10 @@ public class Tile {
    }
 
    public void update() {
+        if(isSolid && solidLives == 1){
+            removeSolidBlock();
+            return;
+        }
         if(isMoving) {
             updatePosition();
         }
@@ -186,5 +189,17 @@ public class Tile {
 
     public boolean needsToUpdate(){
         return currentPosition != desPosition || currentCellWidth != defaultCellWidth;
+    }
+
+    void removeSolidBlock(){
+        int sizeSpeed =20;
+        if(currentCellHeight - sizeSpeed <= 0 || currentCellWidth - sizeSpeed <= 0){
+            isSolidGone = true;
+        }
+        currentCellHeight = (int)( currentCellHeight - sizeSpeed);
+        currentCellWidth = (int)( currentCellHeight - sizeSpeed);
+    }
+    public Boolean isSolidGone(){
+        return isSolidGone;
     }
 }

@@ -6,7 +6,7 @@
                 android:centerColor="@color/value64"
                 android:endColor="#D6FAF1"
                 android:angle="270"/>
-            <corners android:radius="20dp"/>
+            <corners android:radius="30dp"/>
             <stroke android:color="@color/colorPrimary"
                 android:width="2dp"/>
         </shape>
@@ -17,7 +17,7 @@
                 android:centerColor="#CC96E8D5"
                 android:endColor="#CCD6FAF1"
                 android:angle="270"/>
-            <corners android:radius="20dp"/>
+            <corners android:radius="30dp"/>
             <stroke android:color="#FFFFFF"
                 android:width="1dp"/>
         </shape>

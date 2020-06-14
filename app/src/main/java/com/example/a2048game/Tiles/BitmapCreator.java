@@ -89,20 +89,26 @@ public class BitmapCreator {
     public void createBitmap(int index) {
         //get drawable
         Drawable drawable = createDrawable(index);
-        int value = (int)Math.pow(exponent,index+1);
-        String text = Integer.toString(value);
+        long value = (long)Math.pow(exponent,index+1);
+        String text = Long.toString(value);
         Bitmap bitmap = Bitmap.createBitmap(cellDefaultWidth,cellDefaultHeight,Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
         //set text style and size
 
-        Typeface customTypeface = ResourcesCompat.getFont(context, R.font.luckiest_guy);
+        Typeface customTypeface = ResourcesCompat.getFont(context, R.font.mouse_memoirs);
         mPaint.setTypeface(customTypeface);
+        //mPaint.setFakeBoldText(true);
         mPaint.setColor(Color.WHITE);
-        int textSize = 90;
+        int textSize = 130;
         mPaint.setTextSize(textSize);
         drawable.setBounds(0,0,cellDefaultWidth,cellDefaultHeight);
         mPaint.getTextBounds(text, 0, text.length(), textBounds);
+        while (textBounds.height() > cellDefaultWidth/2.5 && textSize >= 10) {
+            textSize -= 20;
+            mPaint.setTextSize(textSize);
+            mPaint.getTextBounds(text, 0, text.length(), textBounds); mPaint.getTextBounds(text, 0, text.length(), textBounds);
+        }
         while (textBounds.width() > cellDefaultWidth-20 && textSize >= 10) {
             textSize -= 10;
             mPaint.setTextSize(textSize);
@@ -115,9 +121,14 @@ public class BitmapCreator {
     }
 
 
-    public Bitmap getBitmap (int value){
+    public Bitmap getBitmap (long value){
+        if(value == 1){
+            return createBlockTile();
+        }
         //calculating index according to value
-        int index = (int)( Math.log(value) /Math.log(exponent) ) - 1 ;
+        double val = Math.log(value) / Math.log(exponent);
+        val = Math.round(val);
+        int index =(int) (val - 1 );
 
         //first create 12 starting tiles
         if(bitmapArrayList.isEmpty()) {
@@ -132,6 +143,17 @@ public class BitmapCreator {
 
         return bitmapArrayList.get(index);
     }
+    public void clearBitmapArray(){
+        bitmapArrayList.clear();
+    }
 
 
+    public Bitmap createBlockTile(){
+        Drawable drawable = MainActivity.getContext().getDrawable(R.drawable.gameboard_block_shape);
+        Bitmap bitmap = Bitmap.createBitmap(cellDefaultWidth,cellDefaultHeight,Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0,0,cellDefaultWidth,cellDefaultHeight);
+        drawable.draw(canvas);
+        return bitmap;
+    }
 }

@@ -5,4 +5,14 @@
     <string name="gameover_yourscore">הניקוד שלך</string>
     <string name="main_score">ניקוד</string>
     <string name="main_topscore">שיא</string>
+    <string name="mode_classic">classic</string>
+    <string name="mode_blocks">blocks</string>
+    <string name="mode_shuffle">shuffle</string>
+    <string name="mode_exp_classic">The good old classic 2048</string>
+    <string name="mode_exp_blocks">Random blocks will spawn in your board</string>
+    <string name="mode_exp_shuffle">"Your board knows how to shuffle!! "</string>
+    <string name="exponent_exp_2">try to get the \n2048 tile!</string>
+    <string name="exponent_exp_3">try to get the \n177,147 tile!!</string>
+    <string name="exponent_exp_4">try to get the \n4,194,301 tile!!!</string>
+    <string name="exponent_exp_5">try to get the \n4,828,123 tile!!!!</string>
 </resources>
