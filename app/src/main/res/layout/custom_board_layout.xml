@@ -17,7 +17,7 @@
             android:id="@+id/tv_create_board"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Chose Game Mode"
+            android:text="Choose Game Mode"
             android:fontFamily="@font/luckiest_guy"
             android:textColor="@color/valueOther"
             android:gravity="center"
@@ -125,7 +125,7 @@
             android:id="@+id/tv_create_board2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="chose board size"
+            android:text="choose board size"
             android:fontFamily="@font/luckiest_guy"
             android:textColor="@color/valueOther"
             android:gravity="center"
@@ -266,7 +266,7 @@
             android:layout_marginVertical="20dp"
             android:fontFamily="@font/luckiest_guy"
             android:gravity="center"
-            android:text="Chose Exponent"
+            android:text="Choose Exponent"
             android:textColor="@color/valueOther"
             android:textSize="40dp" />
 

@@ -12,6 +12,6 @@
     <string name="mode_exp_shuffle">"Your board knows how to shuffle!! "</string>
     <string name="exponent_exp_2">try to get the \n2048 tile!</string>
     <string name="exponent_exp_3">try to get the \n177,147 tile!!</string>
-    <string name="exponent_exp_4">try to get the \n4,194,301 tile!!!</string>
-    <string name="exponent_exp_5">try to get the \n4,828,123 tile!!!!</string>
+    <string name="exponent_exp_4">try to get the \n4,194,304 tile!!!</string>
+    <string name="exponent_exp_5">try to get the \n48,828,125 tile!!!!</string>
 </resources>

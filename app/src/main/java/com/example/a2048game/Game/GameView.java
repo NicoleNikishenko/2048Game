@@ -74,7 +74,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         int cols = mainActivity.getBoardCols();
         int gameMode = mainActivity.getGameMode();
 
-        this.score = new Score(getResources(), (long)0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE));
+        this.score = new Score(getResources(), (long)0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE),gameMode);
 
         //gameMode = getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE).getInt(SELECTED_GAME_MODE,1);
         gameBoard = new GameBoard(rows, cols, exponent, this ,gameMode);
