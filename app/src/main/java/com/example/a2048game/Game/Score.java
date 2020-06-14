@@ -15,14 +15,9 @@ public class Score {
 
 
     public Score(Resources resources, Long score , SharedPreferences prefs) {
-
         this.score = score;
         this.prefs = prefs;
-
-
         topScore = prefs.getLong(TOP_SCORE_PREF,0);
-
-
     }
 
     public void updateScore(long value){

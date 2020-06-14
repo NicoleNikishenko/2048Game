@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -11,6 +13,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +31,12 @@ public class CustomGameActivity extends AppCompatActivity {
     private RelativeLayout firstLayout;
     private RelativeLayout secondLayout;
 
+    private  Animation rightInAnim ;
+    private Animation leftInAnim ;
+    private Animation rightOutAnim ;
+    private Animation leftOutAnim ;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,18 +53,38 @@ public class CustomGameActivity extends AppCompatActivity {
 
         firstLayout = findViewById(R.id.first_layout);
         secondLayout = findViewById(R.id.second_layout);
+        Animation scaleAnim = AnimationUtils.loadAnimation(CustomGameActivity.this,R.anim.scale_anim);
+        rightInAnim = AnimationUtils.loadAnimation(CustomGameActivity.this,R.anim.slide_in_right);
+        leftInAnim = AnimationUtils.loadAnimation(CustomGameActivity.this,R.anim.slide_in_left);
+        rightOutAnim = AnimationUtils.loadAnimation(CustomGameActivity.this,R.anim.slide_out_right);
+        leftOutAnim = AnimationUtils.loadAnimation(CustomGameActivity.this,R.anim.slide_out_left);
 
         Button btnNext = findViewById(R.id.btn_next);
+        btnNext.setAnimation(scaleAnim);
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firstLayout.setVisibility(View.GONE);
-                secondLayout.setVisibility(View.VISIBLE);
-                secondViewIsVisible = true;
+
+                leftOutAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) { }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) { }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        firstLayout.setVisibility(View.GONE);
+                        secondLayout.startAnimation(rightInAnim);
+                        secondLayout.setVisibility(View.VISIBLE);
+                        secondViewIsVisible = true;
+                    }
+                });
+                firstLayout.startAnimation(leftOutAnim);
+
             }
         });
 
         Button btnPlay = findViewById(R.id.btn_play);
+        btnPlay.setAnimation(scaleAnim);
         setExponentSelecting();
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
@@ -74,11 +103,21 @@ public class CustomGameActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         if (secondViewIsVisible){
-            firstLayout.setVisibility(View.VISIBLE);
-            secondLayout.setVisibility(View.GONE);
-            secondViewIsVisible = false;
+            rightOutAnim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) { }
+                @Override
+                public void onAnimationRepeat(Animation animation) { }
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    secondLayout.setVisibility(View.GONE);
+                    firstLayout.setVisibility(View.VISIBLE);
+                    firstLayout.startAnimation(leftInAnim);
+                    secondViewIsVisible = false;
+                }
+            });
+            secondLayout.startAnimation(rightOutAnim);
         } else {
             super.onBackPressed();
         }
@@ -111,14 +150,13 @@ public class CustomGameActivity extends AppCompatActivity {
         final TextView tvBoardType = findViewById(R.id.tv_shape_type);
         final ImageView ivBoardType = findViewById(R.id.image_view);
         ivBoardType.setImageDrawable(currentDisplayedBoards.get(0).drawable);
-        ImageButton btnLeft = findViewById(R.id.btn_left);
+        final ImageButton btnLeft = findViewById(R.id.btn_left);
         ImageButton btnRight = findViewById(R.id.btn_right);
 
 
         final RadioGroup shapeRadioGroup = findViewById(R.id.rg_board_shape);
         final RadioButton radioButtonRectangle = findViewById(R.id.rb_rectangle);
         final RadioButton radioButtonSquare = findViewById(R.id.rb_square);
-
 
         shapeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -146,11 +184,24 @@ public class CustomGameActivity extends AppCompatActivity {
                     index = currentDisplayedBoards.size()-1;
                 }
                 else { index--; }
-                ivBoardType.setImageDrawable(currentDisplayedBoards.get(index).drawable);
-                tvBoardType.setText(currentDisplayedBoards.get(index).getTypeString());
+                rightOutAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) { }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) { }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        ivBoardType.setImageDrawable(currentDisplayedBoards.get(index).drawable);
+                        ivBoardType.startAnimation(leftInAnim);
+                        tvBoardType.setText(currentDisplayedBoards.get(index).getTypeString());
+                    }
+                });
+                ivBoardType.startAnimation(rightOutAnim);
+
             }
         });
-
         btnRight.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -158,14 +209,25 @@ public class CustomGameActivity extends AppCompatActivity {
                     index = 0;
                 }
                 else { index++; }
-                ivBoardType.setImageDrawable(currentDisplayedBoards.get(index).drawable);
-                tvBoardType.setText(currentDisplayedBoards.get(index).getTypeString());
+                leftOutAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) { }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) { }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        ivBoardType.setImageDrawable(currentDisplayedBoards.get(index).drawable);
+                        ivBoardType.startAnimation(rightInAnim);
+                        tvBoardType.setText(currentDisplayedBoards.get(index).getTypeString());
+                    }
+                });
+                ivBoardType.startAnimation(leftOutAnim);
+
+
             }
         });
-
-
-
-
 
 
     }
@@ -216,8 +278,6 @@ public class CustomGameActivity extends AppCompatActivity {
         });
 
     }
-
-
 
 }
 

@@ -4,36 +4,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/pic_game_background_light">
 
-    <LinearLayout
-            android:id="@+id/menu"
+    <RelativeLayout
+        android:id="@+id/menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="3dp"
+        android:background="@drawable/pic_menu_top">
+        <LinearLayout
+            android:id="@+id/menu_first_line"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:background="@drawable/pic_menu_bar"
-            android:orientation="vertical"
-            android:weightSum="2">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:weightSum="3"
-                android:layout_marginVertical="5dp">
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:layout_marginVertical="5dp"
+            android:layout_alignParentTop="true">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:fontFamily="@font/luckiest_guy"
                     android:paddingHorizontal="10dp"
-                    android:paddingTop="12dp"
+                    android:paddingVertical="3dp"
+                    android:gravity="center"
                     android:text="Best :"
                     android:textColor="@color/valueEmpty"
                     android:textSize="30sp" />
                 <TextView
                     android:id="@+id/tv_best_score"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="13dp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="@drawable/shape_oval_orange"
                     android:fontFamily="@font/luckiest_guy"
                     android:gravity="center_vertical"
@@ -44,15 +44,14 @@
                     android:textColor="@color/valueEmpty"
                     android:textSize="25sp" />
             </LinearLayout>
-
         <TextView
             android:id="@+id/tv_current_score"
+            android:layout_below="@+id/menu_first_line"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="80dp"
             android:layout_marginBottom="5dp"
-            android:layout_weight="1"
             android:autoSizeTextType="uniform"
             android:fontFamily="@font/luckiest_guy"
             android:maxLines="2"
@@ -63,19 +62,20 @@
             android:textSize="35sp"
             android:textStyle="italic" />
 
-         </LinearLayout>
-
+    </RelativeLayout>
 
     <ImageButton
         android:src="@drawable/icon_trophy"
         android:id="@+id/btn_leader_board"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginHorizontal="10dp"
         android:background="@drawable/btn_round_orange"
-        android:layout_margin="10dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginVertical="12dp"
         android:layout_alignParentEnd="true"/>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -85,10 +85,11 @@
 
         <LinearLayout
             android:id="@+id/game_layout"
-            android:layout_width="380dp"
-            android:layout_height="380dp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="20dp"
             android:background="@drawable/gameboard_cell_shape"
-            android:layout_marginBottom="30dp"
             android:layout_centerInParent="true"
             android:padding="5dp">
 

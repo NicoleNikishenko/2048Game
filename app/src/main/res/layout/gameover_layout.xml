@@ -12,7 +12,7 @@
         android:text="@string/gameover_title"
         android:gravity="center"
         android:fontFamily="@font/luckiest_guy"
-        android:textSize="60sp"
+        android:textSize="50sp"
         android:textColor="@color/valueOther"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="20dp"/>

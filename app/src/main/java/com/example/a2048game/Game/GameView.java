@@ -33,6 +33,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     private boolean isInit;
     private Score score;
     GameBoard gameBoard;
+    Boolean dialogOpen = false;
     Drawable backgroundRectangle = getResources().getDrawable(R.drawable.gameboard_background);
     Drawable cellRectangle = getResources().getDrawable(R.drawable.gameboard_cell_shape);
 
@@ -84,12 +85,10 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         thread.start();
 
         //Initializing board
-        prepareGameOverDialog();
-        gameBoard.initBoard();
         mainActivity.updateScore(score.getScore(),score.getTopScore());
-        isInit=true;
         initClickListeners();
         initSwipeListener();
+        prepareGameOverDialog();
 
     }
 
@@ -117,7 +116,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
 
     public void update() {
-        if(gameBoard.isGameOver()){
+        if(gameBoard.isGameOver() && !dialogOpen){
+            dialogOpen = true;
             showGameOverDialog();
         }
         if(isInit) {
@@ -132,6 +132,9 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
         drawDrawable(canvas, backgroundRectangle, 0, 0, getWidth(), getHeight());
         drawEmptyBoard(canvas);
+        if (!isInit){
+            gameBoard.initBoard();
+        } isInit = true;
         gameBoard.draw(canvas);
     }
 
@@ -243,7 +246,6 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     public void updateScore(long value){
         score.updateScore(value);
         mainActivity.updateScore(score.getScore(),score.getTopScore());
-
     }
 
     public void prepareGameOverDialog(){
@@ -259,7 +261,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
             public void onClick(View v) {
                 gameBoard.resetGame();
                 gameOverDialog.dismiss();
-
+                dialogOpen = false;
             }
         });
     }

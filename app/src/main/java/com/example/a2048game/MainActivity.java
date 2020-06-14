@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private int boardRows;
     private int boardCols;
     private int boardExponent;
-
-    GameView gameView;
-
 
 
     @Override
@@ -90,20 +88,20 @@ public class MainActivity extends AppCompatActivity {
         //change layout size according to rows and cols
         LinearLayout layout = findViewById(R.id.game_layout);
         ViewGroup.LayoutParams params = layout.getLayoutParams();
+        params.width = params.height = Resources.getSystem().getDisplayMetrics().widthPixels;
         double difference = (double) boardCols / boardRows;
 
         if (boardRows == 3 && boardCols == 3){
             params.width = params.height = (int)(params.width * 0.8);
         }
        if (boardRows == 4 && boardCols == 4){
-           params.width = params.height = (int)(params.width * 0.9);
+           params.width = params.height = (int)(params.width * 0.85);
        }
-
         if (boardRows != boardCols) {
             params.width = params.height = (int)(params.width * 1.1);
             params.width = (int) (params.width * difference);
-            layout.setLayoutParams(params);
         }
+       layout.setLayoutParams(params);
    }
 
     public void updateScore(final long score, final long topScore){
@@ -149,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent(MainActivity.this,HomeActivity.class);
+        startActivity(intent);
         destroyGameThread();
     }
 }

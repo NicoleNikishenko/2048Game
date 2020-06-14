@@ -337,7 +337,10 @@ public class GameBoard {
 
 
         public void updateScore(long value){
-        currentScore += value;
+        double val = Math.log(value) / Math.log(exponent);
+        val = Math.round(val) + 1;
+        int score =(int)Math.pow(val, 2);
+        currentScore += score;
         callback.updateScore(currentScore);
     }
 
