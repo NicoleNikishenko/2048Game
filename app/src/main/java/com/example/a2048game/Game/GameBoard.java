@@ -1,5 +1,6 @@
-package com.example.a2048game.Game;
+package com.example.a2048game;
 
+import android.content.Context;
 import android.graphics.Canvas;
 
 import com.example.a2048game.Tiles.Position;
@@ -11,6 +12,11 @@ import java.util.Random;
 import static java.lang.Thread.sleep;
 
 public class GameBoard {
+
+    private static final int GAME_MODE_CLASSIC = 0;
+    private static final int GAME_MODE_SHUFFLE = 1;
+    private static final int GAME_MODE_SOLID_TILE = 2;
+    private static final int NUM_SOLID_LIVES = 5;
 
 
     private Tile[][] tempBoard;
@@ -32,13 +38,14 @@ public class GameBoard {
     private boolean gameOver = false;
 
     private GameView callback;
-    private long currentScore;
-    private long oldScore;
+    private int currentScore;
+    private int oldScore;
+    private int gameMode;
 
 
 
     //constructor
-    public GameBoard(int rows, int cols, int exponentValue, GameView callback) {
+    public GameBoard(int rows, int cols, int exponentValue, GameView callback, int gameMode) {
         exponent = exponentValue;
         boardRows = rows;
         boardCols = cols;
@@ -47,6 +54,8 @@ public class GameBoard {
         this.callback = callback;
         currentScore = 0;
         boardIsInitialized = false;
+        this.gameMode = gameMode;
+
 
     }
 
@@ -305,6 +314,12 @@ public class GameBoard {
         if (movingTiles.isEmpty()) {
             isMoving = false;
             spawn();
+            if(gameMode == GAME_MODE_SHUFFLE)
+                shuffleBoard();
+            if(gameMode == GAME_MODE_SOLID_TILE){
+                decreaseSolidLives();
+                addRandomSolidTile();}
+
         }
     }
 
@@ -386,5 +401,90 @@ public class GameBoard {
         addRandom();
     }
 
+
+    public void shuffleBoard(){
+
+        int num = rand.nextInt(100); //will return and num between 0 and 100
+
+        if(num <= 10 && num >= 0) {  //10 percent chance of shuffling the board
+
+            Tile[][] newBoard = new Tile[boardRows][boardCols];
+            int randX, randY;
+            boolean moved = false;
+
+            for (int x = 0; x < boardRows; x++) {
+                for (int y = 0; y < boardCols; y++) {
+                    if (getTile(x, y) != null) {
+
+                        moved = false;
+                        while (!moved) {
+                            randX = rand.nextInt(boardRows);
+                            randY = rand.nextInt(boardCols);
+
+                            if (newBoard[randX][randY] == null) {
+
+                                newBoard[randX][randY] = new Tile(board[x][y].getValue(), positions[randX][randY], this);
+                                moved = true;
+                            }
+                        }
+
+
+                    }
+                }
+            }
+
+            board = newBoard;
+
+        }
+    }
+
+
+    public void addRandomSolidTile() {
+
+        int num = rand.nextInt(100); //will return and num between 0 and 100
+
+        if(num <= 5 && num >= 0) {  //5 percent chance of adding solid tile to the board
+
+            int count = 0;
+            for (int x = 0; x < boardRows; x++) {
+                for (int y = 0; y < boardCols; y++) {
+                    if (getTile(x, y) == null)
+                        count++;
+                }
+            }
+            int number = rand.nextInt(count);
+            count = 0;
+            for (int x = 0; x < boardRows; x++) {
+                for (int y = 0; y < boardCols; y++) {
+                    if (getTile(x, y) == null) {
+                        if (count == number) {
+                            board[x][y] = new Tile(64, positions[x][y], this, NUM_SOLID_LIVES); //here we need to send a special value and set a bitmap to look like a solid block, value should be a special one that can never be merged with
+                            return;
+                        }
+                        count++;
+                    }
+                }
+            }
+        }
+    }
+
+    public void decreaseSolidLives(){
+
+        for (int x = 0; x < boardRows; x++) {
+            for (int y = 0; y < boardCols; y++) {
+                if(board[x][y] != null && board[x][y].isSolid())
+                    if(board[x][y].getSolidLives() == 1)
+                        board[x][y] = null;
+                    else
+                        board[x][y].decreaseLiveCount();
+
+
+            }
+        }
+
+
+
+
+    }
 
 }

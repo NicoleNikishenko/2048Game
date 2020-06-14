@@ -1,4 +1,4 @@
-package com.example.a2048game.Game;
+package com.example.a2048game;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -28,6 +28,10 @@ import com.example.a2048game.Tiles.BitmapCreator;
 public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     private static final String APP_NAME = "2048Project";
+    private static final String SELECTED_GAME_MODE = "gameMode";
+    private static final int GAME_MODE_CLASSIC = 0;
+    private static final int GAME_MODE_SHUFFLE = 1;
+    private static final int GAME_MODE_SOLID_TILE = 2;
 
     private MainThread thread;
     private boolean isInit;
@@ -42,7 +46,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     MainActivity mainActivity;
     private Dialog gameOverDialog;
 
-
+    private int gameMode;
 
 
 
@@ -66,12 +70,13 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         int cols = mainActivity.getBoardCols();
 
         this.score = new Score(getResources(), (long)0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE));
-        gameBoard = new GameBoard(rows, cols, exponent, this);
+
+        gameMode = getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE).getInt(SELECTED_GAME_MODE,0);
+        gameBoard = new GameBoard(rows, cols, exponent, this,gameMode);
         BitmapCreator.exponent = exponent;
 
         builder = new AlertDialog.Builder(MainActivity.getContext());
         gameOverDialog = new Dialog(context);
-
 
     }
 
@@ -89,7 +94,6 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         initClickListeners();
         initSwipeListener();
         prepareGameOverDialog();
-
     }
 
     @Override
@@ -118,6 +122,10 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     public void update() {
         if(gameBoard.isGameOver() && !dialogOpen){
             dialogOpen = true;
+            if(score.isNewHighScore()) //if we have a new highscore we will update the entire leaderboard. else we will check if we got a new midscore and if so we will update the leaderboard appropriately
+                score.updateLeaderBoard();
+            else
+                score.checkIfNewMidScore();
             showGameOverDialog();
         }
         if(isInit) {
@@ -221,6 +229,13 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         resetBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
+                if(score.isNewHighScore())
+                    score.updateLeaderBoard();
+                else
+                    score.checkIfNewMidScore();
+                score.refreshLeaderBoard();
+
                 gameBoard.resetGame();
                 mainActivity.updateScore(score.getScore(),score.getTopScore());
             }
@@ -246,6 +261,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     public void updateScore(long value){
         score.updateScore(value);
         mainActivity.updateScore(score.getScore(),score.getTopScore());
+
     }
 
     public void prepareGameOverDialog(){
@@ -253,8 +269,6 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         gameOverDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         gameOverDialog.setCancelable(false);
         Button btn = gameOverDialog.findViewById(R.id.btn_try_again);
-
-
         btn.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -275,9 +289,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
                 gameOverDialog.show();
             }
         });
+
     }
-
-
 
 }
 
