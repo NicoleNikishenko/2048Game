@@ -160,11 +160,6 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
 
         int padding = (int) pxFromDp(3);
-
-        if (gameBoard.getRows() == 6){
-            padding = (int) pxFromDp(1);
-        }
-
         int width = getWidth() - padding * 2;
         int height = getHeight() - padding * 2;
 

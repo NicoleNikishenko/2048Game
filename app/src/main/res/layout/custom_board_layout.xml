@@ -49,39 +49,49 @@
                 android:textColor="@color/valueOther"
                 android:textSize="20dp" />
 
-            <ImageView
-                android:id="@+id/iv_select_mode"
-                android:layout_gravity="center"
-                android:layout_width="250dp"
-                android:layout_height="250dp" />
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginBottom="20dp">
-                <ImageButton
-                    android:id="@+id/btn_left_mode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_arrow_left"
-                    android:layout_gravity="center_vertical"/>
-                <TextView
-                    android:id="@+id/tv_mode_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Classic"
-                    android:fontFamily="@font/luckiest_guy"
-                    android:textColor="@color/valueOther"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp"
+                android:weightSum="4">
+                <ImageView
+                    android:id="@+id/iv_select_mode"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:textSize="30sp" />
-                <ImageButton
-                    android:id="@+id/btn_right_mode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_arrow_right"
-                    android:layout_gravity="center_vertical"/>
+                    android:layout_marginBottom="20dp">
+                    <ImageButton
+                        android:id="@+id/btn_left_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_arrow_left"
+                        android:layout_gravity="center_vertical"/>
+                    <TextView
+                        android:id="@+id/tv_mode_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Classic"
+                        android:fontFamily="@font/luckiest_guy"
+                        android:textColor="@color/valueOther"
+                        android:gravity="center"
+                        android:textSize="30sp" />
+                    <ImageButton
+                        android:id="@+id/btn_right_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_arrow_right"
+                        android:layout_gravity="center_vertical"/>
+                </LinearLayout>
             </LinearLayout>
+
+
 
         </LinearLayout>
 
@@ -173,43 +183,50 @@
                     android:background="@drawable/radio_btn_rectangle" />
 
             </RadioGroup>
-
-            <ImageView
-                android:id="@+id/image_view"
-                android:layout_gravity="center"
-                android:layout_width="250dp"
-                android:layout_height="250dp" />
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginBottom="20dp">
-                <ImageButton
-                    android:id="@+id/btn_left_board_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_arrow_left"
-                    android:layout_gravity="center_vertical"/>
-                <TextView
-                    android:id="@+id/tv_shape_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="3 X 3"
-                    android:fontFamily="@font/luckiest_guy"
-                    android:textColor="@color/valueOther"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="10dp"
+                android:orientation="vertical"
+                android:weightSum="4">
+                <ImageView
+                    android:id="@+id/image_view"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:weightSum="1"
                     android:gravity="center"
-                    android:textSize="30sp" />
-                <ImageButton
-                    android:id="@+id/btn_right_board_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_arrow_right"
-                    android:layout_gravity="center_vertical"/>
+                    android:layout_marginBottom="20dp">
+
+                    <ImageButton
+                        android:id="@+id/btn_left_board_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_arrow_left"
+                        android:layout_gravity="center_vertical"/>
+                    <TextView
+                        android:id="@+id/tv_shape_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3 X 3"
+                        android:fontFamily="@font/luckiest_guy"
+                        android:textColor="@color/valueOther"
+                        android:gravity="center"
+                        android:textSize="30sp" />
+                    <ImageButton
+                        android:id="@+id/btn_right_board_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_arrow_right"
+                        android:layout_gravity="center_vertical"/>
+
+                </LinearLayout>
             </LinearLayout>
-
-
-
         </LinearLayout>
 
 
