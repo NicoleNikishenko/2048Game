@@ -21,8 +21,8 @@ import static java.lang.Thread.sleep;
 public class GameBoard {
 
     private static final int GAME_MODE_CLASSIC = 0;
-    private static final int GAME_MODE_SHUFFLE = 1;
-    private static final int GAME_MODE_SOLID_TILE = 2;
+    private static final int GAME_MODE_SOLID_TILE = 1;
+    private static final int GAME_MODE_SHUFFLE = 2;
     private static final int NUM_SOLID_LIVES = 10;
 
     private Tile[][] tempBoard;
@@ -82,16 +82,8 @@ public class GameBoard {
     public void initBoard(){
         //initializing board with 2 random tiles
         if(!boardIsInitialized) {
-            board[0][1] = new Tile(2,positions[0][1],this);
-            board[0][2] = new Tile(4,positions[0][2],this);
-            board[0][0] = new Tile(16,positions[0][0],this);
-            board[1][1] = new Tile(32,positions[1][1],this);
-            board[1][0] = new Tile(64,positions[1][0],this);
-            board[1][3] = new Tile(128,positions[1][3],this);
-            board[2][1] = new Tile(256,positions[2][1],this);
-            board[2][0] = new Tile(2,positions[2][0],this);
-            board[2][3] = new Tile(2,positions[2][3],this);
-
+            addRandom();
+            addRandom();
             movingTiles = new ArrayList<>();
             boardIsInitialized = true;
         }
@@ -113,7 +105,7 @@ public class GameBoard {
             for(int y = 0; y < boardCols; y++){
                 if (getTile(x, y)==null) {
                     if(count == number){
-                        board[x][y] = new Tile(2,positions[x][y],this);
+                        board[x][y] = new Tile(exponent,positions[x][y],this);
                         return;
                     }
                     count++;
@@ -420,13 +412,13 @@ public class GameBoard {
 
 
     public void shuffleBoard(){
-//        int num = rand.nextInt(100); //will return and num between 0 and 100
-//
-//        if(num <= 5 && num >= 0) {  //5 percent chance of shuffling the board
-//
-//            callback.ShowShufflingMsg();
-//            startShuffle();
-//        }
+        int num = rand.nextInt(100); //will return and num between 0 and 100
+
+        if(num <= 5 && num >= 0) {  //5 percent chance of shuffling the board
+
+            callback.ShowShufflingMsg();
+            startShuffle();
+        }
     }
 
     public void startShuffle(){

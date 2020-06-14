@@ -4,9 +4,8 @@
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/pic_start_background">
-
     <RelativeLayout
-        android:id="@+id/first_layout"
+        android:id="@+id/select_mode_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="40dp"
@@ -18,7 +17,7 @@
             android:id="@+id/tv_create_board"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create Your Board!"
+            android:text="Chose Game Mode"
             android:fontFamily="@font/luckiest_guy"
             android:textColor="@color/valueOther"
             android:gravity="center"
@@ -31,7 +30,105 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/tv_create_board"
-            android:layout_above="@+id/btn_next"
+            android:layout_above="@+id/btn_next_mode"
+            android:orientation="vertical"
+            android:gravity="center">
+
+
+            <TextView
+                android:id="@+id/tv_mode_exp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:minLines="2"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/luckiest_guy"
+                android:gravity="center"
+                android:text="@string/mode_exp_classic"
+                android:textColor="@color/valueOther"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/iv_select_mode"
+                android:layout_gravity="center"
+                android:layout_width="250dp"
+                android:layout_height="250dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginBottom="20dp">
+                <ImageButton
+                    android:id="@+id/btn_left_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_arrow_left"
+                    android:layout_gravity="center_vertical"/>
+                <TextView
+                    android:id="@+id/tv_mode_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Classic"
+                    android:fontFamily="@font/luckiest_guy"
+                    android:textColor="@color/valueOther"
+                    android:gravity="center"
+                    android:textSize="30sp" />
+                <ImageButton
+                    android:id="@+id/btn_right_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_arrow_right"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_next_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="next"
+            android:layout_gravity="center"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="50dp"
+            android:fontFamily="@font/luckiest_guy"
+            android:textColor="#FFFFFF"
+            android:textSize="40sp"
+            android:background="@drawable/btn_rectangle_dark_blue"/>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/select_board_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginVertical="40dp"
+        android:background="@drawable/shape_rectangle_white"
+        android:padding="20dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_create_board2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="chose board size"
+            android:fontFamily="@font/luckiest_guy"
+            android:textColor="@color/valueOther"
+            android:gravity="center"
+            android:textSize="40dp"
+            android:layout_marginVertical="20dp"
+            android:layout_alignParentStart="true"/>
+
+        <LinearLayout
+            android:layoutDirection="ltr"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tv_create_board2"
+            android:layout_above="@+id/btn_next_board_type"
             android:orientation="vertical"
             android:gravity="center">
 
@@ -78,8 +175,8 @@
             </RadioGroup>
 
             <ImageView
-                android:layout_gravity="center"
                 android:id="@+id/image_view"
+                android:layout_gravity="center"
                 android:layout_width="250dp"
                 android:layout_height="250dp" />
 
@@ -89,7 +186,7 @@
                 android:gravity="center"
                 android:layout_marginBottom="20dp">
                 <ImageButton
-                    android:id="@+id/btn_left"
+                    android:id="@+id/btn_left_board_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_arrow_left"
@@ -104,7 +201,7 @@
                     android:gravity="center"
                     android:textSize="30sp" />
                 <ImageButton
-                    android:id="@+id/btn_right"
+                    android:id="@+id/btn_right_board_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_arrow_right"
@@ -119,7 +216,7 @@
 
 
         <Button
-            android:id="@+id/btn_next"
+            android:id="@+id/btn_next_board_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="next"
@@ -135,46 +232,43 @@
 
     </RelativeLayout>
     <RelativeLayout
-        android:id="@+id/second_layout"
+        android:id="@+id/select_exponent_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="40dp"
         android:layout_marginVertical="40dp"
         android:background="@drawable/shape_rectangle_white"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:visibility="gone">
 
         <TextView
-            android:id="@+id/tv_create_board_second"
+            android:id="@+id/tv_create_board3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginVertical="20dp"
             android:fontFamily="@font/luckiest_guy"
             android:gravity="center"
-            android:text="Create Your Board!"
+            android:text="Chose Exponent"
             android:textColor="@color/valueOther"
             android:textSize="40dp" />
-        <TextView
-            android:id="@+id/tv_chose_exponent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_create_board_second"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
-            android:fontFamily="@font/luckiest_guy"
-            android:text="Chose Exponent:"
-            android:textColor="@color/valueOther"
-            android:textSize="30dp" />
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tv_create_board3"
+            android:layout_above="@id/btn_play"
+            android:orientation="vertical"
+            android:gravity="center">
+
+        <LinearLayout
+            android:id="@+id/radio_group_layout"
             android:layout_width="250dp"
             android:layout_height="250dp"
-            android:layout_below="@id/tv_chose_exponent"
             android:layout_centerHorizontal="true"
             android:orientation="vertical"
-
             android:weightSum="2">
+
 
             <RadioGroup
                 android:layoutDirection="ltr"
@@ -263,6 +357,21 @@
             </RadioGroup>
 
 
+        </LinearLayout>
+
+         <TextView
+            android:id="@+id/tv_exponent_exp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/radio_group_layout"
+            android:layout_alignParentStart="true"
+            android:layout_marginVertical="20dp"
+            android:padding="5dp"
+            android:fontFamily="@font/luckiest_guy"
+            android:gravity="center"
+            android:text="@string/exponent_exp_2"
+            android:textColor="@color/valueOther"
+            android:textSize="25sp" />
         </LinearLayout>
 
         <Button

@@ -33,8 +33,9 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     private static final String APP_NAME = "2048Project";
     private static final String SELECTED_GAME_MODE = "gameMode";
     private static final int GAME_MODE_CLASSIC = 0;
-    private static final int GAME_MODE_SHUFFLE = 1;
-    private static final int GAME_MODE_SOLID_TILE = 2;
+    private static final int GAME_MODE_SOLID_TILE = 1;
+    private static final int GAME_MODE_SHUFFLE = 2;
+
 
     private MainThread thread;
     private boolean isInit;
@@ -71,10 +72,11 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         int exponent = mainActivity.getBoardExponent();
         int rows = mainActivity.getBoardRows();
         int cols = mainActivity.getBoardCols();
+        int gameMode = mainActivity.getGameMode();
 
         this.score = new Score(getResources(), (long)0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE));
 
-        gameMode = getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE).getInt(SELECTED_GAME_MODE,1);
+        //gameMode = getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE).getInt(SELECTED_GAME_MODE,1);
         gameBoard = new GameBoard(rows, cols, exponent, this ,gameMode);
         BitmapCreator.exponent = exponent;
 

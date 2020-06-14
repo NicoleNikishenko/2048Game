@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private int boardRows;
     private int boardCols;
     private int boardExponent;
+    private int gameMode;
+
 
 
     @Override
@@ -39,11 +41,9 @@ public class MainActivity extends AppCompatActivity {
         boardRows = getIntent().getIntExtra("rows",4);
         boardCols = getIntent().getIntExtra("cols",4);
         boardExponent = getIntent().getIntExtra("exponent",2);
-
-
+        gameMode = getIntent().getIntExtra("game_mode",0);
 
         setContentView(R.layout.activity_main);
-
         changeLayoutParams();
 
         this.scoreTv = findViewById(R.id.tv_current_score);
@@ -78,11 +78,7 @@ public class MainActivity extends AppCompatActivity {
     public int getBoardExponent() {
         return boardExponent;
     }
-    public void setBoardType(int boardCols ,int boardRows ,int boardExponent) {
-        this.boardCols = boardCols;
-        this.boardRows = boardRows;
-        this.boardExponent = boardExponent;
-    }
+    public int getGameMode(){return gameMode;}
 
    private void changeLayoutParams(){
         //change layout size according to rows and cols
