@@ -1,21 +1,13 @@
 package com.example.a2048game.Game;
 
-import android.content.Context;
 import android.graphics.Canvas;
-import android.os.CountDownTimer;
-import android.view.View;
-import android.widget.LinearLayout;
 
-import com.example.a2048game.MainActivity;
-import com.example.a2048game.R;
 import com.example.a2048game.Tiles.Position;
 import com.example.a2048game.Tiles.Tile;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 import static java.lang.Thread.sleep;
 
 public class GameBoard {
@@ -39,6 +31,7 @@ public class GameBoard {
     private boolean spawnNeeded = false;
     private boolean canUndo;
     private boolean boardIsInitialized;
+    private boolean tutorialIsPlaying;
     private ArrayList<Tile> movingTiles;
 
     private boolean gameOver = false;
@@ -82,11 +75,22 @@ public class GameBoard {
     public void initBoard(){
         //initializing board with 2 random tiles
         if(!boardIsInitialized) {
-            board[0][3] = new Tile(exponent,positions[0][3],this);
-            board[1][3] = new Tile(exponent,positions[1][3],this);
+            addRandom();
+            addRandom();
             movingTiles = new ArrayList<>();
             boardIsInitialized = true;
         }
+    }
+    public void initTutorialBoard(){
+        tutorialIsPlaying = true;
+        board[0][0] = new Tile(exponent, positions[0][0], this);
+        board[1][2] = new Tile(exponent, positions[1][2], this);
+        movingTiles = new ArrayList<>();
+        boardIsInitialized = true;
+    }
+    public void setTutorialFinished(){
+        tutorialIsPlaying = false;
+        resetGame();
     }
 
 
@@ -329,9 +333,9 @@ public class GameBoard {
             callback.playSwipe();
             isMoving = false;
             spawn();
-            if(gameMode == GAME_MODE_SHUFFLE)
+            if(gameMode == GAME_MODE_SHUFFLE && !tutorialIsPlaying)
                 shuffleBoard();
-            if(gameMode == GAME_MODE_SOLID_TILE){
+            if(gameMode == GAME_MODE_SOLID_TILE && !tutorialIsPlaying){
                 decreaseSolidLives();
                 addRandomSolidTile();}
 
@@ -370,6 +374,11 @@ public class GameBoard {
         val = Math.round(val) + 1;
         int score =(int)Math.pow(val, 2);
         currentScore += score;
+
+        //if score is updated then a merge happened
+            if (tutorialIsPlaying){
+                callback.thirdTutorialScreen();
+            }
     }
 
 
@@ -398,18 +407,16 @@ public class GameBoard {
 
     public void resetGame(){
         //reset the game and score
-        gameOver = false;
-        canUndo = false;
-
-        for (int x = 0; x < boardRows; x++) {
-            for (int y = 0; y < boardCols; y++) {
-                board[x][y] = null;
+            gameOver = false;
+            canUndo = false;
+            for (int x = 0; x < boardRows; x++) {
+                for (int y = 0; y < boardCols; y++) {
+                    board[x][y] = null;
+                }
             }
-        }
-
-        currentScore = 0;
-        addRandom();
-        addRandom();
+            currentScore = 0;
+            addRandom();
+            addRandom();
     }
 
 
@@ -487,10 +494,6 @@ public class GameBoard {
                         board[x][y].decreaseLiveCount();
             }
         }
-
-
-
-
     }
 
 }
