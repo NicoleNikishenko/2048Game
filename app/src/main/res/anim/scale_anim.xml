@@ -2,7 +2,7 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
     <scale
-        android:fromXScale="0.97"
+        android:fromXScale="0.98"
         android:fromYScale="1"
         android:toXScale="1"
         android:toYScale="1"

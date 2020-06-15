@@ -1,9 +1,17 @@
 package com.example.a2048game;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.PowerManager;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -42,12 +50,20 @@ public class CustomGameActivity extends AppCompatActivity {
     private Animation rightOutAnim ;
     private Animation leftOutAnim ;
 
+    HomeWatcher mHomeWatcher;
+    private SharedPreferences sp;
+
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_board_layout);
+
+        sp = getSharedPreferences("music_settings", MODE_PRIVATE);
+        if (!sp.getBoolean("mute_music",false)){
+            playMusic();
+        }
 
         boardsIndex = 0;
         modesIndex = 0;
@@ -75,7 +91,7 @@ public class CustomGameActivity extends AppCompatActivity {
         btnNextFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                playClick();
                 leftOutAnim.setAnimationListener(new Animation.AnimationListener() {
                     public void onAnimationStart(Animation animation) { }
                     public void onAnimationRepeat(Animation animation) { }
@@ -97,7 +113,7 @@ public class CustomGameActivity extends AppCompatActivity {
         btnNextSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                playClick();
                 leftOutAnim.setAnimationListener(new Animation.AnimationListener() {
                     public void onAnimationStart(Animation animation) { }
                     public void onAnimationRepeat(Animation animation) { }
@@ -120,6 +136,7 @@ public class CustomGameActivity extends AppCompatActivity {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                playClick();
                 Intent intent = new Intent(CustomGameActivity.this, MainActivity.class);
                 intent.putExtra("rows", currentDisplayedBoards.get(boardsIndex).rows);
                 intent.putExtra("cols", currentDisplayedBoards.get(boardsIndex).cols);
@@ -134,6 +151,7 @@ public class CustomGameActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        playClick();
         if (thirdViewIsVisible) {
             rightOutAnim.setAnimationListener(new Animation.AnimationListener() {
                 public void onAnimationStart(Animation animation) {
@@ -218,6 +236,7 @@ public class CustomGameActivity extends AppCompatActivity {
         btnRight.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                playClick();
                 if (modesIndex == 2){
                     modesIndex =0;
                 }else {
@@ -245,6 +264,7 @@ public class CustomGameActivity extends AppCompatActivity {
         btnLeft.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                playClick();
                 if (modesIndex == 0){
                     modesIndex =2;
                 } else {
@@ -285,21 +305,30 @@ public class CustomGameActivity extends AppCompatActivity {
         final RadioGroup shapeRadioGroup = findViewById(R.id.rg_board_shape);
         final RadioButton radioButtonRectangle = findViewById(R.id.rb_rectangle);
         final RadioButton radioButtonSquare = findViewById(R.id.rb_square);
+        radioButtonSquare.setTextColor(Color.rgb(90,85,83));
+        radioButtonRectangle.setTextColor(Color.rgb(167,168,168));
+
+
 
         shapeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                playClick();
                 if (checkedId == radioButtonRectangle.getId()){
                     boardsIndex = 0;
                     currentDisplayedBoards = rectangleBoards;
                     tvBoardType.setText(currentDisplayedBoards.get(boardsIndex).getTypeString());
                     ivBoardType.setImageDrawable(currentDisplayedBoards.get(boardsIndex).drawable);
+                    radioButtonRectangle.setTextColor(Color.rgb(90,85,83));
+                    radioButtonSquare.setTextColor(Color.rgb(167,168,168));
 
                 } else if (checkedId == radioButtonSquare.getId()){
                     boardsIndex = 0;
                     currentDisplayedBoards = squareBoards;
                     tvBoardType.setText(currentDisplayedBoards.get(boardsIndex).getTypeString());
                     ivBoardType.setImageDrawable(currentDisplayedBoards.get(boardsIndex).drawable);
+                    radioButtonSquare.setTextColor(Color.rgb(90,85,83));
+                    radioButtonRectangle.setTextColor(Color.rgb(167,168,168));
                 }
             }
         });
@@ -308,6 +337,7 @@ public class CustomGameActivity extends AppCompatActivity {
         btnLeft.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                playClick();
                 if (boardsIndex == 0){
                     boardsIndex = currentDisplayedBoards.size()-1;
                 }
@@ -333,6 +363,7 @@ public class CustomGameActivity extends AppCompatActivity {
         btnRight.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                playClick();
                 if (boardsIndex == currentDisplayedBoards.size() - 1){
                     boardsIndex = 0;
                 }
@@ -377,6 +408,7 @@ public class CustomGameActivity extends AppCompatActivity {
        rbExponent2.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               playClick();
                rbExponent2.setChecked(true);
                rgExponentBottom.clearCheck();
                exponent = 2;
@@ -387,6 +419,7 @@ public class CustomGameActivity extends AppCompatActivity {
         rbExponent3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                playClick();
                 rbExponent3.setChecked(true);
                 rgExponentBottom.clearCheck();
                 exponent = 3;
@@ -397,6 +430,7 @@ public class CustomGameActivity extends AppCompatActivity {
         rbExponent4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                playClick();
                 rbExponent4.setChecked(true);
                 rgExponentTop.clearCheck();
                 exponent = 4;
@@ -407,6 +441,7 @@ public class CustomGameActivity extends AppCompatActivity {
         rbExponent5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                playClick();
                 rbExponent5.setChecked(true);
                 rgExponentTop.clearCheck();
                 exponent = 5;
@@ -417,7 +452,111 @@ public class CustomGameActivity extends AppCompatActivity {
     }
 
 
+    /////////////////////// Music and sound methods////////////////////////
+
+
+
+    private void playClick() {
+        SharedPreferences sp = getSharedPreferences("music_settings", MODE_PRIVATE);
+        final MediaPlayer click = MediaPlayer.create(CustomGameActivity.this, R.raw.button_click);
+        if (!sp.getBoolean("mute_sounds", false)) {
+            click.start();
+        }
+    }
+    private void playMusic() {
+        //BIND Music Service
+        doBindService();
+        Intent music = new Intent();
+        music.setClass(this, MusicService.class);
+        startService(music);
+
+        //Start HomeWatcher
+        mHomeWatcher = new HomeWatcher(this);
+        mHomeWatcher.setOnHomePressedListener(new HomeWatcher.OnHomePressedListener() {
+            @Override
+            public void onHomePressed() {
+                if (mServ != null) {
+                    mServ.pauseMusic();
+                }
+            }
+            @Override
+            public void onHomeLongPressed() {
+                if (mServ != null) {
+                    mServ.pauseMusic();
+                }
+            }
+        });
+        mHomeWatcher.startWatch();
+
+    }
+
+    //Bind/Unbind music service
+    private boolean mIsBound = false;
+    private MusicService mServ;
+    private ServiceConnection Scon =new ServiceConnection(){
+
+        public void onServiceConnected(ComponentName name, IBinder
+                binder) {
+            mServ = ((MusicService.ServiceBinder)binder).getService();
+        }
+
+        public void onServiceDisconnected(ComponentName name) {
+            mServ = null;
+        }
+    };
+    void doBindService(){
+        bindService(new Intent(this,MusicService.class),
+                Scon, Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+    }
+    void doUnbindService()
+    {
+        if(mIsBound)
+        {
+            unbindService(Scon);
+            mIsBound = false;
+        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mServ != null) {
+            mServ.resumeMusic();
+        }
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        //Detect idle screen
+        PowerManager pm = (PowerManager)
+                getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = false;
+        if (pm != null) {
+            isScreenOn = pm.isScreenOn();
+        }
+
+        if (!isScreenOn) {
+            if (mServ != null) {
+                mServ.pauseMusic();
+            }
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        //UNBIND music service
+        doUnbindService();
+        Intent music = new Intent();
+        music.setClass(this,MusicService.class);
+        stopService(music);
+
+    }
 }
+
+//////////////////////////////////////////
 
 class BoardType {
 

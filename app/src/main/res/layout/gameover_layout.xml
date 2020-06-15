@@ -12,23 +12,23 @@
         android:text="@string/gameover_title"
         android:gravity="center"
         android:fontFamily="@font/luckiest_guy"
-        android:textSize="50sp"
-        android:textColor="@color/valueOther"
+        android:textSize="55sp"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp" />
     <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:background="@drawable/shape_rectangle_white">
+        android:background="@drawable/shape_rectangle_gray"
+        android:padding="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/gameover_yourscore"
+            android:text="your score"
             android:fontFamily="@font/luckiest_guy"
             android:textSize="35sp"
             android:textColor="@color/valueOther"
@@ -53,7 +53,7 @@
         android:layout_marginTop="20dp">
         <Button
             android:id="@+id/btn_try_again"
-            android:text="Try Again"
+            android:text="Play Again"
             android:textColor="#FFFFFF"
             android:fontFamily="@font/luckiest_guy"
             android:textSize="20sp"
