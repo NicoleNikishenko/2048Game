@@ -22,11 +22,14 @@ public class Score{
     private SharedPreferences prefs;
     private Paint paint;
     private int gameMode;
+    private String rowsString;
+    private String colsString;
     private String gameModeString;
+
 
     private boolean newHighScore;
 
-    public Score(Resources resources, Long score , SharedPreferences prefs, int gameMode) {
+    public Score(Resources resources, Long score , SharedPreferences prefs, int gameMode, int rows, int cols) {
 
         this.score = score;
         this.prefs = prefs;
@@ -34,13 +37,15 @@ public class Score{
         this.oldTopScore = 0;
         this.gameMode = gameMode;
         this.gameModeString = Integer.toString(gameMode);
+        this.rowsString = Integer.toString(rows);
+        this.colsString = Integer.toString(cols);
 
-        leaderBoard[0] = prefs.getLong(TOP_SCORE_PREF + gameModeString,0);
-        leaderBoard[1] = prefs.getLong(SECOND_HIGHEST_SCORE + gameModeString,0);
-        leaderBoard[2] = prefs.getLong(THIRD_HIGHEST_SCORE + gameModeString,0);
-        leaderBoard[3] = prefs.getLong(FOURTH_HIGHEST_SCORE + gameModeString,0);
-        leaderBoard[4] = prefs.getLong(FIFTH_HIGHEST_SCORE + gameModeString,0);
-        leaderBoard[5] = prefs.getLong(SIXTH_HIGHEST_SCORE + gameModeString,0);
+        leaderBoard[0] = prefs.getLong(TOP_SCORE_PREF + gameModeString + rowsString + colsString,0);
+        leaderBoard[1] = prefs.getLong(SECOND_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
+        leaderBoard[2] = prefs.getLong(THIRD_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
+        leaderBoard[3] = prefs.getLong(FOURTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
+        leaderBoard[4] = prefs.getLong(FIFTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
+        leaderBoard[5] = prefs.getLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
 
 
     }
@@ -53,7 +58,7 @@ public class Score{
 
         if(!newHighScore) {
 
-            leaderBoard[0] = prefs.getLong(TOP_SCORE_PREF + gameModeString, 0);
+            leaderBoard[0] = prefs.getLong(TOP_SCORE_PREF + gameModeString + rowsString + colsString, 0);
 
             if (score > leaderBoard[0]) {
 
@@ -65,24 +70,24 @@ public class Score{
 
     public void updateLeaderBoard (){
 
-        prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString,leaderBoard[4]).apply();
-        prefs.edit().putLong(FIFTH_HIGHEST_SCORE + gameModeString,leaderBoard[3]).apply();
-        prefs.edit().putLong(FOURTH_HIGHEST_SCORE + gameModeString,leaderBoard[2]).apply();
-        prefs.edit().putLong(THIRD_HIGHEST_SCORE + gameModeString,leaderBoard[1]).apply();
-        prefs.edit().putLong(SECOND_HIGHEST_SCORE + gameModeString,leaderBoard[0]).apply();
-        prefs.edit().putLong(TOP_SCORE_PREF + gameModeString,score).apply();
+        prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,leaderBoard[4]).apply();
+        prefs.edit().putLong(FIFTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,leaderBoard[3]).apply();
+        prefs.edit().putLong(FOURTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,leaderBoard[2]).apply();
+        prefs.edit().putLong(THIRD_HIGHEST_SCORE + gameModeString + rowsString + colsString,leaderBoard[1]).apply();
+        prefs.edit().putLong(SECOND_HIGHEST_SCORE + gameModeString + rowsString + colsString,leaderBoard[0]).apply();
+        prefs.edit().putLong(TOP_SCORE_PREF + gameModeString + rowsString + colsString,score).apply();
         refreshLeaderBoard();
 
     }
 
     public void refreshLeaderBoard (){
 
-        leaderBoard[0] = prefs.getLong(TOP_SCORE_PREF + gameModeString,0);
-        leaderBoard[1] = prefs.getLong(SECOND_HIGHEST_SCORE + gameModeString,0);
-        leaderBoard[2] = prefs.getLong(THIRD_HIGHEST_SCORE + gameModeString,0);
-        leaderBoard[3] = prefs.getLong(FOURTH_HIGHEST_SCORE + gameModeString,0);
-        leaderBoard[4] = prefs.getLong(FIFTH_HIGHEST_SCORE + gameModeString,0);
-        leaderBoard[5] = prefs.getLong(SIXTH_HIGHEST_SCORE + gameModeString,0);
+        leaderBoard[0] = prefs.getLong(TOP_SCORE_PREF + gameModeString + rowsString + colsString,0);
+        leaderBoard[1] = prefs.getLong(SECOND_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
+        leaderBoard[2] = prefs.getLong(THIRD_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
+        leaderBoard[3] = prefs.getLong(FOURTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
+        leaderBoard[4] = prefs.getLong(FIFTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
+        leaderBoard[5] = prefs.getLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
 
     }
 
@@ -97,37 +102,37 @@ public class Score{
                     switch (i) {
 
                         case 1:
-                            prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString, leaderBoard[4]).apply();
-                            prefs.edit().putLong(FIFTH_HIGHEST_SCORE + gameModeString, leaderBoard[3]).apply();
-                            prefs.edit().putLong(FOURTH_HIGHEST_SCORE + gameModeString, leaderBoard[2]).apply();
-                            prefs.edit().putLong(THIRD_HIGHEST_SCORE + gameModeString, leaderBoard[1]).apply();
-                            prefs.edit().putLong(SECOND_HIGHEST_SCORE + gameModeString, score).apply();
+                            prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString, leaderBoard[4]).apply();
+                            prefs.edit().putLong(FIFTH_HIGHEST_SCORE + gameModeString + rowsString + colsString, leaderBoard[3]).apply();
+                            prefs.edit().putLong(FOURTH_HIGHEST_SCORE + gameModeString + rowsString + colsString, leaderBoard[2]).apply();
+                            prefs.edit().putLong(THIRD_HIGHEST_SCORE + gameModeString + rowsString + colsString, leaderBoard[1]).apply();
+                            prefs.edit().putLong(SECOND_HIGHEST_SCORE + gameModeString + rowsString + colsString, score).apply();
                             found = true;
                             break;
 
                         case 2:
-                            prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString, leaderBoard[4]).apply();
-                            prefs.edit().putLong(FIFTH_HIGHEST_SCORE + gameModeString, leaderBoard[3]).apply();
-                            prefs.edit().putLong(FOURTH_HIGHEST_SCORE + gameModeString, leaderBoard[2]).apply();
-                            prefs.edit().putLong(THIRD_HIGHEST_SCORE + gameModeString, score).apply();
+                            prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString, leaderBoard[4]).apply();
+                            prefs.edit().putLong(FIFTH_HIGHEST_SCORE + gameModeString + rowsString + colsString, leaderBoard[3]).apply();
+                            prefs.edit().putLong(FOURTH_HIGHEST_SCORE + gameModeString + rowsString + colsString, leaderBoard[2]).apply();
+                            prefs.edit().putLong(THIRD_HIGHEST_SCORE + gameModeString + rowsString + colsString, score).apply();
                             found = true;
                             break;
 
                         case 3:
-                            prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString, leaderBoard[4]).apply();
-                            prefs.edit().putLong(FIFTH_HIGHEST_SCORE + gameModeString, leaderBoard[3]).apply();
-                            prefs.edit().putLong(FOURTH_HIGHEST_SCORE + gameModeString, score).apply();
+                            prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString, leaderBoard[4]).apply();
+                            prefs.edit().putLong(FIFTH_HIGHEST_SCORE + gameModeString + rowsString + colsString, leaderBoard[3]).apply();
+                            prefs.edit().putLong(FOURTH_HIGHEST_SCORE + gameModeString + rowsString + colsString, score).apply();
                             found = true;
                             break;
 
                         case 4:
-                            prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString, leaderBoard[4]).apply();
-                            prefs.edit().putLong(FIFTH_HIGHEST_SCORE + gameModeString, score).apply();
+                            prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString, leaderBoard[4]).apply();
+                            prefs.edit().putLong(FIFTH_HIGHEST_SCORE + gameModeString + rowsString + colsString, score).apply();
                             found = true;
                             break;
 
                         case 5:
-                            prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString, score).apply();
+                            prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString, score).apply();
                             found = true;
                             break;
 
@@ -147,7 +152,7 @@ public class Score{
 
     public void setTopScore(Long value){
 
-        prefs.edit().putLong(TOP_SCORE_PREF + gameModeString,value).apply();
+        prefs.edit().putLong(TOP_SCORE_PREF + gameModeString + rowsString + colsString,value).apply();
     }
 
 }
