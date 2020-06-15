@@ -17,6 +17,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,20 +37,20 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     private static final int GAME_MODE_CLASSIC = 0;
     private static final int GAME_MODE_SOLID_TILE = 1;
     private static final int GAME_MODE_SHUFFLE = 2;
-    private MediaPlayer swipe;
 
+    private MediaPlayer swipe;
     private MainThread thread;
     private boolean isInit;
+    private boolean isTutorial;
     private Score score;
     GameBoard gameBoard;
     Boolean dialogOpen = false;
     Drawable backgroundRectangle = getResources().getDrawable(R.drawable.gameboard_background);
     Drawable cellRectangle = getResources().getDrawable(R.drawable.gameboard_cell_shape);
-
     AlertDialog.Builder builder;
-
     MainActivity mainActivity;
     private Dialog gameOverDialog;
+
 
 
 
@@ -73,6 +74,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         int rows = mainActivity.getBoardRows();
         int cols = mainActivity.getBoardCols();
         int gameMode = mainActivity.getGameMode();
+        isTutorial = mainActivity.isTutorial();
 
 
         this.score = new Score(getResources(), (long)0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE),gameMode, rows, cols);
@@ -84,11 +86,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
         builder = new AlertDialog.Builder(MainActivity.getContext());
         gameOverDialog = new Dialog(context);
-        
-
     }
-
-
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
@@ -151,12 +149,21 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         drawDrawable(canvas, backgroundRectangle, 0, 0, getWidth(), getHeight());
         drawEmptyBoard(canvas);
         if (!isInit){
-            gameBoard.initBoard();
+            if (isTutorial){
+                firstTutorialScreen();
+                gameBoard.initTutorialBoard();
+            } else {
+                gameBoard.initBoard();
+            }
         } isInit = true;
         gameBoard.draw(canvas);
     }
 
+    public void updateScore(long value){
+        score.updateScore(value);
+        mainActivity.updateScore(score.getScore(),score.getTopScore());
 
+    }
 
     private void drawEmptyBoard (Canvas canvas){
         drawDrawable(canvas, backgroundRectangle, 0, 0, getWidth(), getHeight());
@@ -198,40 +205,33 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
             }
         }
     }
-
-
     private void drawDrawable(Canvas canvas, Drawable draw, int startingX, int startingY, int endingX, int endingY) {
         draw.setBounds(startingX, startingY, endingX, endingY);
         draw.draw(canvas);
     }
 
-
-    public float pxFromDp(final float dp) {
-        return dp * getContext().getResources().getDisplayMetrics().density;
-    }
-
-
     private void initSwipeListener() {
         setOnTouchListener(new OnSwipeTouchListener(this.getContext()) {
-            public void onSwipeTop() { if(!dialogOpen) gameBoard.up(); }
-            public void onSwipeRight() { if(!dialogOpen) gameBoard.right(); }
-            public void onSwipeLeft() { if(!dialogOpen) gameBoard.left(); }
-            public void onSwipeBottom() { if(!dialogOpen)  gameBoard.down(); }
+            public void onSwipeTop() { if(!dialogOpen) { gameBoard.up(); secondTutorialScreen();}}
+            public void onSwipeRight() { if(!dialogOpen) { gameBoard.right(); secondTutorialScreen();}}
+            public void onSwipeLeft() { if(!dialogOpen) { gameBoard.left(); secondTutorialScreen();}}
+            public void onSwipeBottom() { if(!dialogOpen) { gameBoard.down(); secondTutorialScreen();}}
         });
     }
-
     private void initClickListeners() {
         ImageButton resetBtn = mainActivity.findViewById(R.id.btn_reset);
         resetBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                playClick();
-                if(score.isNewHighScore())
-                    score.updateLeaderBoard();
-                else
-                    score.checkIfNewMidScore();
-                score.refreshLeaderBoard();
-                gameBoard.resetGame();
+                if (!isTutorial) {
+                    playClick();
+                    if (score.isNewHighScore())
+                        score.updateLeaderBoard();
+                    else
+                        score.checkIfNewMidScore();
+                    score.refreshLeaderBoard();
+                    gameBoard.resetGame();
+                }
 
             }
         });
@@ -240,22 +240,12 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         undoBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                playClick();
-                gameBoard.undoMove();
+                if (!isTutorial) {
+                    playClick();
+                    gameBoard.undoMove();
+                }
             }
         });
-    }
-
-    @Override
-    public boolean performClick() {
-        return super.performClick();
-    }
-
-
-    public void updateScore(long value){
-        score.updateScore(value);
-        mainActivity.updateScore(score.getScore(),score.getTopScore());
-
     }
 
     public void prepareGameOverDialog(){
@@ -274,7 +264,6 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
             }
         });
     }
-
     public void showGameOverDialog() {
         mainActivity.runOnUiThread(new Runnable() {
             @Override
@@ -287,37 +276,87 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     }
     public void ShowShufflingMsg(){
-        //displaying shuffle msg and placing it on top of score bar
-        final LinearLayout shufflingLayout = mainActivity.findViewById(R.id.shuffling_msg);
-        TextView score = mainActivity.findViewById(R.id.tv_current_score);
+        //displaying shuffle msg
+        final ImageView shufflingBackground = mainActivity.findViewById(R.id.shuffling_msg);
         final TextView shufflingText = mainActivity.findViewById(R.id.tv_shuffling);
-        final float spacing = (int)convertPixelsToDp(score.getY(),MainActivity.getContext());
-        final float padding = pxFromDp(spacing);
-        final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(0, (int)padding, 0, 0);
 
         mainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 dialogOpen = true;
-                shufflingText.setLayoutParams(params);
-                shufflingLayout.setVisibility(VISIBLE);
+                shufflingText.setVisibility(VISIBLE);
+                shufflingBackground.setVisibility(VISIBLE);
                 new CountDownTimer(1000, 500) {
                     @Override
                     public void onTick(long millisUntilFinished) {
                     }
                     @Override
                     public void onFinish() {
-                        shufflingLayout.setVisibility(GONE);
+                        shufflingText.setVisibility(GONE);
+                        shufflingBackground.setVisibility(GONE);
                         dialogOpen = false;
                     }
                 }.start();
             }
         });
     }
+    public void firstTutorialScreen(){
+        //displaying shuffle msg and placing it on top of score bar
+        final ImageView tutorialBackground = mainActivity.findViewById(R.id.tutorial_background);
+        final TextView tutorialText = mainActivity.findViewById(R.id.tv_tutorial);
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tutorialBackground.setVisibility(VISIBLE);
+                tutorialText.setVisibility(VISIBLE);
+                tutorialText.setText("Swipe Up/Down/left/right to move the tiles across the board");
+            }
+        });
+    }
+    public void secondTutorialScreen(){
+        //displaying shuffle msg and placing it on top of score bar
+        final TextView tutorialText = mainActivity.findViewById(R.id.tv_tutorial);
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tutorialText.setText("GOOD!! \nTwo identical tiles can merge, swipe to merge your tiles ");
 
-    public static float convertPixelsToDp(float px, Context context){
-        return px / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+            }
+        });
+    }
+    public void thirdTutorialScreen(){
+        //displaying shuffle msg and placing it on top of score bar
+        final ImageView tutorialBackground = mainActivity.findViewById(R.id.tutorial_background);
+        final TextView tutorialText = mainActivity.findViewById(R.id.tv_tutorial);
+        final Button end = mainActivity.findViewById(R.id.btn_end_tutorial);
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tutorialText.setText("Perfect!! \n Marge more and more tiles and try to get a higher score");
+                end.setVisibility(VISIBLE);
+                dialogOpen = true;
+                end.setOnClickListener(new View.OnClickListener(){
+
+                    @Override
+                    public void onClick(View v) {
+                        playClick();
+                        tutorialBackground.setVisibility(GONE);
+                        tutorialText.setVisibility(GONE);
+                        end.setVisibility(GONE);
+                        gameBoard.setTutorialFinished();
+                        dialogOpen = false;
+                    }
+                });
+
+
+
+            }
+        });
+    }
+
+
+    public float pxFromDp(final float dp) {
+        return dp * getContext().getResources().getDisplayMetrics().density;
     }
 
 
@@ -333,6 +372,13 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
             swipe.start();
         }
     }
+
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
+    }
+
 }
 
 

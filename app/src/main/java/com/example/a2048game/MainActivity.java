@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private int boardCols;
     private int boardExponent;
     private int gameMode;
+    private boolean isTutorialNeeded;
 
 
 
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         boardCols = getIntent().getIntExtra("cols",4);
         boardExponent = getIntent().getIntExtra("exponent",2);
         gameMode = getIntent().getIntExtra("game_mode",0);
+        isTutorialNeeded = getIntent().getBooleanExtra("tutorial", false);
         setContentView(R.layout.activity_main);
 
         sp = getSharedPreferences("music_settings", MODE_PRIVATE);
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                playClick();
                 openSettingsDialog();
             }
         });
@@ -92,16 +95,11 @@ public class MainActivity extends AppCompatActivity {
     public static Context getContext(){
         return mContext;
     }
-    public int getBoardRows() {
-        return boardRows;
-    }
-    public int getBoardCols() {
-        return boardCols;
-    }
-    public int getBoardExponent() {
-        return boardExponent;
-    }
+    public int getBoardRows() { return boardRows; }
+    public int getBoardCols() { return boardCols; }
+    public int getBoardExponent() { return boardExponent; }
     public int getGameMode(){return gameMode;}
+    public boolean isTutorial(){ return isTutorialNeeded;}
     public boolean isSoundMuted(){
         if (sp.getBoolean("mute_sounds", false)) {
             return true;
@@ -109,8 +107,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
-
-   private void changeLayoutParams(){
+    private void changeLayoutParams(){
         //change layout size according to rows and cols
         LinearLayout layout = findViewById(R.id.game_layout);
         ViewGroup.LayoutParams params = layout.getLayoutParams();
@@ -129,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
         }
        layout.setLayoutParams(params);
    }
-
     public void updateScore(final long score, final long topScore){
         this.scoreTv = findViewById(R.id.tv_current_score);
         this.topScoreTv = findViewById(R.id.tv_best_score);

@@ -72,6 +72,17 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        btnLoadGame.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                playClick();
+                Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                intent.putExtra("tutorial", true);
+                startActivity(intent);
+            }
+        });
+
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -63,7 +63,6 @@
             android:textStyle="italic" />
 
     </RelativeLayout>
-
     <ImageButton
         android:src="@drawable/icon_trophy"
         android:id="@+id/btn_leader_board"
@@ -75,9 +74,8 @@
         android:layout_marginHorizontal="12dp"
         android:layout_marginVertical="12dp"
         android:layout_alignParentEnd="true"/>
-
-
     <RelativeLayout
+        android:id="@+id/game_relative_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/menu"
@@ -101,8 +99,6 @@
         </LinearLayout>
 
     </RelativeLayout>
-
-
     <LinearLayout
         android:id="@+id/game_bar"
         android:layout_width="match_parent"
@@ -123,7 +119,7 @@
             android:layout_height="60dp"
             android:layout_gravity="center_vertical"
             android:layout_marginHorizontal="10dp"
-            android:background="@drawable/btn_round_white"/>
+            android:background="@drawable/btn_round_white" />
         <ImageButton
             android:src="@drawable/icon_reset"
             android:id="@+id/btn_reset"
@@ -153,21 +149,59 @@
                 android:background="@drawable/btn_round_white"/>
 
     </LinearLayout>
-    <LinearLayout
+
+
+    <ImageView
         android:id="@+id/shuffling_msg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#BF000000"
-        android:visibility="gone">
-        <TextView
-            android:id="@+id/tv_shuffling"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text=" Shuffle!!!"
-            android:textSize="40sp"
-            android:fontFamily="@font/luckiest_guy"
-            android:textColor="@color/value2"/>
-    </LinearLayout>
+        android:visibility="gone"/>
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_shuffling"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text=" Shuffle!!!"
+        android:textSize="40sp"
+        android:layout_above="@id/game_relative_layout"
+        android:fontFamily="@font/luckiest_guy"
+        android:textColor="@color/value2"/>
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/tutorial_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#E62B2B2B"/>
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_above="@id/game_relative_layout"
+        android:paddingHorizontal="15dp"
+        android:text="Swipe Up/Down/left/right to move the tiles across the board"
+        android:textSize="25sp"
+        android:fontFamily="@font/luckiest_guy"
+        android:textColor="@color/value2"/>
+    <Button
+        android:visibility="gone"
+        android:id="@+id/btn_end_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="End Tutorial"
+        android:fontFamily="@font/luckiest_guy"
+        android:textColor="#FFFFFF"
+        android:textSize="30dp"
+        android:layout_centerHorizontal="true"
+        android:paddingHorizontal="30dp"
+        android:background="@drawable/pic_menu_bottom_bar"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="30dp"/>
+
 
 </RelativeLayout>
