@@ -82,8 +82,8 @@ public class GameBoard {
     public void initBoard(){
         //initializing board with 2 random tiles
         if(!boardIsInitialized) {
-            addRandom();
-            addRandom();
+            board[0][3] = new Tile(exponent,positions[0][3],this);
+            board[1][3] = new Tile(exponent,positions[1][3],this);
             movingTiles = new ArrayList<>();
             boardIsInitialized = true;
         }
@@ -126,6 +126,8 @@ public class GameBoard {
     }
 
     public void update() {
+        callback.updateScore(currentScore);
+
         boolean updating = false;
             for (int x = 0; x < boardRows; x++) {
                 for (int y = 0; y < boardCols; y++) {
@@ -291,6 +293,7 @@ public class GameBoard {
 
     public void moveTiles(){
         //checking which tiles changed position and moving them accordingly
+
         for (int x = 0; x < boardRows; x++) {
             for (int y = 0; y < boardCols; y++) {
                 Tile t = tempBoard[x][y];
@@ -323,6 +326,7 @@ public class GameBoard {
     //finish moving is false only if all tiles are at their right place
         movingTiles.remove(t);
         if (movingTiles.isEmpty()) {
+            callback.playSwipe();
             isMoving = false;
             spawn();
             if(gameMode == GAME_MODE_SHUFFLE)
@@ -366,7 +370,6 @@ public class GameBoard {
         val = Math.round(val) + 1;
         int score =(int)Math.pow(val, 2);
         currentScore += score;
-        callback.updateScore(currentScore);
     }
 
 
@@ -389,7 +392,6 @@ public class GameBoard {
         if(canUndo) {
             board = oldBoard;
             currentScore = oldScore;
-            callback.updateScore(currentScore);
             canUndo = false;
         }
     }
@@ -404,8 +406,8 @@ public class GameBoard {
                 board[x][y] = null;
             }
         }
+
         currentScore = 0;
-        callback.updateScore(currentScore);
         addRandom();
         addRandom();
     }
@@ -415,7 +417,6 @@ public class GameBoard {
         int num = rand.nextInt(100); //will return and num between 0 and 100
 
         if(num <= 5 && num >= 0) {  //5 percent chance of shuffling the board
-
             callback.ShowShufflingMsg();
             startShuffle();
         }

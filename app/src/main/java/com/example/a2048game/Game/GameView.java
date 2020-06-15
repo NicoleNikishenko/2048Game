@@ -8,6 +8,7 @@ import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -25,6 +26,7 @@ import com.example.a2048game.MainActivity;
 import com.example.a2048game.R;
 import com.example.a2048game.Tiles.BitmapCreator;
 
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
@@ -34,7 +36,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     private static final int GAME_MODE_CLASSIC = 0;
     private static final int GAME_MODE_SOLID_TILE = 1;
     private static final int GAME_MODE_SHUFFLE = 2;
-
+    private MediaPlayer swipe;
 
     private MainThread thread;
     private boolean isInit;
@@ -64,6 +66,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         getHolder().setFormat(PixelFormat.TRANSPARENT);
 
         this.mainActivity = (MainActivity)context;
+        swipe = MediaPlayer.create(mainActivity , R.raw.swipe);
 
         isInit = false;
         int exponent = mainActivity.getBoardExponent();
@@ -71,7 +74,9 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         int cols = mainActivity.getBoardCols();
         int gameMode = mainActivity.getGameMode();
 
+
         this.score = new Score(getResources(), (long)0, getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE),gameMode, rows, cols);
+
 
         //gameMode = getContext().getSharedPreferences(APP_NAME,Context.MODE_PRIVATE).getInt(SELECTED_GAME_MODE,1);
         gameBoard = new GameBoard(rows, cols, exponent, this ,gameMode);
@@ -79,6 +84,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
         builder = new AlertDialog.Builder(MainActivity.getContext());
         gameOverDialog = new Dialog(context);
+        
 
     }
 
@@ -91,11 +97,13 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         thread.setRunning(true);
         thread.start();
 
+
         //Initializing board
         mainActivity.updateScore(score.getScore(),score.getTopScore());
         initClickListeners();
         initSwipeListener();
         prepareGameOverDialog();
+
     }
 
     @Override
@@ -205,10 +213,10 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     private void initSwipeListener() {
         setOnTouchListener(new OnSwipeTouchListener(this.getContext()) {
-            public void onSwipeTop() { if(!dialogOpen)gameBoard.up(); }
-            public void onSwipeRight() { if(!dialogOpen)gameBoard.right(); }
-            public void onSwipeLeft() { if(!dialogOpen)gameBoard.left(); }
-            public void onSwipeBottom() { if(!dialogOpen)gameBoard.down(); }
+            public void onSwipeTop() { if(!dialogOpen) gameBoard.up(); }
+            public void onSwipeRight() { if(!dialogOpen) gameBoard.right(); }
+            public void onSwipeLeft() { if(!dialogOpen) gameBoard.left(); }
+            public void onSwipeBottom() { if(!dialogOpen)  gameBoard.down(); }
         });
     }
 
@@ -217,15 +225,14 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         resetBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
+                playClick();
                 if(score.isNewHighScore())
                     score.updateLeaderBoard();
                 else
                     score.checkIfNewMidScore();
                 score.refreshLeaderBoard();
-
                 gameBoard.resetGame();
-                mainActivity.updateScore(score.getScore(),score.getTopScore());
+
             }
         });
 
@@ -233,8 +240,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         undoBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                playClick();
                 gameBoard.undoMove();
-                mainActivity.updateScore(score.getScore(),score.getTopScore());
             }
         });
     }
@@ -260,6 +267,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
             @Override
             public void onClick(View v) {
+                playClick();
                 gameBoard.resetGame();
                 gameOverDialog.dismiss();
                 dialogOpen = false;
@@ -312,6 +320,19 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         return px / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
+
+
+    public void playClick() {
+        final MediaPlayer click = MediaPlayer.create(mainActivity , R.raw.button_click);
+        if (!mainActivity.isSoundMuted()) {
+            click.start();
+        }
+    }
+    public void playSwipe() {
+        if (!mainActivity.isSoundMuted()) {
+            swipe.start();
+        }
+    }
 }
 
 

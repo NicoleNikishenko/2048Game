@@ -114,13 +114,13 @@ public class Tile {
    }
 
    public void update() {
-        if(isSolid && solidLives == 1){
-            removeSolidBlock();
-            return;
-        }
         if(isMoving) {
             updatePosition();
         }
+       if(isSolid && solidLives == 1){
+           removeSolidBlock();
+           return;
+       }
       updateSize();
 
    }
