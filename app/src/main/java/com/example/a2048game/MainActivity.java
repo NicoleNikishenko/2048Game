@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -26,6 +25,8 @@ import android.widget.TextView;
 
 import com.example.a2048game.Game.MainThread;
 import com.example.a2048game.Tiles.BitmapCreator;
+
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -100,12 +101,8 @@ public class MainActivity extends AppCompatActivity {
     public int getBoardExponent() { return boardExponent; }
     public int getGameMode(){return gameMode;}
     public boolean isTutorial(){ return isTutorialNeeded;}
-    public boolean isSoundMuted(){
-        if (sp.getBoolean("mute_sounds", false)) {
-            return true;
-        } else {
-            return false;
-        }
+    public boolean isSoundPlayed(){
+        return !sp.getBoolean("mute_sounds", false);
     }
     private void changeLayoutParams(){
         //change layout size according to rows and cols
@@ -134,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if(score == 0) {
-                    scoreTv.setText("START!");
+                    scoreTv.setText(getString(R.string.start));
                 } else {
                     scoreTv.setText(String.valueOf(score));
                 }
@@ -181,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.setting_layout);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(true);
         dialog.show();
 
@@ -277,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void playClick() {
         final MediaPlayer click = MediaPlayer.create(MainActivity.this, R.raw.button_click);
-        if (!isSoundMuted()) {
+        if (isSoundPlayed()) {
             click.start();
             }
     }
@@ -357,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
                 getSystemService(Context.POWER_SERVICE);
         boolean isScreenOn = false;
         if (pm != null) {
-            isScreenOn = pm.isScreenOn();
+            isScreenOn = pm.isInteractive();
         }
 
         if (!isScreenOn) {
@@ -371,7 +368,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         //UNBIND music service
         doUnbindService();
         Intent music = new Intent();

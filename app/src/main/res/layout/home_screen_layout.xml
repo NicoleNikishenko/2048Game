@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="match_parent"
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/pic_start_background">
@@ -28,20 +29,19 @@
             android:src="@drawable/pic_logo"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
-            />
+            tools:ignore="ContentDescription" />
 
         <Button
             android:id="@+id/btn_new_game"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginHorizontal="40dp"
             android:layout_marginVertical="10dp"
             android:layout_marginBottom="10dp"
+            android:layout_weight="1"
             android:background="@drawable/btn_rectangle_blue"
-            android:fontFamily="@font/luckiest_guy"
             android:padding="7dp"
-            android:text="New Game"
+            android:text="@string/new_game"
             android:textColor="#FFFFFF"
             android:textSize="30sp" />
 
@@ -53,9 +53,9 @@
             android:layout_marginHorizontal="40dp"
             android:layout_marginVertical="10dp"
             android:background="@drawable/btn_rectangle_dark_blue"
-            android:fontFamily="@font/luckiest_guy"
+
             android:padding="7dp"
-            android:text="Load Game"
+            android:text="@string/load_game"
             android:textColor="#FFFFFF"
             android:textSize="30sp" />
 
@@ -67,9 +67,8 @@
             android:layout_marginHorizontal="40dp"
             android:layout_marginVertical="10dp"
             android:background="@drawable/btn_rectangle_pink"
-            android:fontFamily="@font/luckiest_guy"
             android:padding="7dp"
-            android:text="Settings"
+            android:text="@string/settings"
             android:textColor="#FFFFFF"
             android:textSize="30sp" />
 
@@ -77,13 +76,12 @@
             android:id="@+id/btn_leader_board"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginHorizontal="40dp"
             android:layout_marginVertical="10dp"
+            android:layout_weight="1"
             android:background="@drawable/btn_rectangle_yellow"
-            android:fontFamily="@font/luckiest_guy"
             android:padding="7dp"
-            android:text="Leader Board"
+            android:text="@string/leader_board"
             android:textColor="#FFFFFF"
             android:textSize="30sp" />
 

@@ -1,5 +1,4 @@
 package com.example.a2048game;
-
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -18,14 +17,15 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
     private SharedPreferences sp;
-    private MediaPlayer sound;
+
     HomeWatcher mHomeWatcher;
 
 
@@ -106,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
 
         final Dialog dialog = new Dialog(HomeActivity.this);
         dialog.setContentView(R.layout.setting_layout);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(true);
         dialog.show();
 

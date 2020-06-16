@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_height="match_parent"
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/pic_start_background">
+
     <RelativeLayout
         android:id="@+id/select_mode_layout"
         android:layout_width="match_parent"
@@ -17,11 +19,10 @@
             android:id="@+id/tv_create_board"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choose Game Mode"
-            android:fontFamily="@font/luckiest_guy"
+            android:text="@string/choose_game_mode"
             android:textColor="@color/valueOther"
             android:gravity="center"
-            android:textSize="40dp"
+            android:textSize="40sp"
             android:layout_marginVertical="20dp"
             android:layout_alignParentStart="true"/>
 
@@ -39,15 +40,13 @@
                 android:id="@+id/tv_mode_exp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:minLines="2"
                 android:layout_marginHorizontal="5dp"
                 android:layout_marginBottom="10dp"
-                android:fontFamily="@font/luckiest_guy"
                 android:gravity="center"
                 android:text="@string/mode_exp_classic"
                 android:textColor="@color/valueOther"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,62 +54,69 @@
                 android:orientation="vertical"
                 android:paddingHorizontal="10dp"
                 android:weightSum="4">
+
                 <ImageView
                     android:id="@+id/iv_select_mode"
                     android:layout_gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="3"/>
+                    android:layout_weight="3"
+                    tools:ignore="ContentDescription" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_marginBottom="20dp">
+                    android:layout_marginBottom="20dp"
+                    android:layoutDirection="rtl">
+
                     <ImageButton
                         android:id="@+id/btn_left_mode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/btn_arrow_left"
-                        android:layout_gravity="center_vertical"/>
+                        android:layout_gravity="center_vertical"
+                        tools:ignore="ContentDescription" />
+
                     <TextView
                         android:id="@+id/tv_mode_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Classic"
-                        android:fontFamily="@font/luckiest_guy"
+                        android:text="@string/mode_classic"
                         android:textColor="@color/valueOther"
                         android:gravity="center"
                         android:textSize="30sp" />
+
                     <ImageButton
                         android:id="@+id/btn_right_mode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/btn_arrow_right"
-                        android:layout_gravity="center_vertical"/>
+                        android:layout_gravity="center_vertical"
+                        tools:ignore="ContentDescription" />
                 </LinearLayout>
             </LinearLayout>
-
-
-
         </LinearLayout>
 
         <Button
             android:id="@+id/btn_next_mode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="next"
+            android:text="@string/next"
             android:layout_gravity="center"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="50dp"
-            android:fontFamily="@font/luckiest_guy"
             android:textColor="#FFFFFF"
             android:textSize="40sp"
             android:background="@drawable/btn_rectangle_dark_blue"/>
 
     </RelativeLayout>
+
+                                           <!-- Second Screen Layout   -->
+
     <RelativeLayout
         android:id="@+id/select_board_layout"
         android:layout_width="match_parent"
@@ -125,16 +131,14 @@
             android:id="@+id/tv_create_board2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="choose board size"
-            android:fontFamily="@font/luckiest_guy"
+            android:text="@string/choose_board_size"
             android:textColor="@color/valueOther"
             android:gravity="center"
-            android:textSize="40dp"
+            android:textSize="40sp"
             android:layout_marginVertical="20dp"
             android:layout_alignParentStart="true"/>
 
         <LinearLayout
-            android:layoutDirection="ltr"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/tv_create_board2"
@@ -157,32 +161,30 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="square"
-                    android:fontFamily="@font/luckiest_guy"
+                    android:text="@string/square"
                     android:textAlignment="center"
                     android:textSize="17sp"
                     android:textColor="@color/valueOther"
                     android:paddingVertical="15dp"
                     android:paddingHorizontal="5dp"
                     android:button="@null"
-                    android:background="@drawable/radio_btn_square" />
+                    style="@style/radioSwitchBtnSquare"/>
                 <RadioButton
                     android:id="@+id/rb_rectangle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="rectangle"
+                    android:text="@string/rectangle"
                     android:maxLines="1"
-                    android:fontFamily="@font/luckiest_guy"
                     android:textAlignment="center"
                     android:textSize="17sp"
                     android:textColor="@color/valueOther"
                     android:paddingVertical="15dp"
                     android:paddingHorizontal="5dp"
                     android:button="@null"
-                    android:background="@drawable/radio_btn_rectangle" />
-
+                    style="@style/radioSwitchBtnRectangle" />
             </RadioGroup>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -194,7 +196,8 @@
                     android:layout_gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="3"/>
+                    android:layout_weight="3"
+                    tools:ignore="ContentDescription" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -208,46 +211,48 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/btn_arrow_left"
-                        android:layout_gravity="center_vertical"/>
+                        android:layout_gravity="center_vertical"
+                        tools:ignore="ContentDescription" />
                     <TextView
                         android:id="@+id/tv_shape_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3 X 3"
-                        android:fontFamily="@font/luckiest_guy"
+                        android:text="3_x_3"
                         android:textColor="@color/valueOther"
                         android:gravity="center"
-                        android:textSize="30sp" />
+                        android:textSize="30sp"
+                        tools:ignore="HardcodedText" />
                     <ImageButton
                         android:id="@+id/btn_right_board_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/btn_arrow_right"
-                        android:layout_gravity="center_vertical"/>
+                        android:layout_gravity="center_vertical"
+                        tools:ignore="ContentDescription" />
 
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
-
-
-
 
         <Button
             android:id="@+id/btn_next_board_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="next"
+            android:text="@string/next"
             android:layout_gravity="center"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="50dp"
-            android:fontFamily="@font/luckiest_guy"
             android:textColor="#FFFFFF"
             android:textSize="40sp"
             android:background="@drawable/btn_rectangle_dark_blue"/>
 
     </RelativeLayout>
+
+                                 <!-- Third Screen Layout   -->
+
     <RelativeLayout
         android:id="@+id/select_exponent_layout"
         android:layout_width="match_parent"
@@ -264,12 +269,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginVertical="20dp"
-            android:fontFamily="@font/luckiest_guy"
             android:gravity="center"
-            android:text="Choose Exponent"
+            android:text="@string/choose_exponent"
             android:textColor="@color/valueOther"
-            android:textSize="40dp" />
-
+            android:textSize="40sp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -278,134 +281,113 @@
             android:orientation="vertical"
             android:gravity="center">
 
-        <LinearLayout
-            android:id="@+id/radio_group_layout"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_centerHorizontal="true"
-            android:orientation="vertical"
-            android:weightSum="2">
-
-
-            <RadioGroup
-                android:layoutDirection="ltr"
-                android:id="@+id/rg_exponent_top"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:checkedButton="@id/rb_exponent_2"
-                android:orientation="horizontal"
+            <LinearLayout
+                android:id="@+id/radio_group_layout"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:orientation="vertical"
                 android:weightSum="2">
-
-                <RadioButton
-                    android:id="@+id/rb_exponent_2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
+                <RadioGroup
+                    android:id="@+id/rg_exponent_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@drawable/radio_btn_exponent"
-                    android:button="@null"
-                    android:fontFamily="@font/luckiest_guy"
-                    android:padding="5dp"
-                    android:text="2"
-                    android:textAlignment="center"
-                    android:textColor="@color/valueOther"
-                    android:textSize="40sp" />
-
-                <RadioButton
-                    android:id="@+id/rb_exponent_3"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
+                    android:checkedButton="@id/rb_exponent_2"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <RadioButton
+                        android:id="@+id/rb_exponent_2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/radio_btn_exponent"
+                        android:button="@null"
+                        android:padding="5dp"
+                        android:text="2"
+                        android:textAlignment="center"
+                        android:textColor="@color/valueOther"
+                        android:textSize="40sp"
+                        tools:ignore="HardcodedText" />
+                    <RadioButton
+                        android:id="@+id/rb_exponent_3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/radio_btn_exponent"
+                        android:button="@null"
+                        android:padding="5dp"
+                        android:text="3"
+                        android:textAlignment="center"
+                        android:textColor="@color/valueOther"
+                        android:textSize="40sp"
+                        tools:ignore="HardcodedText" />
+                </RadioGroup>
+                <RadioGroup
+                    android:id="@+id/rg_exponent_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@drawable/radio_btn_exponent"
-                    android:button="@null"
-                    android:fontFamily="@font/luckiest_guy"
-                    android:padding="5dp"
-                    android:text="3"
-                    android:textAlignment="center"
-                    android:textColor="@color/valueOther"
-                    android:textSize="40sp" />
-
-            </RadioGroup>
-
-            <RadioGroup
-                android:layoutDirection="ltr"
-                android:id="@+id/rg_exponent_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:checkedButton="@id/rb_exponent_2"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <RadioButton
-                    android:id="@+id/rb_exponent_4"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/radio_btn_exponent"
-                    android:button="@null"
-                    android:fontFamily="@font/luckiest_guy"
-                    android:padding="5dp"
-                    android:text="4"
-                    android:textAlignment="center"
-                    android:textColor="@color/valueOther"
-                    android:textSize="40sp" />
-
-                <RadioButton
-                    android:id="@+id/rb_exponent_5"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/radio_btn_exponent"
-                    android:button="@null"
-                    android:fontFamily="@font/luckiest_guy"
-                    android:padding="5dp"
-                    android:text="5"
-                    android:textAlignment="center"
-                    android:textColor="@color/valueOther"
-                    android:textSize="40sp" />
-
-            </RadioGroup>
-
-
-        </LinearLayout>
-
-         <TextView
+                    android:checkedButton="@id/rb_exponent_2"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <RadioButton
+                        android:id="@+id/rb_exponent_4"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/radio_btn_exponent"
+                        android:button="@null"
+                        android:padding="5dp"
+                        android:text="4"
+                        android:textAlignment="center"
+                        android:textColor="@color/valueOther"
+                        android:textSize="40sp"
+                        tools:ignore="HardcodedText" />
+                    <RadioButton
+                        android:id="@+id/rb_exponent_5"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/radio_btn_exponent"
+                        android:button="@null"
+                        android:padding="5dp"
+                        android:text="5"
+                        android:textAlignment="center"
+                        android:textColor="@color/valueOther"
+                        android:textSize="40sp"
+                        tools:ignore="HardcodedText" />
+                </RadioGroup>
+            </LinearLayout>
+            <TextView
             android:id="@+id/tv_exponent_exp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/radio_group_layout"
-            android:layout_alignParentStart="true"
             android:layout_marginVertical="20dp"
             android:padding="5dp"
-            android:fontFamily="@font/luckiest_guy"
             android:gravity="center"
             android:text="@string/exponent_exp_2"
             android:textColor="@color/valueOther"
             android:textSize="25sp" />
         </LinearLayout>
-
         <Button
             android:id="@+id/btn_play"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="play!"
+            android:text="@string/play"
             android:layout_gravity="center"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="50dp"
-            android:fontFamily="@font/luckiest_guy"
             android:textColor="#FFFFFF"
             android:textSize="40sp"
             android:background="@drawable/btn_rectangle_dark_blue"/>
-
     </RelativeLayout>
 
 </LinearLayout>

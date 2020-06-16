@@ -51,8 +51,6 @@ public class CustomGameActivity extends AppCompatActivity {
     private Animation leftOutAnim ;
 
     HomeWatcher mHomeWatcher;
-    private SharedPreferences sp;
-
 
 
     @Override
@@ -60,7 +58,7 @@ public class CustomGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_board_layout);
 
-        sp = getSharedPreferences("music_settings", MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences("music_settings", MODE_PRIVATE);
         if (!sp.getBoolean("mute_music",false)){
             playMusic();
         }
@@ -534,7 +532,7 @@ public class CustomGameActivity extends AppCompatActivity {
                 getSystemService(Context.POWER_SERVICE);
         boolean isScreenOn = false;
         if (pm != null) {
-            isScreenOn = pm.isScreenOn();
+            isScreenOn = pm.isInteractive();
         }
 
         if (!isScreenOn) {

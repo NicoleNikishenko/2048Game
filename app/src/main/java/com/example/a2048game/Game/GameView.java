@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -27,16 +26,16 @@ import com.example.a2048game.MainActivity;
 import com.example.a2048game.R;
 import com.example.a2048game.Tiles.BitmapCreator;
 
-import static android.content.Context.MODE_PRIVATE;
+import java.util.Objects;
 
 
 public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     private static final String APP_NAME = "2048Project";
-    private static final String SELECTED_GAME_MODE = "gameMode";
-    private static final int GAME_MODE_CLASSIC = 0;
-    private static final int GAME_MODE_SOLID_TILE = 1;
-    private static final int GAME_MODE_SHUFFLE = 2;
+    // private static final String SELECTED_GAME_MODE = "gameMode";
+    //  private static final int GAME_MODE_CLASSIC = 0;
+    //  private static final int GAME_MODE_SOLID_TILE = 1;
+    // private static final int GAME_MODE_SHUFFLE = 2;
 
     private MediaPlayer swipe;
     private MainThread thread;
@@ -250,7 +249,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     public void prepareGameOverDialog(){
         gameOverDialog.setContentView(R.layout.gameover_layout);
-        gameOverDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(gameOverDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         gameOverDialog.setCancelable(false);
         Button btn = gameOverDialog.findViewById(R.id.btn_try_again);
         btn.setOnClickListener(new View.OnClickListener(){
@@ -309,7 +308,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
             public void run() {
                 tutorialBackground.setVisibility(VISIBLE);
                 tutorialText.setVisibility(VISIBLE);
-                tutorialText.setText("Swipe Up/Down/left/right to move the tiles across the board");
+                tutorialText.setText(mainActivity.getString(R.string.tutorial_first_line));
             }
         });
     }
@@ -319,7 +318,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         mainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tutorialText.setText("GOOD!! \nTwo identical tiles can merge, swipe to merge your tiles ");
+                tutorialText.setText(mainActivity.getString(R.string.tutorial_second_line));
 
             }
         });
@@ -332,7 +331,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         mainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tutorialText.setText("Perfect!! \n Marge more and more tiles and try to get a higher score");
+                tutorialText.setText(mainActivity.getString(R.string.tutorial_third_line));
                 end.setVisibility(VISIBLE);
                 dialogOpen = true;
                 end.setOnClickListener(new View.OnClickListener(){
@@ -363,12 +362,12 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
     public void playClick() {
         final MediaPlayer click = MediaPlayer.create(mainActivity , R.raw.button_click);
-        if (!mainActivity.isSoundMuted()) {
+        if (mainActivity.isSoundPlayed()) {
             click.start();
         }
     }
     public void playSwipe() {
-        if (!mainActivity.isSoundMuted()) {
+        if (mainActivity.isSoundPlayed()) {
             swipe.start();
         }
     }
