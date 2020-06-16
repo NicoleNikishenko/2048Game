@@ -6,9 +6,6 @@ import android.graphics.Paint;
 
 public class Score{
 
-    private static final int GAME_MODE_CLASSIC = 0;
-    private static final int GAME_MODE_SHUFFLE = 1;
-    private static final int GAME_MODE_SOLID_TILE = 2;
 
     private static final String TOP_SCORE_PREF = "TopScore pref";
     private static final String SECOND_HIGHEST_SCORE = "2ndHighScore";
@@ -17,10 +14,9 @@ public class Score{
     private static final String FIFTH_HIGHEST_SCORE = "5thHighScore";
     private static final String SIXTH_HIGHEST_SCORE = "6thHighScore";
 
-    private long score, oldTopScore;
-    private Long[] leaderBoard;
+    private long score;
+    private Long leaderBoard;
     private SharedPreferences prefs;
-    private Paint paint;
     private int gameMode;
     private String rowsString;
     private String colsString;
@@ -33,19 +29,17 @@ public class Score{
 
         this.score = score;
         this.prefs = prefs;
-        this.leaderBoard = new Long[6];
-        this.oldTopScore = 0;
         this.gameMode = gameMode;
         this.gameModeString = Integer.toString(gameMode);
         this.rowsString = Integer.toString(rows);
         this.colsString = Integer.toString(cols);
 
-        leaderBoard[0] = prefs.getLong(TOP_SCORE_PREF + gameModeString + rowsString + colsString,0);
-        leaderBoard[1] = prefs.getLong(SECOND_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
+        this.leaderBoard = prefs.getLong(TOP_SCORE_PREF + gameModeString + rowsString + colsString,0);
+        /*leaderBoard[1] = prefs.getLong(SECOND_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
         leaderBoard[2] = prefs.getLong(THIRD_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
         leaderBoard[3] = prefs.getLong(FOURTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
         leaderBoard[4] = prefs.getLong(FIFTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
-        leaderBoard[5] = prefs.getLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
+        leaderBoard[5] = prefs.getLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);*/
 
 
     }
@@ -58,9 +52,9 @@ public class Score{
 
         if(!newHighScore) {
 
-            leaderBoard[0] = prefs.getLong(TOP_SCORE_PREF + gameModeString + rowsString + colsString, 0);
+            leaderBoard = prefs.getLong(TOP_SCORE_PREF + gameModeString + rowsString + colsString, 0);
 
-            if (score > leaderBoard[0]) {
+            if (score > leaderBoard) {
 
                 newHighScore = true;
 
@@ -70,11 +64,11 @@ public class Score{
 
     public void updateLeaderBoard (){
 
-        prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,leaderBoard[4]).apply();
+        /*prefs.edit().putLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,leaderBoard[4]).apply();
         prefs.edit().putLong(FIFTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,leaderBoard[3]).apply();
         prefs.edit().putLong(FOURTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,leaderBoard[2]).apply();
         prefs.edit().putLong(THIRD_HIGHEST_SCORE + gameModeString + rowsString + colsString,leaderBoard[1]).apply();
-        prefs.edit().putLong(SECOND_HIGHEST_SCORE + gameModeString + rowsString + colsString,leaderBoard[0]).apply();
+        prefs.edit().putLong(SECOND_HIGHEST_SCORE + gameModeString + rowsString + colsString,leaderBoard[0]).apply();*/
         prefs.edit().putLong(TOP_SCORE_PREF + gameModeString + rowsString + colsString,score).apply();
         refreshLeaderBoard();
 
@@ -82,16 +76,16 @@ public class Score{
 
     public void refreshLeaderBoard (){
 
-        leaderBoard[0] = prefs.getLong(TOP_SCORE_PREF + gameModeString + rowsString + colsString,0);
-        leaderBoard[1] = prefs.getLong(SECOND_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
+        leaderBoard = prefs.getLong(TOP_SCORE_PREF + gameModeString + rowsString + colsString,0);
+        /*leaderBoard[1] = prefs.getLong(SECOND_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
         leaderBoard[2] = prefs.getLong(THIRD_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
         leaderBoard[3] = prefs.getLong(FOURTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
         leaderBoard[4] = prefs.getLong(FIFTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
-        leaderBoard[5] = prefs.getLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);
+        leaderBoard[5] = prefs.getLong(SIXTH_HIGHEST_SCORE + gameModeString + rowsString + colsString,0);*/
 
     }
 
-    public void checkIfNewMidScore(){
+    /*public void checkIfNewMidScore(){
 
         boolean found = false;
 
@@ -143,10 +137,10 @@ public class Score{
             }
         }
 
-    }
+    }*/
 
     public Long getScore(){ return score;}
-    public Long getTopScore(){ return leaderBoard[0];}
+    public Long getTopScore(){ return leaderBoard;}
     public boolean isNewHighScore(){ return newHighScore;}
 
 

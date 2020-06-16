@@ -90,6 +90,16 @@ public class HomeActivity extends AppCompatActivity {
                 openSettingsDialog();
             }
         });
+
+        btnLeaderBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playClick();
+                Intent intent = new Intent(HomeActivity.this, LeaderBoardActivity.class);
+                intent.putExtra("game_mode",0);
+                startActivity(intent);
+            }
+        });
     }
 
     ////////////////////////////////// Music Service

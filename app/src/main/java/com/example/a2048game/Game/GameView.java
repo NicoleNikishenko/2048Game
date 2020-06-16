@@ -2,6 +2,7 @@ package com.example.a2048game.Game;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.example.a2048game.HomeActivity;
 import com.example.a2048game.MainActivity;
 import com.example.a2048game.R;
 import com.example.a2048game.Tiles.BitmapCreator;
@@ -130,10 +132,9 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     public void update() {
         if(gameBoard.isGameOver() && !dialogOpen){
             dialogOpen = true;
-            if(score.isNewHighScore()) //if we have a new highscore we will update the entire leaderboard. else we will check if we got a new midscore and if so we will update the leaderboard appropriately
+            if(score.isNewHighScore()) //if we have a new highscore we will update the  leaderboard. else we will check if we got a new midscore and if so we will update the leaderboard appropriately
                 score.updateLeaderBoard();
-            else
-                score.checkIfNewMidScore();
+            score.refreshLeaderBoard();
             showGameOverDialog();
         }
         if(isInit) {
@@ -227,8 +228,6 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
                     playClick();
                     if (score.isNewHighScore())
                         score.updateLeaderBoard();
-                    else
-                        score.checkIfNewMidScore();
                     score.refreshLeaderBoard();
                     gameBoard.resetGame();
                 }
@@ -253,6 +252,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         gameOverDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         gameOverDialog.setCancelable(false);
         Button btn = gameOverDialog.findViewById(R.id.btn_try_again);
+        Button btn2 = gameOverDialog.findViewById(R.id.btn_gameover_leaderboard);
         btn.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -263,6 +263,14 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
                 dialogOpen = false;
             }
         });
+        btn2.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                playClick();
+                mainActivity.showLeaderBoard();
+            }
+        });
     }
     public void showGameOverDialog() {
         mainActivity.runOnUiThread(new Runnable() {
@@ -270,6 +278,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
             public void run() {
                 final TextView tvScore = gameOverDialog.findViewById(R.id.game_over_score_line);
                 tvScore.setText(String.valueOf(score.getScore()));
+
                 gameOverDialog.show();
             }
         });

@@ -380,6 +380,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void showLeaderBoard(){
+
+        Intent intent = new Intent(MainActivity.this, LeaderBoardActivity.class);
+        intent.putExtra("game_mode",gameMode);
+        startActivity(intent);
+        destroyGameThread();
+
+    }
 
 }
 
