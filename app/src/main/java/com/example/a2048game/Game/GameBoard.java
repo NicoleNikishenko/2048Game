@@ -1,18 +1,13 @@
 package com.example.a2048game.Game;
-
 import android.graphics.Canvas;
-
 import com.example.a2048game.Tiles.Position;
 import com.example.a2048game.Tiles.Tile;
-
 import java.util.ArrayList;
 import java.util.Random;
 
-import static java.lang.Thread.sleep;
-
 public class GameBoard {
 
-    private static final int GAME_MODE_CLASSIC = 0;
+
     private static final int GAME_MODE_SOLID_TILE = 1;
     private static final int GAME_MODE_SHUFFLE = 2;
     private static final int NUM_SOLID_LIVES = 10;
@@ -130,7 +125,6 @@ public class GameBoard {
     }
 
     public void update() {
-        callback.updateScore(currentScore);
 
         boolean updating = false;
             for (int x = 0; x < boardRows; x++) {
@@ -331,6 +325,7 @@ public class GameBoard {
         movingTiles.remove(t);
         if (movingTiles.isEmpty()) {
             callback.playSwipe();
+            callback.updateScore(currentScore);
             isMoving = false;
             spawn();
             if(gameMode == GAME_MODE_SHUFFLE && !tutorialIsPlaying)
@@ -433,7 +428,7 @@ public class GameBoard {
 
             Tile[][] newBoard = new Tile[boardRows][boardCols];
             int randX, randY;
-            boolean moved = false;
+            boolean moved;
 
             for (int x = 0; x < boardRows; x++) {
                 for (int y = 0; y < boardCols; y++) {

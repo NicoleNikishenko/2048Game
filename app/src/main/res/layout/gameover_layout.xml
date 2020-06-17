@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="400dp"
     android:layout_height="400dp"
     android:background="@drawable/pic_popup_background"
@@ -9,12 +10,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/gameover_title"
-        android:gravity="center"
-        android:fontFamily="@font/luckiest_guy"
-        android:textSize="55sp"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="@string/game_over_title"
+        android:textSize="55sp" />
     <LinearLayout
 
         android:layout_width="match_parent"
@@ -28,8 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="your score"
-            android:fontFamily="@font/luckiest_guy"
+            android:text="@string/your_score"
             android:textSize="35sp"
             android:textColor="@color/valueOther"
             android:layout_marginTop="10dp"
@@ -41,39 +40,25 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="5dp"
-            android:fontFamily="@font/luckiest_guy"
             android:textColor="@color/valueOther"
             android:textSize="25sp" />
     </LinearLayout>
 
-
-    <LinearLayout
+    <Button
+        android:id="@+id/btn_try_again"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
+        android:text="@string/play_again"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:background="@drawable/btn_rectangle_yellow"
+        android:layout_marginVertical="7dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="15dp"
+        android:layout_marginHorizontal="50dp"
+        tools:ignore="ButtonStyle"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="20dp">
-        <Button
-            android:id="@+id/btn_try_again"
-            android:text="Play Again"
-            android:textColor="#FFFFFF"
-            android:fontFamily="@font/luckiest_guy"
-            android:textSize="20sp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:background="@drawable/btn_rectangle_yellow"
-            android:layout_margin="7dp"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="Leader board"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:fontFamily="@font/luckiest_guy"
-            android:layout_height="match_parent"
-            android:background="@drawable/btn_rectangle_yellow"
-            android:layout_margin="7dp"
-            android:id="@+id/btn_gameover_leaderboard"/>
-    </LinearLayout>
+        android:layout_centerHorizontal="true"/>
 
-    </RelativeLayout>
+
+</RelativeLayout>

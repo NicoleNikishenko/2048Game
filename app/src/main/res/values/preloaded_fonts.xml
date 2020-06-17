@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="preloaded_fonts" translatable="false">
-
-        <item>@font/benchnine</item>
-        <item>@font/coming_soon</item>
         <item>@font/luckiest_guy</item>
-        <item>@font/montserrat_alternates</item>
         <item>@font/mouse_memoirs</item>
+        <item>@font/rubik_black_italic</item>
     </array>
 </resources>

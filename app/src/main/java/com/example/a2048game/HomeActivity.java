@@ -1,5 +1,4 @@
 package com.example.a2048game;
-
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,17 +15,24 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
+
+
 public class HomeActivity extends AppCompatActivity {
 
     private SharedPreferences sp;
-    private MediaPlayer sound;
-    HomeWatcher mHomeWatcher;
+    MusicService.HomeWatcher mHomeWatcher;
 
 
     @Override
@@ -46,17 +52,17 @@ public class HomeActivity extends AppCompatActivity {
         Button btnNewGame = findViewById(R.id.btn_new_game);
         Button btnLoadGame = findViewById(R.id.btn_load_game);
         Button btnSettings = findViewById(R.id.btn_settings);
-        Button btnLeaderBoard = findViewById(R.id.btn_leader_board);
+        Button btnScoreBoard = findViewById(R.id.btn_Score_board);
         btnNewGame.startAnimation(scaleAnim);
         btnLoadGame.startAnimation(scaleAnim);
         btnSettings.startAnimation(scaleAnim);
-        btnLeaderBoard.startAnimation(scaleAnim);
+        btnScoreBoard.startAnimation(scaleAnim);
         btnLoadGame.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 playClick();
-                Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                Intent intent = new Intent(HomeActivity.this, GameActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
@@ -67,7 +73,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 playClick();
-                Intent intent = new Intent(HomeActivity.this, CustomGameActivity.class);
+                Intent intent = new Intent(HomeActivity.this, ChooseBoardActivity.class);
                 startActivity(intent);
             }
         });
@@ -77,7 +83,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 playClick();
-                Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                Intent intent = new Intent(HomeActivity.this, GameActivity.class);
                 intent.putExtra("tutorial", true);
                 startActivity(intent);
             }
@@ -91,32 +97,154 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        btnLeaderBoard.setOnClickListener(new View.OnClickListener() {
+        btnScoreBoard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 playClick();
-                Intent intent = new Intent(HomeActivity.this, LeaderBoardActivity.class);
-                intent.putExtra("game_mode",0);
-                startActivity(intent);
+                openScoreBoardDialog();
             }
         });
+
+
     }
 
-    ////////////////////////////////// Music Service
+    // Dialogs
 
-    private void playClick() {
-        SharedPreferences sp = getSharedPreferences("music_settings", MODE_PRIVATE);
-        final MediaPlayer click = MediaPlayer.create(HomeActivity.this, R.raw.button_click);
-        if (!sp.getBoolean("mute_sounds", false)) {
-            click.start();
-        }
+    private void openScoreBoardDialog(){
+        SharedPreferences sharedPreferences = getSharedPreferences("2048Project", MODE_PRIVATE);
+        final Dialog dialog = new Dialog(HomeActivity.this);
+        dialog.setContentView(R.layout.scoreboard_layout);
+
+        int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
+        Objects.requireNonNull(dialog.getWindow()).setLayout(width, height);
+
+
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        final ListView listView = dialog.findViewById(R.id.lv_score_board);
+        ArrayList<ScoreBoardBuilder.Score> classicScores = ScoreBoardBuilder.createClassicArrayList(sharedPreferences,"0");
+        ArrayList<ScoreBoardBuilder.Score> blocksScores = ScoreBoardBuilder.createClassicArrayList(sharedPreferences,"1");
+        ArrayList<ScoreBoardBuilder.Score> shuffleScores = ScoreBoardBuilder.createClassicArrayList(sharedPreferences,"2");
+        final ScoreBoardBuilder.ScoreAdapter scoreAdapterClassic = new ScoreBoardBuilder.ScoreAdapter(classicScores,this);
+        final ScoreBoardBuilder.ScoreAdapter scoreAdapterBlocks = new ScoreBoardBuilder.ScoreAdapter(blocksScores,this);
+        final ScoreBoardBuilder.ScoreAdapter scoreAdapterShuffle = new ScoreBoardBuilder.ScoreAdapter(shuffleScores,this);
+        listView.setAdapter(scoreAdapterClassic);
+
+        final Animation rightInAnim = AnimationUtils.loadAnimation(HomeActivity.this,R.anim.slide_in_right);
+        final Animation leftInAnim = AnimationUtils.loadAnimation(HomeActivity.this,R.anim.slide_in_left);
+        final Animation rightOutAnim = AnimationUtils.loadAnimation(HomeActivity.this,R.anim.slide_out_right);
+        final Animation  leftOutAnim = AnimationUtils.loadAnimation(HomeActivity.this,R.anim.slide_out_left);
+
+
+        Animation scaleAnim = AnimationUtils.loadAnimation(HomeActivity.this, R.anim.scale_anim);
+        final TextView currentModeTv = dialog.findViewById(R.id.tv_mode_type);
+        final int[] index = {0};
+
+        ImageButton btnRight = dialog.findViewById(R.id.btn_right_mode);
+        btnRight.startAnimation(scaleAnim);
+        btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (index[0] == 2) {
+                    index [0] = 0;
+                } else { index[0] ++; }
+                leftOutAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) { }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) { }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        switch(index[0]){
+                            case 0:
+                                playClick();
+                                listView.setAdapter(scoreAdapterClassic);
+                                currentModeTv.setText(getString(R.string.mode_classic));
+                                break;
+                            case 1:
+                                playClick();
+                                listView.setAdapter(scoreAdapterBlocks);
+                                currentModeTv.setText(getString(R.string.mode_blocks));
+                                break;
+                            case 2:
+                                playClick();
+                                listView.setAdapter(scoreAdapterShuffle);
+                                currentModeTv.setText(getString(R.string.mode_shuffle));
+                                break;
+                        }
+                        listView.startAnimation(rightInAnim);
+                    }
+                });
+                listView.startAnimation(leftOutAnim);
+
+
+
+            }
+        });
+
+        ImageButton btnLeft = dialog.findViewById(R.id.btn_left_mode);
+        btnLeft.startAnimation(scaleAnim);
+        btnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (index[0] == 0 ) {
+                    index [0] = 2;
+                } else { index[0] --; }
+
+                rightOutAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) { }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) { }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        switch(index[0]){
+                            case 0:
+                                playClick();
+                                listView.setAdapter(scoreAdapterClassic);
+                                currentModeTv.setText(getString(R.string.mode_classic));
+                                break;
+                            case 1:
+                                playClick();
+                                listView.setAdapter(scoreAdapterBlocks);
+                                currentModeTv.setText(getString(R.string.mode_blocks));
+                                break;
+                            case 2:
+                                playClick();
+                                listView.setAdapter(scoreAdapterShuffle);
+                                currentModeTv.setText(getString(R.string.mode_shuffle));
+                                break;
+                        }
+                        listView.startAnimation(leftInAnim);
+                    }
+                });
+                listView.startAnimation(rightOutAnim);
+
+
+            }
+        });
+
+        Button btnClose = dialog.findViewById(R.id.btn_close);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playClick();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
     }
-
     private void openSettingsDialog(){
+
 
         final Dialog dialog = new Dialog(HomeActivity.this);
         dialog.setContentView(R.layout.setting_layout);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(true);
         dialog.show();
 
@@ -184,17 +312,17 @@ public class HomeActivity extends AppCompatActivity {
                     soundOn.setTextColor(Color.rgb(90,85,83));
                     soundOff.setTextColor(Color.rgb(167,168,168));
 
-                    } else {
+                } else {
                     sp.edit().putBoolean("mute_sounds",true).apply();
                     soundOff.setTextColor(Color.rgb(90,85,83));
                     soundOn.setTextColor(Color.rgb(167,168,168));
-                    }
                 }
+            }
         });
 
-
-        Button btn = dialog.findViewById(R.id.btn_close);
-        btn.setOnClickListener(new View.OnClickListener() {
+        Animation scaleAnim = AnimationUtils.loadAnimation(HomeActivity.this, R.anim.scale_anim);
+        Button closeBtn = dialog.findViewById(R.id.btn_close);
+        closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 playClick();
@@ -207,7 +335,15 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
+    ////////////////////////////////// Music Service
 
+    private void playClick() {
+        SharedPreferences sp = getSharedPreferences("music_settings", MODE_PRIVATE);
+        final MediaPlayer click = MediaPlayer.create(HomeActivity.this, R.raw.button_click);
+        if (!sp.getBoolean("mute_sounds", false)) {
+            click.start();
+        }
+    }
 
 
     private void playMusic() {
@@ -218,8 +354,8 @@ public class HomeActivity extends AppCompatActivity {
         startService(music);
 
         //Start HomeWatcher
-        mHomeWatcher = new HomeWatcher(this);
-        mHomeWatcher.setOnHomePressedListener(new HomeWatcher.OnHomePressedListener() {
+        mHomeWatcher = new MusicService.HomeWatcher(this);
+        mHomeWatcher.setOnHomePressedListener(new MusicService.HomeWatcher.OnHomePressedListener() {
             @Override
             public void onHomePressed() {
                 if (mServ != null) {

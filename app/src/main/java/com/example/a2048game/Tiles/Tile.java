@@ -64,23 +64,15 @@ public class Tile {
     //getters and setters
     public long getValue() { return value; }
     public Position getPosition() { return currentPosition; }
-    public int getSolidLives(){ return solidLives;}
     public boolean isSolid(){ return isSolid;}
     public void  decreaseLiveCount(){ this.solidLives--; }
 
-
-    public void setPosition(Position position) {
-        this.currentPosition = position;
-        this.desPosition = position;
-    }
-    public void setValue(int value){ this.value = value; }
 
 
     public boolean notAlreadyIncreased(){ return !increased; }
     public void setIncreased(boolean state) { increased = state; }
     public Tile copyTile (){
-        Tile tile = new Tile(this.value,this.currentPosition,this.callback);
-        return tile;
+        return new Tile(this.value, this.currentPosition, this.callback);
     }
 
     public void move(Position position){
@@ -196,8 +188,8 @@ public class Tile {
         if(currentCellHeight - sizeSpeed <= 0 || currentCellWidth - sizeSpeed <= 0){
             isSolidGone = true;
         }
-        currentCellHeight = (int)( currentCellHeight - sizeSpeed);
-        currentCellWidth = (int)( currentCellHeight - sizeSpeed);
+        currentCellHeight = currentCellHeight - sizeSpeed;
+        currentCellWidth = currentCellHeight - sizeSpeed;
     }
     public Boolean isSolidGone(){
         return isSolidGone;
