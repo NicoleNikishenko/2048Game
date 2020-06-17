@@ -13,7 +13,7 @@ import android.graphics.drawable.Drawable;
 
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.a2048game.MainActivity;
+import com.example.a2048game.GameActivity;
 import com.example.a2048game.R;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class BitmapCreator {
 
-    private Context context = MainActivity.getContext();
+    private Context context = GameActivity.getContext();
     public static int cellDefaultHeight;
     public static int cellDefaultWidth;
     public static int exponent;
@@ -42,7 +42,7 @@ public class BitmapCreator {
 
 
     public Drawable createDrawable (int index){
-        Drawable drawable = MainActivity.getContext().getDrawable(R.drawable.gameboard_cell_shape);
+        Drawable drawable = GameActivity.getContext().getDrawable(R.drawable.gameboard_cell_shape);
         if (drawable != null) {
             switch (index) {
                 case 0:
@@ -149,9 +149,10 @@ public class BitmapCreator {
 
 
     public Bitmap createBlockTile(){
-        Drawable drawable = MainActivity.getContext().getDrawable(R.drawable.gameboard_block_shape);
+        Drawable drawable = GameActivity.getContext().getDrawable(R.drawable.gameboard_block_shape);
         Bitmap bitmap = Bitmap.createBitmap(cellDefaultWidth,cellDefaultHeight,Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
+        assert drawable != null;
         drawable.setBounds(0,0,cellDefaultWidth,cellDefaultHeight);
         drawable.draw(canvas);
         return bitmap;

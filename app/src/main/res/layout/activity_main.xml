@@ -64,7 +64,7 @@
     </RelativeLayout>
     <ImageButton
         android:src="@drawable/icon_trophy"
-        android:id="@+id/btn_leader_board"
+        android:id="@+id/btn_Score_board"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"

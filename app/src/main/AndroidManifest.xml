@@ -16,9 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" android:launchMode="singleTask"/>
-        <activity android:name=".CustomGameActivity" android:launchMode="singleTask"/>
-        <activity android:name=".LeaderBoardActivity" android:launchMode="singleTask"/>
+        <activity android:name=".GameActivity" android:launchMode="singleTask"/>
+        <activity android:name=".ChooseBoardActivity" android:launchMode="singleTask"/>
 
         <meta-data
             android:name="preloaded_fonts"

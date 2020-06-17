@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class GameBoard {
 
- //   private static final int GAME_MODE_CLASSIC = 0;
+
     private static final int GAME_MODE_SOLID_TILE = 1;
     private static final int GAME_MODE_SHUFFLE = 2;
     private static final int NUM_SOLID_LIVES = 10;
@@ -125,7 +125,6 @@ public class GameBoard {
     }
 
     public void update() {
-        callback.updateScore(currentScore);
 
         boolean updating = false;
             for (int x = 0; x < boardRows; x++) {
@@ -326,6 +325,7 @@ public class GameBoard {
         movingTiles.remove(t);
         if (movingTiles.isEmpty()) {
             callback.playSwipe();
+            callback.updateScore(currentScore);
             isMoving = false;
             spawn();
             if(gameMode == GAME_MODE_SHUFFLE && !tutorialIsPlaying)

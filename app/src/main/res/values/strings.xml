@@ -16,8 +16,7 @@
     <string name="end_tutorial">end tutorial</string>
     <string name="shuffle">shuffle!!!</string>
     <string name="new_game">new game</string>
-    <string name="load_game">Load Game</string>
-    <string name="leader_board">Leader Board</string>
+    <string name="Score_board">Score Board</string>
     <string name="choose_game_mode">Choose Game Mode</string>
     <string name="choose_board_size">choose board size</string>
     <string name="square">square</string>
@@ -34,6 +33,7 @@
     <string name="your_score">your score</string>
     <string name="play_again">Play Again</string>
     <string name="tutorial_first_line">How to play:\nSwipe Up / Down / left / right to move the tiles across the board</string>
-    <string name="tutorial_second_line">GOOD!! Two identical tiles will merge when they colide, try to merge the tiles</string>
+    <string name="tutorial_second_line">GOOD!! \nTwo identical tiles will merge when they collide, try to merge the tiles</string>
     <string name="tutorial_third_line">Perfect!!\nContinue to merge the tiles and try to break your records</string>
+    <string name="how_to_play">how to play</string>
 </resources>

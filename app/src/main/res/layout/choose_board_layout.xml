@@ -69,7 +69,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:layout_marginBottom="20dp"
-                    android:layoutDirection="rtl">
+                    android:layoutDirection="locale">
 
                     <ImageButton
                         android:id="@+id/btn_left_mode"

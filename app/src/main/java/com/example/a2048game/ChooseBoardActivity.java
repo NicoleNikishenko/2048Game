@@ -28,7 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-public class CustomGameActivity extends AppCompatActivity {
+public class ChooseBoardActivity extends AppCompatActivity {
 
     private int boardsIndex;
     private int modesIndex;
@@ -50,13 +50,13 @@ public class CustomGameActivity extends AppCompatActivity {
     private Animation rightOutAnim ;
     private Animation leftOutAnim ;
 
-    HomeWatcher mHomeWatcher;
+    MusicService.HomeWatcher mHomeWatcher;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.custom_board_layout);
+        setContentView(R.layout.choose_board_layout);
 
         SharedPreferences sp = getSharedPreferences("music_settings", MODE_PRIVATE);
         if (!sp.getBoolean("mute_music",false)){
@@ -78,11 +78,11 @@ public class CustomGameActivity extends AppCompatActivity {
         secondLayout = findViewById(R.id.select_board_layout);
         thirdLayout = findViewById(R.id.select_exponent_layout);
 
-        Animation scaleAnim = AnimationUtils.loadAnimation(CustomGameActivity.this,R.anim.scale_anim);
-        rightInAnim = AnimationUtils.loadAnimation(CustomGameActivity.this,R.anim.slide_in_right);
-        leftInAnim = AnimationUtils.loadAnimation(CustomGameActivity.this,R.anim.slide_in_left);
-        rightOutAnim = AnimationUtils.loadAnimation(CustomGameActivity.this,R.anim.slide_out_right);
-        leftOutAnim = AnimationUtils.loadAnimation(CustomGameActivity.this,R.anim.slide_out_left);
+        Animation scaleAnim = AnimationUtils.loadAnimation(ChooseBoardActivity.this,R.anim.scale_anim);
+        rightInAnim = AnimationUtils.loadAnimation(ChooseBoardActivity.this,R.anim.slide_in_right);
+        leftInAnim = AnimationUtils.loadAnimation(ChooseBoardActivity.this,R.anim.slide_in_left);
+        rightOutAnim = AnimationUtils.loadAnimation(ChooseBoardActivity.this,R.anim.slide_out_right);
+        leftOutAnim = AnimationUtils.loadAnimation(ChooseBoardActivity.this,R.anim.slide_out_left);
 
         Button btnNextFirst = findViewById(R.id.btn_next_mode);
         btnNextFirst.setAnimation(scaleAnim);
@@ -135,7 +135,7 @@ public class CustomGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 playClick();
-                Intent intent = new Intent(CustomGameActivity.this, MainActivity.class);
+                Intent intent = new Intent(ChooseBoardActivity.this, GameActivity.class);
                 intent.putExtra("rows", currentDisplayedBoards.get(boardsIndex).rows);
                 intent.putExtra("cols", currentDisplayedBoards.get(boardsIndex).cols);
                 intent.putExtra("exponent", exponent);
@@ -456,7 +456,7 @@ public class CustomGameActivity extends AppCompatActivity {
 
     private void playClick() {
         SharedPreferences sp = getSharedPreferences("music_settings", MODE_PRIVATE);
-        final MediaPlayer click = MediaPlayer.create(CustomGameActivity.this, R.raw.button_click);
+        final MediaPlayer click = MediaPlayer.create(ChooseBoardActivity.this, R.raw.button_click);
         if (!sp.getBoolean("mute_sounds", false)) {
             click.start();
         }
@@ -469,8 +469,8 @@ public class CustomGameActivity extends AppCompatActivity {
         startService(music);
 
         //Start HomeWatcher
-        mHomeWatcher = new HomeWatcher(this);
-        mHomeWatcher.setOnHomePressedListener(new HomeWatcher.OnHomePressedListener() {
+        mHomeWatcher = new MusicService.HomeWatcher(this);
+        mHomeWatcher.setOnHomePressedListener(new MusicService.HomeWatcher.OnHomePressedListener() {
             @Override
             public void onHomePressed() {
                 if (mServ != null) {
@@ -552,27 +552,27 @@ public class CustomGameActivity extends AppCompatActivity {
         stopService(music);
 
     }
+
+    static class BoardType {
+
+        public int rows;
+        public int cols;
+        public String typeString;
+        public Drawable drawable;
+
+        public BoardType(int rows, int cols, Drawable drawable) {
+            this.rows = rows;
+            this.cols = cols;
+            this.drawable = drawable;
+            typeString = rows + "x" + cols;
+        }
+        public String getTypeString() {
+            return typeString;
+        }
+    }
 }
 
 //////////////////////////////////////////
-
-class BoardType {
-
-    public int rows;
-    public int cols;
-    public String typeString;
-    public Drawable drawable;
-
-    public BoardType(int rows, int cols, Drawable drawable) {
-        this.rows = rows;
-        this.cols = cols;
-        this.drawable = drawable;
-        typeString = rows + "x" + cols;
-    }
-    public String getTypeString() {
-        return typeString;
-    }
-}
 
 
 

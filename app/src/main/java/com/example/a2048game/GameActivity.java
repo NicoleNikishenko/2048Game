@@ -16,9 +16,12 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -26,17 +29,18 @@ import android.widget.TextView;
 import com.example.a2048game.Game.MainThread;
 import com.example.a2048game.Tiles.BitmapCreator;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 
-public class MainActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
 
     @SuppressLint("StaticFieldLeak")
     private static Context mContext;
     private TextView scoreTv;
     private TextView topScoreTv;
 
-    HomeWatcher mHomeWatcher;
+    MusicService.HomeWatcher mHomeWatcher;
     private SharedPreferences sp;
 
 
@@ -44,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private int boardCols;
     private int boardExponent;
     private int gameMode;
-    private boolean isTutorialNeeded;
+    private boolean isTutorialFromMainScreen;
 
 
 
@@ -52,12 +56,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         mContext = this;
         boardRows = getIntent().getIntExtra("rows",4);
         boardCols = getIntent().getIntExtra("cols",4);
         boardExponent = getIntent().getIntExtra("exponent",2);
         gameMode = getIntent().getIntExtra("game_mode",0);
-        isTutorialNeeded = getIntent().getBooleanExtra("tutorial", false);
+        isTutorialFromMainScreen = getIntent().getBooleanExtra("tutorial", false);
+
         setContentView(R.layout.activity_main);
 
         sp = getSharedPreferences("music_settings", MODE_PRIVATE);
@@ -66,13 +72,13 @@ public class MainActivity extends AppCompatActivity {
         }
         changeLayoutParams();
 
-        ImageButton btnNewGame = findViewById(R.id.btn_home);
-        btnNewGame.setOnClickListener(new View.OnClickListener(){
+        ImageButton homeBtn = findViewById(R.id.btn_home);
+        homeBtn.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 playClick();
-                Intent intent = new Intent(MainActivity.this,HomeActivity.class);
+                Intent intent = new Intent(GameActivity.this,HomeActivity.class);
                 startActivity(intent);
                 destroyGameThread();
             }
@@ -87,7 +93,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        
+        ImageButton btnScoreBoard = findViewById(R.id.btn_Score_board);
+        btnScoreBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playClick();
+                openScoreBoardDialog();
+            }
+        });
+
     }
 
 
@@ -100,7 +114,16 @@ public class MainActivity extends AppCompatActivity {
     public int getBoardCols() { return boardCols; }
     public int getBoardExponent() { return boardExponent; }
     public int getGameMode(){return gameMode;}
-    public boolean isTutorial(){ return isTutorialNeeded;}
+    public boolean isTutorial(){
+        SharedPreferences sharedPreferences = getSharedPreferences("play_history",MODE_PRIVATE);
+
+        if(!sharedPreferences.getBoolean("tutorial_played",false) || isTutorialFromMainScreen){
+            sharedPreferences.edit().putBoolean("tutorial_played",false).apply();
+            return true;
+        }
+        return false;
+    }
+    public boolean isTutorialFromMainScreen(){return isTutorialFromMainScreen;}
     public boolean isSoundPlayed(){
         return !sp.getBoolean("mute_sounds", false);
     }
@@ -169,14 +192,15 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         playClick();
         super.onBackPressed();
-        Intent intent = new Intent(MainActivity.this,HomeActivity.class);
+        Intent intent = new Intent(GameActivity.this,HomeActivity.class);
         startActivity(intent);
         destroyGameThread();
     }
 
+    // Dialogs
     private void openSettingsDialog(){
 
-        final Dialog dialog = new Dialog(MainActivity.this);
+        final Dialog dialog = new Dialog(GameActivity.this);
         dialog.setContentView(R.layout.setting_layout);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(true);
@@ -254,9 +278,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        Button btn = dialog.findViewById(R.id.btn_close);
-        btn.setOnClickListener(new View.OnClickListener() {
+        Animation scaleAnim = AnimationUtils.loadAnimation(GameActivity.this, R.anim.scale_anim);
+        Button closeBtn = dialog.findViewById(R.id.btn_close);
+        closeBtn.startAnimation(scaleAnim);
+        closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 playClick();
@@ -267,13 +292,143 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    private void openScoreBoardDialog(){
+        SharedPreferences sharedPreferences = getSharedPreferences("2048Project", MODE_PRIVATE);
+        final Dialog dialog = new Dialog(GameActivity.this);
+        dialog.setContentView(R.layout.scoreboard_layout);
+
+        int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
+        Objects.requireNonNull(dialog.getWindow()).setLayout(width, height);
+
+
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        final ListView listView = dialog.findViewById(R.id.lv_score_board);
+        ArrayList<ScoreBoardBuilder.Score> classicScores = ScoreBoardBuilder.createClassicArrayList(sharedPreferences,"0");
+        ArrayList<ScoreBoardBuilder.Score> blocksScores = ScoreBoardBuilder.createClassicArrayList(sharedPreferences,"1");
+        ArrayList<ScoreBoardBuilder.Score> shuffleScores = ScoreBoardBuilder.createClassicArrayList(sharedPreferences,"2");
+        final ScoreBoardBuilder.ScoreAdapter scoreAdapterClassic = new ScoreBoardBuilder.ScoreAdapter(classicScores,this);
+        final ScoreBoardBuilder.ScoreAdapter scoreAdapterBlocks = new ScoreBoardBuilder.ScoreAdapter(blocksScores,this);
+        final ScoreBoardBuilder.ScoreAdapter scoreAdapterShuffle = new ScoreBoardBuilder.ScoreAdapter(shuffleScores,this);
+        listView.setAdapter(scoreAdapterClassic);
+
+        final Animation rightInAnim = AnimationUtils.loadAnimation(GameActivity.this,R.anim.slide_in_right);
+        final Animation leftInAnim = AnimationUtils.loadAnimation(GameActivity.this,R.anim.slide_in_left);
+        final Animation rightOutAnim = AnimationUtils.loadAnimation(GameActivity.this,R.anim.slide_out_right);
+        final Animation  leftOutAnim = AnimationUtils.loadAnimation(GameActivity.this,R.anim.slide_out_left);
+
+        Animation scaleAnim = AnimationUtils.loadAnimation(GameActivity.this, R.anim.scale_anim);
+        final TextView currentModeTv = dialog.findViewById(R.id.tv_mode_type);
+        final int[] index = {gameMode};
+
+        ImageButton btnRight = dialog.findViewById(R.id.btn_right_mode);
+        btnRight.startAnimation(scaleAnim);
+        btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (index[0] == 2) {
+                    index [0] = 0;
+                } else { index[0] ++; }
+                leftOutAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) { }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) { }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        switch(index[0]){
+                            case 0:
+                                playClick();
+                                listView.setAdapter(scoreAdapterClassic);
+                                currentModeTv.setText(getString(R.string.mode_classic));
+                                break;
+                            case 1:
+                                playClick();
+                                listView.setAdapter(scoreAdapterBlocks);
+                                currentModeTv.setText(getString(R.string.mode_blocks));
+                                break;
+                            case 2:
+                                playClick();
+                                listView.setAdapter(scoreAdapterShuffle);
+                                currentModeTv.setText(getString(R.string.mode_shuffle));
+                                break;
+                        }
+                        listView.startAnimation(rightInAnim);
+                    }
+                });
+                listView.startAnimation(leftOutAnim);
+
+
+
+            }
+        });
+
+        ImageButton btnLeft = dialog.findViewById(R.id.btn_left_mode);
+        btnLeft.startAnimation(scaleAnim);
+        btnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (index[0] == 0 ) {
+                    index [0] = 2;
+                } else { index[0] --; }
+
+                rightOutAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) { }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) { }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        switch(index[0]){
+                            case 0:
+                                playClick();
+                                listView.setAdapter(scoreAdapterClassic);
+                                currentModeTv.setText(getString(R.string.mode_classic));
+                                break;
+                            case 1:
+                                playClick();
+                                listView.setAdapter(scoreAdapterBlocks);
+                                currentModeTv.setText(getString(R.string.mode_blocks));
+                                break;
+                            case 2:
+                                playClick();
+                                listView.setAdapter(scoreAdapterShuffle);
+                                currentModeTv.setText(getString(R.string.mode_shuffle));
+                                break;
+                        }
+                        listView.startAnimation(leftInAnim);
+                    }
+                });
+                listView.startAnimation(rightOutAnim);
+
+
+            }
+        });
+
+        Button btnClose = dialog.findViewById(R.id.btn_close);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playClick();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+    }
+
+
 
 
 ////////////////////////////////// Music Service
 
 
     private void playClick() {
-        final MediaPlayer click = MediaPlayer.create(MainActivity.this, R.raw.button_click);
+        final MediaPlayer click = MediaPlayer.create(GameActivity.this, R.raw.button_click);
         if (isSoundPlayed()) {
             click.start();
             }
@@ -287,8 +442,8 @@ public class MainActivity extends AppCompatActivity {
         startService(music);
 
         //Start HomeWatcher
-        mHomeWatcher = new HomeWatcher(this);
-        mHomeWatcher.setOnHomePressedListener(new HomeWatcher.OnHomePressedListener() {
+        mHomeWatcher = new MusicService.HomeWatcher(this);
+        mHomeWatcher.setOnHomePressedListener(new MusicService.HomeWatcher.OnHomePressedListener() {
             @Override
             public void onHomePressed() {
                 if (mServ != null) {
@@ -376,14 +531,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void showLeaderBoard(){
 
-        Intent intent = new Intent(MainActivity.this, LeaderBoardActivity.class);
-        intent.putExtra("game_mode",gameMode);
-        startActivity(intent);
-        destroyGameThread();
-
-    }
 
 }
 

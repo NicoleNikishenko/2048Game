@@ -44,35 +44,21 @@
             android:textSize="25sp" />
     </LinearLayout>
 
-    <LinearLayout
+    <Button
+        android:id="@+id/btn_try_again"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
+        android:text="@string/play_again"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:background="@drawable/btn_rectangle_yellow"
+        android:layout_marginVertical="7dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="15dp"
+        android:layout_marginHorizontal="50dp"
+        tools:ignore="ButtonStyle"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="20dp"
-        android:weightSum="2">
-        <Button
-            android:id="@+id/btn_try_again"
-            android:text="@string/play_again"
-            android:textColor="#FFFFFF"
-            android:textSize="17sp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:background="@drawable/btn_rectangle_yellow"
-            android:layout_margin="7dp"
-            tools:ignore="ButtonStyle" />
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="@string/leader_board"
-            android:textColor="#FFFFFF"
-            android:textSize="17sp"
-            android:layout_height="match_parent"
-            android:background="@drawable/btn_rectangle_yellow"
-            android:layout_margin="7dp"
-            android:id="@+id/btn_gameover_leaderboard"/>
-            android:layout_margin="7dp"
-            tools:ignore="ButtonStyle" />
-    </LinearLayout>
+        android:layout_centerHorizontal="true"/>
+
 
 </RelativeLayout>
