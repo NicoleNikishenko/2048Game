@@ -2,7 +2,7 @@ package com.example.a2048game.Game;
 import android.content.SharedPreferences;
 
 
-public class Score{
+public class Score {
 
 
     private static final String TOP_SCORE_PREF = "TopScore pref";
@@ -41,10 +41,7 @@ public class Score{
     }
 
     public void updateScoreBoard (){
-
         prefs.edit().putLong(TOP_SCORE_PREF + gameModeString + rowsString + colsString,score).apply();
-        refreshScoreBoard();
-
     }
 
     public void refreshScoreBoard (){

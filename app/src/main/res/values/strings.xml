@@ -36,4 +36,6 @@
     <string name="tutorial_second_line">GOOD!! \nTwo identical tiles will merge when they collide, try to merge the tiles</string>
     <string name="tutorial_third_line">Perfect!!\nContinue to merge the tiles and try to break your records</string>
     <string name="how_to_play">how to play</string>
+    <string name="winner">winner!!!</string>
+    <string name="new_score">new score!!!</string>
 </resources>

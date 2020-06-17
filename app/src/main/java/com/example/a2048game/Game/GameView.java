@@ -41,6 +41,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     private boolean isInit;
     private boolean isTutorial;
     private boolean isTutorialFromMainScreen;
+    private boolean isWinningMsgPlayed;
+    private boolean isNewScoreMsgPlayed;
 
     private Score score;
     GameBoard gameBoard;
@@ -99,7 +101,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
         //Initializing board
         gameActivity.updateScore(score.getScore(),score.getTopScore());
-        initClickListeners();
+        initBarButtons();
         initSwipeListener();
         prepareGameOverDialog();
 
@@ -131,10 +133,22 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     public void update() {
         if(gameBoard.isGameOver() && !dialogOpen){
             dialogOpen = true;
-            if(score.isNewHighScore()) //if we have a new highscore we will update the  Scoreboard. else we will check if we got a new midscore and if so we will update the Scoreboard appropriately
-                score.updateScoreBoard();
-            score.refreshScoreBoard();
             showGameOverDialog();
+        }
+
+        if(score.isNewHighScore()){
+            //if we have a new highscore we will update the  Scoreboard. else we will check if we got a new midscore and if so we will update the Scoreboard appropriately
+            score.updateScoreBoard();
+            score.refreshScoreBoard();
+
+            if (!isNewScoreMsgPlayed) {
+                showAnnouncingMsg(getResources().getString(R.string.new_score));
+                isNewScoreMsgPlayed = true;
+            }
+        }
+        if (!isWinningMsgPlayed && gameBoard.isGameWon()){
+            showAnnouncingMsg(getResources().getString(R.string.winner));
+            isWinningMsgPlayed = true;
         }
         if(isInit) {
             gameBoard.update();
@@ -218,7 +232,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
             public void onSwipeBottom() { if(!dialogOpen) { gameBoard.down(); secondTutorialScreen();}}
         });
     }
-    private void initClickListeners() {
+    private void initBarButtons() {
         ImageButton resetBtn = gameActivity.findViewById(R.id.btn_reset);
         resetBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -229,6 +243,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
                         score.updateScoreBoard();
                     score.refreshScoreBoard();
                     gameBoard.resetGame();
+                    isNewScoreMsgPlayed = false;
+                    isWinningMsgPlayed = false;
                 }
 
             }
@@ -290,6 +306,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
                 dialogOpen = true;
                 shufflingText.setVisibility(VISIBLE);
                 shufflingBackground.setVisibility(VISIBLE);
+                shufflingText.setText(getResources().getString(R.string.shuffle));
                 new CountDownTimer(1000, 500) {
                     @Override
                     public void onTick(long millisUntilFinished) {
@@ -356,6 +373,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
                             tutorialText.setVisibility(GONE);
                             endBtn.setVisibility(GONE);
                             gameBoard.setTutorialFinished();
+                            isTutorial = false;
                             dialogOpen = false;
                         }
                     }
@@ -363,6 +381,53 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
 
 
+            }
+        });
+    }
+    public void showAnnouncingMsg(final String msg){
+        //displaying announcing msg
+        final ImageView msgBackground = gameActivity.findViewById(R.id.shuffling_msg);
+        final TextView msgText = gameActivity.findViewById(R.id.tv_shuffling);
+
+        gameActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                msgText.setText(msg);
+                dialogOpen = true;
+                msgText.setVisibility(VISIBLE);
+                msgBackground.setVisibility(VISIBLE);
+                msgText.setTextSize(60);
+
+                new CountDownTimer(2000, 100) {
+                    int count = 0;
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        switch (count){
+                            case 0:
+                                msgText.setTextColor(getResources().getColor(R.color.value2));
+                                count++;
+                                break;
+                            case 1:
+                                msgText.setTextColor(getResources().getColor(R.color.value4));
+                                count++;
+                                break;
+                            case 2:
+                                msgText.setTextColor(getResources().getColor(R.color.value8));
+                                count++;
+                                break;
+                            default:
+                                msgText.setTextColor(getResources().getColor(R.color.value16));
+                                count=0;
+                                break;
+                        }
+                    }
+                    @Override
+                    public void onFinish() {
+                        msgText.setVisibility(GONE);
+                        msgBackground.setVisibility(GONE);
+                        dialogOpen = false;
+                    }
+                }.start();
             }
         });
     }
