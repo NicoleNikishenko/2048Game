@@ -37,4 +37,6 @@
     <string name="tutorial_second_line">מעולה!\nשני ריבועים זהים יתמזגו כאשר הם יתנגשו, נסה למזג את הריבועים שעל הלוח</string>
     <string name="tutorial_third_line">מושלם!!\nהמשך למזג את הריבועים ונסה לשבור את השיאים שלך</string>
     <string name="how_to_play">איך משחקים</string>
+    <string name="winner">ניצחת!!!</string>
+    <string name="new_score">שיא חדש!!!</string>
 </resources>

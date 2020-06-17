@@ -10,6 +10,7 @@ public class Tile {
     private GameBoard callback;
 
     private long value;
+    private int winningValue;
     private int currentPositionX;
     private int currentPositionY;
     private int desPositionX;
@@ -33,6 +34,7 @@ public class Tile {
     public Tile(long value, Position position, GameBoard callback) {
         this.value = value;
         this.callback = callback;
+        this.winningValue = callback.getWinningValue();
 
         defaultCellHeight = currentCellHeight = bitmapCreator.getCellDefaultHeight();
         defaultCellWidth = currentCellWidth = bitmapCreator.getCellDefaultWidth();
@@ -87,6 +89,9 @@ public class Tile {
         currentCellHeight = (int)(defaultCellHeight*1.4);
         currentCellWidth = (int)(defaultCellWidth*1.4);
         increased = false;
+        if (value == winningValue){
+            callback.setPlayerWon();
+        }
     }
 
 

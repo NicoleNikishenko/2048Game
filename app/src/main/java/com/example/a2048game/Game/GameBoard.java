@@ -22,6 +22,10 @@ public class GameBoard {
 
     Random rand = new Random();
 
+    private boolean gameOver = false;
+    private boolean gameWon = false;
+    private boolean NewHighScore = false;
+
     private boolean isMoving = false;
     private boolean spawnNeeded = false;
     private boolean canUndo;
@@ -29,12 +33,12 @@ public class GameBoard {
     private boolean tutorialIsPlaying;
     private ArrayList<Tile> movingTiles;
 
-    private boolean gameOver = false;
 
     private GameView callback;
-    private int currentScore;
-    private int oldScore;
+    private long currentScore;
+    private long oldScore;
     private int gameMode;
+    private int winningValue;
 
 
 
@@ -49,13 +53,13 @@ public class GameBoard {
         currentScore = 0;
         boardIsInitialized = false;
         this.gameMode = gameMode;
-
-        
+        this.winningValue = (int) Math.pow(exponent,11);
     }
 
 
     //getters and setters
     public boolean isGameOver(){ return gameOver; }
+    public boolean isGameWon(){return gameWon;}
     public int getExponent() { return exponent; }
     public int getRows() { return boardRows; }
     public int getCols() { return boardCols; }
@@ -64,8 +68,8 @@ public class GameBoard {
         Position position = new Position(positionX,positionY);
         positions[matrixX][matrixY]= position;
     }
-
-
+    public void setPlayerWon(){ gameWon = true; }
+    public int getWinningValue(){return winningValue;}
 
     public void initBoard(){
         //initializing board with 2 random tiles
@@ -89,30 +93,6 @@ public class GameBoard {
     }
 
 
-    void addRandom() {
-    // a new tile is spawning in a random empty place on the board
-        int count = 0;
-        for (int x = 0; x < boardRows; x++){
-            for(int y = 0; y < boardCols; y++){
-                if (getTile(x, y) == null)
-                    count++;
-            }
-        }
-        int number = rand.nextInt(count);
-        count = 0;
-        for (int x = 0; x < boardRows; x++){
-            for(int y = 0; y < boardCols; y++){
-                if (getTile(x, y)==null) {
-                    if(count == number){
-                        board[x][y] = new Tile(exponent,positions[x][y],this);
-                        return;
-                    }
-                    count++;
-                }
-            }
-        }
-
-    }
 
     public void draw(Canvas canvas){
             for (int x = 0; x < boardRows; x++) {
@@ -147,6 +127,31 @@ public class GameBoard {
         }
     }
 
+
+    void addRandom() {
+        // a new tile is spawning in a random empty place on the board
+        int count = 0;
+        for (int x = 0; x < boardRows; x++){
+            for(int y = 0; y < boardCols; y++){
+                if (getTile(x, y) == null)
+                    count++;
+            }
+        }
+        int number = rand.nextInt(count);
+        count = 0;
+        for (int x = 0; x < boardRows; x++){
+            for(int y = 0; y < boardCols; y++){
+                if (getTile(x, y)==null) {
+                    if(count == number){
+                        board[x][y] = new Tile(1024,positions[x][y],this);
+                        return;
+                    }
+                    count++;
+                }
+            }
+        }
+
+    }
 
 
     void up(){
@@ -403,6 +408,7 @@ public class GameBoard {
     public void resetGame(){
         //reset the game and score
             gameOver = false;
+            gameWon = false;
             canUndo = false;
             for (int x = 0; x < boardRows; x++) {
                 for (int y = 0; y < boardCols; y++) {
