@@ -118,7 +118,7 @@ public class GameActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("play_history",MODE_PRIVATE);
 
         if(!sharedPreferences.getBoolean("tutorial_played",false) || isTutorialFromMainScreen){
-            sharedPreferences.edit().putBoolean("tutorial_played",false).apply();
+            sharedPreferences.edit().putBoolean("tutorial_played",true).apply();
             return true;
         }
         return false;

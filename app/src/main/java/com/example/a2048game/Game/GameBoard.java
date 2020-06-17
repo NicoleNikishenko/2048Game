@@ -143,7 +143,7 @@ public class GameBoard {
             for(int y = 0; y < boardCols; y++){
                 if (getTile(x, y)==null) {
                     if(count == number){
-                        board[x][y] = new Tile(1024,positions[x][y],this);
+                        board[x][y] = new Tile(exponent,positions[x][y],this);
                         return;
                     }
                     count++;
