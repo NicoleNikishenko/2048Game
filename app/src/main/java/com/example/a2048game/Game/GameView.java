@@ -137,7 +137,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         }
 
         if(score.isNewHighScore()){
-            //if we have a new highscore we will update the  Scoreboard. else we will check if we got a new midscore and if so we will update the Scoreboard appropriately
+            //if we have a new highscore we will update the  Scoreboard.
             score.updateScoreBoard();
             score.refreshScoreBoard();
 
@@ -243,6 +243,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
                         score.updateScoreBoard();
                     score.refreshScoreBoard();
                     gameBoard.resetGame();
+                    score.resetGame();
+                    gameActivity.updateScore(score.getScore(),score.getTopScore());
                     isNewScoreMsgPlayed = false;
                     isWinningMsgPlayed = false;
                 }
@@ -257,6 +259,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
                 if (!isTutorial) {
                     playClick();
                     gameBoard.undoMove();
+                    score.undoScore();
+                    gameActivity.updateScore(score.getScore(),score.getTopScore());
                 }
             }
         });
@@ -445,6 +449,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
             swipe.start();
         }
     }
+
+
 
 
     @Override
