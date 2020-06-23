@@ -34,5 +34,10 @@ public class LoadingScreen extends AppCompatActivity {
             easySplashScreen.startAnimation(scaleAnim);
             setContentView(easySplashScreen);
         }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }
 

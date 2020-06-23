@@ -141,10 +141,10 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
             score.updateScoreBoard();
             score.refreshScoreBoard();
 
-            if (!isNewScoreMsgPlayed) {
-                showAnnouncingMsg(getResources().getString(R.string.new_score));
-                isNewScoreMsgPlayed = true;
-            }
+//            if (!isNewScoreMsgPlayed) {
+//                showAnnouncingMsg(getResources().getString(R.string.new_score));
+//                isNewScoreMsgPlayed = true;
+//            }
         }
         if (!isWinningMsgPlayed && gameBoard.isGameWon()){
             showAnnouncingMsg(getResources().getString(R.string.winner));

@@ -6,8 +6,8 @@
     <string name="mode_blocks">בלוקים</string>
     <string name="mode_shuffle">ערבול</string>
     <string name="mode_exp_classic">"הגרסא הישנה והקלאסית של 2048 "</string>
-    <string name="mode_exp_blocks">בלוקים יופיעו על הלוח בצורה רנדומלית</string>
-    <string name="mode_exp_shuffle">הקוביות שלך יודעות להתערבל!</string>
+    <string name="mode_exp_blocks">בלוקים יופיעו על הלוח בצורה אקראית</string>
+    <string name="mode_exp_shuffle">הקוביות שלך יכולות להתערבל!</string>
     <string name="exponent_exp_2">נסה להגיע לקוביה\nמספר 2048!</string>
     <string name="exponent_exp_3">נסה להגיע לקוביה\nמספר 177,147!!</string>
     <string name="exponent_exp_4">נסה להגיע לקוביה\nמספר  4,194,304!!!</string>
