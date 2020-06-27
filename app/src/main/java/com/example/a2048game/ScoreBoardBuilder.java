@@ -43,9 +43,15 @@ public class ScoreBoardBuilder {
                 });
         Collections.reverse(scores);
 
-        scores.get(0).setIcon(R.drawable.icon_trophy_gold);
-        scores.get(1).setIcon(R.drawable.icon_trophy_silver);
-        scores.get(2).setIcon(R.drawable.icon_trophy_bronze);
+        if (scores.get(0).getScore() != 0){
+            scores.get(0).setIcon(R.drawable.icon_trophy_gold);
+        }
+        if (scores.get(1).getScore() != 0){
+            scores.get(1).setIcon(R.drawable.icon_trophy_silver);
+        }
+        if (scores.get(2).getScore() != 0){
+            scores.get(2).setIcon(R.drawable.icon_trophy_bronze);
+        }
 
 
         return scores;
@@ -96,6 +102,8 @@ public class ScoreBoardBuilder {
 
             icon.setImageResource(score.getIcon());
             tvScore.setText(String.valueOf(score.score));
+
+
             tvBoardType.setText(score.boardType);
 
             return convertView;

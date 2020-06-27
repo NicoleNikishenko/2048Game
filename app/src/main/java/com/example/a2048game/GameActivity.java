@@ -64,7 +64,7 @@ public class GameActivity extends AppCompatActivity {
         gameMode = getIntent().getIntExtra("game_mode",0);
         isTutorialFromMainScreen = getIntent().getBooleanExtra("tutorial", false);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.game_layout);
 
         sp = getSharedPreferences("music_settings", MODE_PRIVATE);
         if (!sp.getBoolean("mute_music",false)){
@@ -319,7 +319,7 @@ public class GameActivity extends AppCompatActivity {
 
         Animation scaleAnim = AnimationUtils.loadAnimation(GameActivity.this, R.anim.scale_anim);
         final TextView currentModeTv = dialog.findViewById(R.id.tv_mode_type);
-        final int[] index = {gameMode};
+        final int[] index = {0};
 
         ImageButton btnRight = dialog.findViewById(R.id.btn_right_mode);
         btnRight.startAnimation(scaleAnim);

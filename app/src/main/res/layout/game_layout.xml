@@ -156,17 +156,18 @@
                 tools:ignore="ContentDescription" />
     </LinearLayout>
 
-
     <ImageView
-        android:id="@+id/shuffling_msg"
+        android:visibility="gone"
+        android:id="@+id/dark_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#BF000000"
-        android:visibility="gone"
+        android:orientation="vertical"
+        android:background="#E62B2B2B"
         tools:ignore="ContentDescription" />
+
     <TextView
         android:visibility="gone"
-        android:id="@+id/tv_shuffling"
+        android:id="@+id/tv_announcing_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
@@ -174,14 +175,7 @@
         android:textSize="40sp"
         android:layout_above="@id/game_relative_layout"
         android:textColor="@color/value2"/>
-    <ImageView
-        android:visibility="gone"
-        android:id="@+id/tutorial_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#E62B2B2B"
-        tools:ignore="ContentDescription" />
+
     <TextView
         android:visibility="gone"
         android:id="@+id/tv_tutorial"

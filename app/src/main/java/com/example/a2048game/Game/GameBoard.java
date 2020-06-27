@@ -372,7 +372,7 @@ public class GameBoard {
         public void updateScore(long value){
         double val = Math.log(value) / Math.log(exponent);
         val = Math.round(val) + 1;
-        int score =(int)Math.pow(val, 2);
+        int score =(int)Math.pow(2,val);
         currentScore += score;
 
         //if score is updated then a merge happened
