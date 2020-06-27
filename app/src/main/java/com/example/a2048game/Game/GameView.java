@@ -130,6 +130,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     }
 
 
+
     public void update() {
         if(gameBoard.isGameOver() && !dialogOpen){
             dialogOpen = true;

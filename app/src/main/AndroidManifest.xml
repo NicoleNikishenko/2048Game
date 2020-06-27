@@ -10,16 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeNoBar">
         <service android:name=".MusicService" android:enabled="true"/>
-        <activity android:name=".LoadingScreen">
+        <activity android:name=".LoadingScreen"  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".HomeActivity" android:launchMode="singleTask"/>
-        <activity android:name=".GameActivity" android:launchMode="singleTask"/>
-        <activity android:name=".ChooseBoardActivity" android:launchMode="singleTask"/>
-        <meta-data android:name="preloaded_fonts" android:resource="@array/preloaded_fonts"/>
+        <activity android:name=".HomeActivity" android:launchMode="singleTask" android:screenOrientation="portrait"/>
+        <activity android:name=".GameActivity" android:launchMode="singleTask" android:screenOrientation="portrait"/>
+        <activity android:name=".ChooseBoardActivity" android:launchMode="singleTask" android:screenOrientation="portrait"/>
+        <meta-data android:name="preloaded_fonts" android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
