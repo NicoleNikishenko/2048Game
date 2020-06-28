@@ -24,8 +24,6 @@ public class GameBoard {
 
     private boolean gameOver = false;
     private boolean gameWon = false;
-    private boolean NewHighScore = false;
-
     private boolean isMoving = false;
     private boolean spawnNeeded = false;
     private boolean canUndo;

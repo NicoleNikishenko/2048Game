@@ -166,37 +166,6 @@ public class GameActivity extends AppCompatActivity {
 
 
 
-    //Destroying thread on back pressed
-
-    private MainThread thread;
-    public void setThread(MainThread thread) {
-        this.thread = thread;
-    }
-
-    public void destroyGameThread(){
-        super.onBackPressed();
-        boolean retry = true;
-        while (retry) {
-            try {
-                thread.setRunning(false);
-                thread.join();
-                retry = false;
-                BitmapCreator bitmapCreator = new BitmapCreator();
-                bitmapCreator.clearBitmapArray();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    @Override
-    public void onBackPressed() {
-        playClick();
-        super.onBackPressed();
-        Intent intent = new Intent(GameActivity.this,HomeActivity.class);
-        startActivity(intent);
-        destroyGameThread();
-    }
-
     // Dialogs
     private void openSettingsDialog(){
 
@@ -419,6 +388,38 @@ public class GameActivity extends AppCompatActivity {
         });
         dialog.show();
 
+    }
+
+
+    //Destroying thread on back pressed
+
+    private MainThread thread;
+    public void setThread(MainThread thread) {
+        this.thread = thread;
+    }
+
+    public void destroyGameThread(){
+        super.onBackPressed();
+        boolean retry = true;
+        while (retry) {
+            try {
+                thread.setRunning(false);
+                thread.join();
+                retry = false;
+                BitmapCreator bitmapCreator = new BitmapCreator();
+                bitmapCreator.clearBitmapArray();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        playClick();
+        super.onBackPressed();
+        Intent intent = new Intent(GameActivity.this,HomeActivity.class);
+        startActivity(intent);
+        destroyGameThread();
     }
 
 
