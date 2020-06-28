@@ -370,14 +370,15 @@ public class GameBoard {
 
 
         public void updateScore(long value){
-        double val = Math.log(value) / Math.log(exponent);
-        val = Math.round(val) + 1;
-        int score =(int)Math.pow(2,val);
-        currentScore += score;
-
-        //if score is updated then a merge happened
+        // updates score if not tutorial mode
             if (tutorialIsPlaying){
+                //if score is updated then a merge happened
                 callback.thirdTutorialScreen();
+            } else {
+                double val = Math.log(value) / Math.log(exponent);
+                val = Math.round(val) + 1;
+                int score =(int)Math.pow(2,val);
+                currentScore += score;
             }
     }
 

@@ -172,7 +172,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="@string/shuffle"
-        android:textSize="40sp"
+        android:textSize="30sp"
         android:layout_above="@id/game_relative_layout"
         android:textColor="@color/value2"/>
 
