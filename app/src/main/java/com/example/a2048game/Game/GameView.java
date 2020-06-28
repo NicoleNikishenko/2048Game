@@ -56,7 +56,6 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
 
 
 
-
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -130,6 +129,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     }
 
 
+
     public void update() {
         if(gameBoard.isGameOver() && !dialogOpen){
             dialogOpen = true;
@@ -137,7 +137,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
         }
 
         if(score.isNewHighScore()){
-            //if we have a new highscore we will update the  Scoreboard.
+            //if we have a new high score we will update the  Scoreboard.
             score.updateScoreBoard();
             score.refreshScoreBoard();
 
@@ -301,17 +301,18 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     }
     public void ShowShufflingMsg(){
         //displaying shuffle msg
-        final ImageView shufflingBackground = gameActivity.findViewById(R.id.shuffling_msg);
-        final TextView shufflingText = gameActivity.findViewById(R.id.tv_shuffling);
+        final ImageView shufflingBackground = gameActivity.findViewById(R.id.dark_background);
+        final TextView shufflingText = gameActivity.findViewById(R.id.tv_announcing_msg);
 
         gameActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 dialogOpen = true;
+                shufflingText.setText(getResources().getString(R.string.shuffle));
+                shufflingText.setTextColor(getResources().getColor(R.color.value2));
                 shufflingText.setVisibility(VISIBLE);
                 shufflingBackground.setVisibility(VISIBLE);
-                shufflingText.setText(getResources().getString(R.string.shuffle));
-                new CountDownTimer(1000, 500) {
+                new CountDownTimer(1000, 100) {
                     @Override
                     public void onTick(long millisUntilFinished) {
                     }
@@ -327,7 +328,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     }
     public void firstTutorialScreen(){
         //displaying shuffle msg and placing it on top of score bar
-        final ImageView tutorialBackground = gameActivity.findViewById(R.id.tutorial_background);
+        final ImageView tutorialBackground = gameActivity.findViewById(R.id.dark_background);
         final TextView tutorialText = gameActivity.findViewById(R.id.tv_tutorial);
         gameActivity.runOnUiThread(new Runnable() {
             @Override
@@ -351,7 +352,7 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     }
     public void thirdTutorialScreen(){
         //displaying shuffle msg and placing it on top of score bar
-        final ImageView tutorialBackground = gameActivity.findViewById(R.id.tutorial_background);
+        final ImageView tutorialBackground = gameActivity.findViewById(R.id.dark_background);
         final TextView tutorialText = gameActivity.findViewById(R.id.tv_tutorial);
         final Button endBtn = gameActivity.findViewById(R.id.btn_end_tutorial);
         Animation scaleAnim = AnimationUtils.loadAnimation(gameActivity, R.anim.scale_anim);
@@ -390,8 +391,8 @@ public class GameView  extends SurfaceView  implements SurfaceHolder.Callback{
     }
     public void showAnnouncingMsg(final String msg){
         //displaying announcing msg
-        final ImageView msgBackground = gameActivity.findViewById(R.id.shuffling_msg);
-        final TextView msgText = gameActivity.findViewById(R.id.tv_shuffling);
+        final ImageView msgBackground = gameActivity.findViewById(R.id.dark_background);
+        final TextView msgText = gameActivity.findViewById(R.id.tv_announcing_msg);
 
         gameActivity.runOnUiThread(new Runnable() {
             @Override

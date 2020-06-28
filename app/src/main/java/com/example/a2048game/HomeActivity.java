@@ -322,6 +322,7 @@ public class HomeActivity extends AppCompatActivity {
 
         Animation scaleAnim = AnimationUtils.loadAnimation(HomeActivity.this, R.anim.scale_anim);
         Button closeBtn = dialog.findViewById(R.id.btn_close);
+        closeBtn.startAnimation(scaleAnim);
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

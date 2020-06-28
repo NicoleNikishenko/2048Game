@@ -64,7 +64,7 @@ public class GameActivity extends AppCompatActivity {
         gameMode = getIntent().getIntExtra("game_mode",0);
         isTutorialFromMainScreen = getIntent().getBooleanExtra("tutorial", false);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.game_layout);
 
         sp = getSharedPreferences("music_settings", MODE_PRIVATE);
         if (!sp.getBoolean("mute_music",false)){
@@ -165,37 +165,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
-
-    //Destroying thread on back pressed
-
-    private MainThread thread;
-    public void setThread(MainThread thread) {
-        this.thread = thread;
-    }
-
-    public void destroyGameThread(){
-        super.onBackPressed();
-        boolean retry = true;
-        while (retry) {
-            try {
-                thread.setRunning(false);
-                thread.join();
-                retry = false;
-                BitmapCreator bitmapCreator = new BitmapCreator();
-                bitmapCreator.clearBitmapArray();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    @Override
-    public void onBackPressed() {
-        playClick();
-        super.onBackPressed();
-        Intent intent = new Intent(GameActivity.this,HomeActivity.class);
-        startActivity(intent);
-        destroyGameThread();
-    }
 
     // Dialogs
     private void openSettingsDialog(){
@@ -319,7 +288,7 @@ public class GameActivity extends AppCompatActivity {
 
         Animation scaleAnim = AnimationUtils.loadAnimation(GameActivity.this, R.anim.scale_anim);
         final TextView currentModeTv = dialog.findViewById(R.id.tv_mode_type);
-        final int[] index = {gameMode};
+        final int[] index = {0};
 
         ImageButton btnRight = dialog.findViewById(R.id.btn_right_mode);
         btnRight.startAnimation(scaleAnim);
@@ -419,6 +388,38 @@ public class GameActivity extends AppCompatActivity {
         });
         dialog.show();
 
+    }
+
+
+    //Destroying thread on back pressed
+
+    private MainThread thread;
+    public void setThread(MainThread thread) {
+        this.thread = thread;
+    }
+
+    public void destroyGameThread(){
+        super.onBackPressed();
+        boolean retry = true;
+        while (retry) {
+            try {
+                thread.setRunning(false);
+                thread.join();
+                retry = false;
+                BitmapCreator bitmapCreator = new BitmapCreator();
+                bitmapCreator.clearBitmapArray();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        playClick();
+        super.onBackPressed();
+        Intent intent = new Intent(GameActivity.this,HomeActivity.class);
+        startActivity(intent);
+        destroyGameThread();
     }
 
 
